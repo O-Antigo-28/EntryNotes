@@ -1,0 +1,20 @@
+@font-face {
+  font-family: Inter;
+  src: url("./assets/fonts/Inter/Inter-var.ttf");
+}
+@font-face {
+  font-family: inriaSansBold;
+  src: url("assets/fonts/InriaSans/InriaSans-Bold.ttf");
+}
+
+@font-face{ 
+  font-family: inriaSans;
+  src: url("assets/fonts/InriaSans/InriaSans-Regular.ttf")
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
+  margin: auto;
+  max-width: 38rem;
+  padding: 2rem;
+}

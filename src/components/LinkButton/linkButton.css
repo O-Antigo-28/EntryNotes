@@ -1,0 +1,19 @@
+.linkButton{ 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-family: inriaSans;
+    padding: 1.3125rem 0;
+    text-decoration: none;
+    background-color: #D5D5D5;
+    border-radius: 4px;
+    color: #222222;
+    transition: all  0.2s ease-in-out;
+
+    border: 2px solid transparent
+}
+
+.linkButton:hover{ 
+    border: 2px solid #000000;
+}

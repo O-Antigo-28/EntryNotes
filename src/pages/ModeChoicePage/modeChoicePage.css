@@ -1,0 +1,10 @@
+.modeChoice__main{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 20%;
+    height: 100%;
+    gap: 50px;
+    width: 90%;
+    margin: 20% auto;
+}
