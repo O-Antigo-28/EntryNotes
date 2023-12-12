@@ -11,6 +11,11 @@
   font-family: inriaSans;
   src: url("assets/fonts/InriaSans/InriaSans-Regular.ttf")
 }
+
+@font-face {
+  font-family: k2d;
+  src: url("assets/fonts/K2D/K2D-SemiBold.ttf");
+}
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;

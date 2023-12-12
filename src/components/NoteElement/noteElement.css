@@ -1,0 +1,37 @@
+.noteElement{ 
+    box-sizing: border-box;
+    font-family: k2d;
+
+}
+.noteElementContainer{ 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    background-color: #B7E66466;
+    border: 1px solid black;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+
+}
+.machineName{ 
+    font-size: 1.3rem;
+}
+.paymentMethod{ 
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    font-size: 0.8rem
+}
+.noteValue{ 
+    font-size: 1.3rem;
+}
+.noteTime{ 
+    font-size: 0.7rem;
+}
+.elementSeparator{ 
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

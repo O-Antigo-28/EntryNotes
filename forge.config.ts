@@ -13,6 +13,7 @@ const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
   },
+
   rebuildConfig: {},
   makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
   plugins: [
@@ -23,12 +24,14 @@ const config: ForgeConfig = {
         config: rendererConfig,
         entryPoints: [
           {
+      
             html: './src/index.html',
             js: './src/renderer.ts',
             name: 'main_window',
             preload: {
               js: './src/preload.ts',
             },
+            nodeIntegration: true
           },
           
         ],

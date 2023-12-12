@@ -14,6 +14,24 @@ import { MyFile } from "../../MyFile"
 import FormFileSelector from "../../components/FormFileSelector"
 
 
+function toggleBars(path: string){
+    const bar = "\\"
+    const outher = "%%"
+    let newPath = path
+    console.log(newPath)
+    if (newPath.indexOf(bar) !== -1){ 
+        while(newPath.indexOf(bar) !== -1){ 
+            newPath = newPath.replace(bar, outher)
+        }
+    }
+
+    else{
+        while(newPath.indexOf(outher) !== -1){ 
+            newPath = newPath.replace(outher, bar)
+        }
+    }
+    return newPath
+}
 
 const AutomaticFileSelection = () => {
     const [allVeryWell, setAllVeryWell] = useState(false)
@@ -59,7 +77,7 @@ const AutomaticFileSelection = () => {
                 <LinkButton to={MyRoutes.HOME}>Voltar</LinkButton>
             </ButtonContainer>
 
-            {allVeryWell && <Navigate to={MyRoutes.AUTO_MODE} replace={true}/>}
+            {allVeryWell && <Navigate to={`${MyRoutes.BASE_AUTO_MODE}/${encodeURIComponent(filesType[0].myFile.path)}/${encodeURIComponent(filesType[2].myFile.path)}/${encodeURIComponent(filesType[1].myFile.path)}/`} />}
 
         </main>
     </>
