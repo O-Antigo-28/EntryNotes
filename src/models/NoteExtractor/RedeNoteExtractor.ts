@@ -15,7 +15,7 @@ export class RedeNoteExtractor extends NoteExtractor{
          "número de parcelas": string
          "bandeira": string,
          "modalidade": string                
-      }) =>  {
+        }) =>  {
         if(object["data da venda"].length > 3){ 
             const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.modalidade, object["número de parcelas"])
             const flag: Flag = this._extractFlag(object.bandeira)

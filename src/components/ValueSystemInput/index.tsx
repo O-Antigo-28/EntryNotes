@@ -1,4 +1,3 @@
-import "./systemInput.css"
 import { ReactNode, useId } from "react"
 import SystemInput from "../SystemInput"
 

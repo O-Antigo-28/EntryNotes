@@ -2,6 +2,8 @@ import { Note, MachineName, Flag, NOTE_FLAGS, PAYMENT_METHODS, PaymentMethod} fr
 import { normalizeString } from "../../normalizeString";
 
 
+import { extractValue } from "../../extractValue";
+
 export abstract class NoteExtractor{
   private _notes: Note[] = []
   constructor(protected _table: Object[]){
@@ -63,16 +65,7 @@ export abstract class NoteExtractor{
   }
 
   protected _extractValue(rawValue:string): number{
-    console.log(rawValue)
-    if(typeof rawValue !== "string"){ 
-      return 0
-    }
-    if(rawValue.indexOf("R$") !== -1){ 
-      rawValue = rawValue.replace("R$", "")
-    }
-    rawValue = rawValue.replace(",", ".")
-    const value = parseFloat(rawValue)
-    return value
+    return extractValue(rawValue)
   }
 
 }
