@@ -1,0 +1,9 @@
+
+class ProductExtractor{ 
+    constructor(
+
+    ){ 
+
+    }
+
+}

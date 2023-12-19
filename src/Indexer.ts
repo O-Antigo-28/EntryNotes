@@ -3,6 +3,7 @@ export class Indexer<T>{
     constructor(private _array: T[]) { 
         
     }
+
     public previous(): T{
         if (this._isNotFirst()){ 
             this._index--   
@@ -28,7 +29,9 @@ export class Indexer<T>{
     public get index(): number{
         return this._index
     }
-
+    public get content(): T[]{ 
+        return this._array
+    }
     public set index(newIndex: number) {
         if(!this._isContained(this.index)){
             throw RangeError()
