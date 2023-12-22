@@ -5,9 +5,7 @@ import LinkButton from "../../components/LinkButton"
 import Header from "../../components/Header"
 import Title from "../../components/Title"
 import ButtonContainer from "../../components/ButtonContainer"
-import { Indexer } from "../../Indexer"
-import { Note } from "../../Note"
-import NotesPanel from "../../components/NotesPanel"
+import SystemInput from "../../components/SystemInput"
 const ModeChoicePage = () => {
 
 
@@ -21,7 +19,7 @@ const ModeChoicePage = () => {
                 <LinkButton to="/manual/fileSelection">Manual</LinkButton>
                 <LinkButton to="/automatic/fileSelection">Automático</LinkButton>
             </ButtonContainer>
-            
+            <SystemInput value="30">código</SystemInput>
 
         </main>
 

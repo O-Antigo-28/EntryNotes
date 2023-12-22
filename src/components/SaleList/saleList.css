@@ -1,0 +1,16 @@
+.saleList__container{ 
+
+}
+
+
+.saleList__List{ 
+
+}
+
+.saleList__item{
+    background-color: #F5EFEF;
+    border:1px solid #CEC6C6;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem
+}

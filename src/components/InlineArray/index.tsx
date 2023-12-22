@@ -1,6 +1,6 @@
 import "./inlineArray.css"
 
-const InlineArray = ({array, delimiter}: {array: number[], delimiter: string}) => { 
+const InlineArray = ({array, delimiter}: {array: string[], delimiter: string}) => { 
     return(
         <div className="inlineArray">
             {array.map((item, index) => {

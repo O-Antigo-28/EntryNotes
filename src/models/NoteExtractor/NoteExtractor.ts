@@ -2,6 +2,7 @@ import { Note, MachineName, Flag, NOTE_FLAGS, PAYMENT_METHODS, PaymentMethod} fr
 import { normalizeString } from "../../normalizeString";
 
 
+
 import { extractValue } from "../../extractValue";
 
 export abstract class NoteExtractor{
@@ -19,11 +20,17 @@ export abstract class NoteExtractor{
   protected _appendNote(note: Note):void{
     this._notes.push(note)
   }
-  protected _extractDate(date:string, clock: string = "23:59:59"):Date{
+  protected _extractDate(date:string = "1/1/1999", clock: string = "23:59:59"):Date{
     if (typeof clock != "string" || typeof date != "string"){
         return new Date(2020)
       }
-    const [day, month, year] = date.split("/")
+    let [day, month, year] = date.split("/")
+    
+
+    if(year.length > 4){
+      year = year.slice(0, 4)
+    }
+    
     const [hour, minutes, seconds] = clock.split(":")
 
     
