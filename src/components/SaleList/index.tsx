@@ -1,6 +1,10 @@
+import { CSSProperties } from "react"
 import { Sale } from "../../Sale"
 import SystemInput from "../SystemInput"
 import "./saleList.css"
+
+
+const copiedStyle: CSSProperties = {}
 
 const SaleList = ({sales}:{sales: Sale[]}) => { 
     return (
@@ -10,9 +14,9 @@ const SaleList = ({sales}:{sales: Sale[]}) => {
                     return (
                     <li key={index} className="saleList__item">
                         <SystemInput value={sale.product.code}>código</SystemInput>
-                        <SystemInput value={sale.product.value.toFixed(2)}>Valor un</SystemInput>
-                        <SystemInput value={sale.quantitySold.toString()}>quantidade</SystemInput>
-                        <SystemInput value={sale.result.toFixed(2)}>resultado</SystemInput>
+                        <SystemInput value={sale.product.value.toFixed(2)}>Vlr un</SystemInput>
+                        <SystemInput value={sale.quantitySold.toString()}>qtde</SystemInput>
+                        <SystemInput value={sale.result.toFixed(2)}>total</SystemInput>
                     </li>)
                 })
                 }

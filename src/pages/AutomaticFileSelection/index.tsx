@@ -14,24 +14,7 @@ import { MyFile } from "../../MyFile"
 import FormFileSelector from "../../components/FormFileSelector"
 
 
-function toggleBars(path: string){
-    const bar = "\\"
-    const outher = "%%"
-    let newPath = path
-    console.log(newPath)
-    if (newPath.indexOf(bar) !== -1){ 
-        while(newPath.indexOf(bar) !== -1){ 
-            newPath = newPath.replace(bar, outher)
-        }
-    }
 
-    else{
-        while(newPath.indexOf(outher) !== -1){ 
-            newPath = newPath.replace(outher, bar)
-        }
-    }
-    return newPath
-}
 
 const AutomaticFileSelection = () => {
     const [allVeryWell, setAllVeryWell] = useState(false)

@@ -4,22 +4,28 @@
     justify-content: left;
     flex-direction: row;
     align-items: center;
-    padding: 1rem 0.5rem;
+    padding: 1rem;
     width: 100%;
-    border: 1px solid #333;
+    max-width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
 }
+
 
 .systemInput__label{
     display: block;
     position: absolute;
     top:-1rem;
+    left: -1px;
+    font-family: baloo;
+    font-size: 0.81rem;
 }
 .systemInput__value{
     position: absolute;
+    font-family: k2d;
     right:0px;
-    width: fit-content;
-    margin-right: 0.5rem;
-    display: block;
+    max-width: calc(100% - 10px);
+    display: inline;
     text-align: end;
     border: none;
 }

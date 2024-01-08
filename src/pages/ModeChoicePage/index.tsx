@@ -1,25 +1,28 @@
 import "./modeChoicePage.css"
-import React, { ButtonHTMLAttributes, ReactNode } from "react"
-import { Link } from "react-router-dom"
+import {  CSSProperties } from "react"
 import LinkButton from "../../components/LinkButton"
 import Header from "../../components/Header"
 import Title from "../../components/Title"
 import ButtonContainer from "../../components/ButtonContainer"
-import SystemInput from "../../components/SystemInput"
 const ModeChoicePage = () => {
 
+    const pageQuestion = "Qual modo você irá escolher?"
 
+    const modes = [
+        {name: "Automático", link: "/automatic/fileSelection"},
+        {name: "Manual", link:"/manual/fileSelection"}
+    ]
 
     return (
     <>
         <Header><></></Header>
         <main className="modeChoice__main">
-            <Title>Qual modo você irá escolher? </Title>
+            <Title> {pageQuestion}</Title>
             <ButtonContainer>
-                <LinkButton to="/manual/fileSelection">Manual</LinkButton>
-                <LinkButton to="/automatic/fileSelection">Automático</LinkButton>
+                {modes.map((mode, index)=> {
+                    return <LinkButton key={index} to={mode.link}>{mode.name}</LinkButton>
+                })}
             </ButtonContainer>
-            <SystemInput value="30">código</SystemInput>
 
         </main>
 

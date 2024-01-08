@@ -161,7 +161,6 @@ const AutomaticPage = () => {
        &&
       <div>
         <NotesPanel nextNote={nextNote} previousNote={previosNote} index={notes.index} currentNote={notes.content[notes.index]}/>
-        <p>{location.pathname}</p>
         {/* <ValueSystemInput value={SI_TotalProducts}>total produtos</ValueSystemInput>
         <ValueSystemInput  value={SI_Difference}>diferença</ValueSystemInput> */}
 
