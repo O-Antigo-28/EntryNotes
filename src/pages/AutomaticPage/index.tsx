@@ -14,9 +14,13 @@ import ValueSystemInput from "../../components/ValueSystemInput"
 import { CSVExtractor } from "../../CSVExtractor"
 import SaleList from "../../components/SaleList"
 import {Product} from "../../Product"
-import {Sale} from "../../Sale"
+import {SaleItem} from "../../SaleItem"
 import { ProductExtractor } from "../../ProductExtrator"
 import { SearchAlgorithm } from "../../SearchAlgorithm"
+import SystemInput from "../../components/SystemInput"
+import AppLogo from "../../components/AppLogo"
+import { Sale } from "../../Sale"
+import {IDGenerator} from "../../IDGenerator"
 const CAIXA_FILE_ENCODING = "win1252"
 
 
@@ -26,10 +30,14 @@ const AutomaticPage = () => {
   const {stockPath, redePath, caixaPath}  = useParams()
 
   const [notes, setNotes] = useState<Indexer<Note>>(new Indexer<Note>([]))
-  const [sales, setSales] = useState<Indexer<Sale[]>>(new Indexer<Sale[]>([]))
+  // const [sales, setSales] = useState<Indexer<SaleItem[]>>(new Indexer<SaleItem[]>([]))
+  const [sales, setSales] = useState<Indexer<Sale>>(new Indexer<Sale>([]))
+  
   const [products, setProducts] = useState<Product[]>([])
+  const [difference, setDifference] = useState<number>(0)
+  const [total, setTotal] = useState<number>(0)
 
-  const [downloadedFiles, setdownloadedFiles] = useState<boolean>(false)
+  // const [downloadedFiles, setdownloadedFiles] = useState<boolean>(false)
 
   // // const [currentNote, setCurrentNote] = useState<Note>()
   const [rangeValue, setRangeValue] = useState<number>(0)
@@ -37,7 +45,15 @@ const AutomaticPage = () => {
   // const [SI_TotalProducts, setSI_TotalProducts]= useState(0)
   // const [SI_Difference, setSI_Difference] = useState(0) 
 
+  function eraseData(){ 
+    setNotes(new Indexer<Note>([]))
+    setSales(new Indexer<Sale>([]))
+    setProducts([])
+    setDifference(0)
+    setTotal(0)
+    IDGenerator.reset()
 
+  }
  
   
 
@@ -69,7 +85,7 @@ const AutomaticPage = () => {
     }
     
   }
-  function updateProductList(productList: Product[], productsSold: Sale[]){
+  function updateProductList(productList: Product[], productsSold: SaleItem[]){
         
     for(const sale of productsSold){
         const currentQuantity = sale.product.quantity
@@ -104,18 +120,20 @@ const AutomaticPage = () => {
           addToStateIndexer<Note>(setNotes, redeExtractor.notes)
           setNotes( (notes) => {
             setProducts((products)=>{ 
-              let allSales:Sale[][] = []
+              let allSales:Sale[] = []
 
               const algorithm = new SearchAlgorithm(products)
           
               notes.content.forEach(note => {
                 const salueList = algorithm.generateSales(note.value)
                 console.log(salueList)
-                updateProductList(products,salueList)
+                updateProductList(products, salueList.itens)
                 allSales.push(salueList)
               });
               
-              setSales(new Indexer<Sale[]>(allSales))
+              
+              // setSales(new Indexer<SaleItem[]>(allSales))
+              setSales(new Indexer<Sale>(allSales))
 
 
               
@@ -124,7 +142,7 @@ const AutomaticPage = () => {
 
             return notes
           })
-          setdownloadedFiles(true)
+          // setdownloadedFiles(true)
         }
         
 
@@ -135,6 +153,7 @@ const AutomaticPage = () => {
     fetchData();
 
     return () => { 
+      eraseData()
       ignore = true
     }
     
@@ -156,19 +175,25 @@ const AutomaticPage = () => {
 
   
   return (
-    <section onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+    <section className="automaticPage" onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+      
+
       {(notes.length> 0 && sales.length > 0)
        &&
-      <div>
+      <div >
         <NotesPanel nextNote={nextNote} previousNote={previosNote} index={notes.index} currentNote={notes.content[notes.index]}/>
         {/* <ValueSystemInput value={SI_TotalProducts}>total produtos</ValueSystemInput>
         <ValueSystemInput  value={SI_Difference}>diferença</ValueSystemInput> */}
+        <div>
+          <ValueSystemInput value={difference}>diferença</ValueSystemInput>
+          <ValueSystemInput value={total}>tot. produtos</ValueSystemInput>
+        </div>
 
-        <SaleList sales={sales.content[sales.index]}/>
-        
+        <SaleList sale={sales.content[sales.index]}/>
         
       </div>}
 
+        <LinkButton leaving={eraseData} to={MyRoutes.HOME}>Voltar</LinkButton>
 
     </section>
     

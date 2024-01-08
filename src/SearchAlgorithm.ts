@@ -1,5 +1,6 @@
 import { Product } from "./Product"
-import {Sale} from "./Sale"
+import {SaleItem} from "./SaleItem"
+import { Sale } from "./Sale"
 export class SearchAlgorithm {
     constructor(private _productList: Product[]){
         
@@ -16,20 +17,23 @@ export class SearchAlgorithm {
         console.log(this._saleValue(this._nearestSales(value)))
 
     }
-    public generateSales(value: number){
+    public generateSales(value: number): Sale{
         
         const sales1 = this._closeSale(value)
         const sales2 = this._twoClosestSales(value)
         const sales3 = this._nearestSales(value)
         
-        const allSales = [sales1, sales2, sales3]  
-        console.log(allSales)
+        const allSales = [sales1, sales2, sales3]
 
-        return this._salesComparator(allSales, value)
+        const bestSale = this._salesComparator(allSales, value) 
+        const total = this._saleValue(bestSale)
+        const diff = total - value
+
+        return new Sale(total, diff, bestSale)
 
     }
 
-    private _closeSale(value: number): Sale[]{
+    private _closeSale(value: number): SaleItem[]{
         
         let produto_mais_proximo = this._productList[0]
         let menor_diferenca = 999999;
@@ -59,7 +63,7 @@ export class SearchAlgorithm {
                 
             }          
         }
-        const venda_mais_proxima = new Sale(produto_mais_proximo, quantity)
+        const venda_mais_proxima = new SaleItem(produto_mais_proximo, quantity)
 
         // console.log(`final ${quantidade}`)
         return [venda_mais_proxima]
@@ -120,8 +124,8 @@ export class SearchAlgorithm {
             
             }
         }
-        let sale1 = new Sale(Prod_1, quantitys[0])
-        let sale2 = new Sale(Prod_2, quantitys[1])
+        let sale1 = new SaleItem(Prod_1, quantitys[0])
+        let sale2 = new SaleItem(Prod_2, quantitys[1])
         return [sale1, sale2]
     }
 
@@ -164,7 +168,7 @@ export class SearchAlgorithm {
             let currentValue = productValue * currentQuantity
             if((currentValue + totalSalueList) < value){
                 totalSalueList += currentValue
-                let newSale = new Sale(product, currentQuantity)
+                let newSale = new SaleItem(product, currentQuantity)
                 saleList.push(newSale)
             }
             else if(difference(totalSalueList, value) < 0.75){
@@ -173,8 +177,8 @@ export class SearchAlgorithm {
         }
         return saleList
     }
-    private _salesComparator(competitiveSales: Sale[][] , value: number){
-        let nearestSale: Sale[] = null;
+    private _salesComparator(competitiveSales: SaleItem[][] , value: number){
+        let nearestSale: SaleItem[] = null;
         let closestDifference: number = null
         
         for(const venda of competitiveSales){
@@ -196,7 +200,7 @@ export class SearchAlgorithm {
         
     }
 
-    private _saleValue(salesList: Sale[]){
+    private _saleValue(salesList: SaleItem[]){
         let result:number = 0
         for(const sale of salesList){
             result += sale.result
@@ -209,7 +213,7 @@ function difference(firstValue: number, SecondValue: number){
     return Math.abs(SecondValue - firstValue)
 }
 
-export function updateProductList(productList: Product[], productsSold: Sale[]){
+export function updateProductList(productList: Product[], productsSold: SaleItem[]){
         
     for(const sale of productsSold){
         const currentQuantity = sale.product.quantity

@@ -1,14 +1,8 @@
 import { CSVExtractor } from "./CSVExtractor";
 import { Product } from "./Product";
 import { extractValue } from "./extractValue";
-
-class IDGenerator{
-    private static _countID = 0
-
-    static get newID(){ 
-        return IDGenerator._countID++
-    }
-}
+import {v4 as uuidv4} from 'uuid'
+import { IDGenerator } from "./IDGenerator";
 
 
 export class ProductExtractor{ 

@@ -1,24 +1,18 @@
-import { Product } from "./Product"
-export class Sale{
+import { SaleItem } from "./SaleItem"
+export class Sale{ 
     constructor(
-        private _product: Product,
-        private _quantitySold: number
-    ){
-        
+      private _total: number,
+      private _difference: number,
+      private _saleItens: SaleItem[]){ 
     }
-
-    set quantitySold(quantity: number){
-        if(quantity > 0){
-            this._quantitySold = quantity
-        }
+    public get total(): number{ 
+      return this._total
     }
-    get product(): Product{
-        return this._product
+    public get difference(): number{ 
+      return this._difference
     }
-    get quantitySold(): number {
-        return this._quantitySold
+    public get itens(): SaleItem[]{
+      return this._saleItens
     }
-    get result(){
-        return (this._product.value * this._quantitySold)
-    }
-}
+    
+  }
