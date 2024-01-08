@@ -8,6 +8,7 @@ rules.push({
   use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
 });
 
+
 export const rendererConfig: Configuration = {
   module: {
     rules,

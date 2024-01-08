@@ -1,14 +1,14 @@
 import "./buttonContainer.css"
-import { ReactNode } from "react"
+import { CSSProperties, ReactNode } from "react"
 
-const ButtonContainer = ({children} : {children: ReactNode[]}) => {
+const ButtonContainer = ({children, style = undefined} : {children: ReactNode[], style?: CSSProperties}) => {
 
     function handleKeyDownEvent( ) :void { 
-
+        
     }
 
     return (
-    <div className="container__Button" onKeyDown={handleKeyDownEvent}>
+    <div className="container__Button" style={style} onKeyDown={handleKeyDownEvent}>
         {children}
     </div>
     )

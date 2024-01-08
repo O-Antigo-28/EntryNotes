@@ -1,0 +1,31 @@
+.systemInput__container{
+    display: flex;
+    position: relative;
+    justify-content: left;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+    max-width: 100%;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+
+.systemInput__label{
+    display: block;
+    position: absolute;
+    top:-1rem;
+    left: -1px;
+    font-family: baloo;
+    font-size: 0.81rem;
+}
+.systemInput__value{
+    position: absolute;
+    font-family: k2d;
+    right:0px;
+    max-width: calc(100% - 10px);
+    display: inline;
+    text-align: end;
+    border: none;
+}

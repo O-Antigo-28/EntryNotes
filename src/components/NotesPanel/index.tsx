@@ -3,6 +3,7 @@ import { Note } from "../../Note"
 import Button from "../Button"
 import NoteElement from "../NoteElement"
 import { Indexer } from "../../Indexer"
+import ButtonContainer from "../ButtonContainer"
 
 
 const NotesPanel = ({currentNote, index, nextNote, previousNote}: { currentNote: Note, index : number,  nextNote(): void, previousNote(): void} ) => {
@@ -37,14 +38,10 @@ const NotesPanel = ({currentNote, index, nextNote, previousNote}: { currentNote:
         <section>
             <NoteElement note={currentNote}/>
 
-            <div>
-                <label htmlFor={rangeID}></label>
-                {/* <input type="range" name="" value={rangeValue } min={0} onChange={handleChangeRange} max={notes.length -1 } id={rangeID} /> */}
-            </div>
-            <div>
+            <ButtonContainer style={{flexDirection:"row"}}>
                 <Button listener={handlePreviousNote}>Anterior</Button>
                 <Button listener={handleNextNote}>Próximo</Button>
-            </div>
+            </ButtonContainer>
         </section>
     )
 }

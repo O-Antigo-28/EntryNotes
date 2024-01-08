@@ -12,7 +12,7 @@ import { CaixaNoteExtractor } from "../../models/NoteExtractor/CaixaNoteExtracto
 import ValueSystemInput from "../../components/ValueSystemInput"
 
 import { CSVExtractor } from "../../CSVExtractor"
-import SalueList from "../../components/SalueList"
+import SaleList from "../../components/SaleList"
 import {Product} from "../../Product"
 import {Sale} from "../../Sale"
 import { ProductExtractor } from "../../ProductExtrator"
@@ -161,11 +161,10 @@ const AutomaticPage = () => {
        &&
       <div>
         <NotesPanel nextNote={nextNote} previousNote={previosNote} index={notes.index} currentNote={notes.content[notes.index]}/>
-        <p>{location.pathname}</p>
         {/* <ValueSystemInput value={SI_TotalProducts}>total produtos</ValueSystemInput>
         <ValueSystemInput  value={SI_Difference}>diferença</ValueSystemInput> */}
 
-        <SalueList salues={sales.content[sales.index]}/>
+        <SaleList sales={sales.content[sales.index]}/>
         
         
       </div>}

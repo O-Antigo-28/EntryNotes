@@ -1,13 +1,13 @@
 import "./systemInput.css"
-import { ReactNode, useId } from "react"
+import { CSSProperties, ReactNode, useId } from "react"
 
-const SystemInput = ({children, value}: {children: ReactNode, value:string}) => { 
+const SystemInput = ({children, value, style}: {children: ReactNode, value:string, style?: CSSProperties}) => { 
     const systemInputID = useId()
     return (
-        <div>
-            <label htmlFor={systemInputID}>{children}</label>
+        <div className="systemInput__container" style={style}>
+            <label className="systemInput__label" htmlFor={systemInputID}>{children}</label>
             
-            <input type="text" id={systemInputID} value={value} />
+            <input className="systemInput__value" type="text" id={systemInputID} value={value} />
         </div>
     )
 }

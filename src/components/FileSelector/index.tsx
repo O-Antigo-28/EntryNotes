@@ -31,7 +31,6 @@ const FileSelector = ({onChange, fileType} : {fileType: FileType, onChange(file:
                 <input onChange={(event) => {handleOnChange(event) }} type="file" id={selectorFileId} accept={fileType.acceptsToString()} style={{display: "none"}} />
             </div>
 
-            <img src="" alt="" />
 
         </section>
     ) 
