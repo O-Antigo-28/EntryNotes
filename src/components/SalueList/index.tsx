@@ -7,11 +7,15 @@ const SalueList = ({salues}:{salues: Sale[]}) => {
                 {salues.map((salue, index) => { 
                     return (
                     <ul key={index} className="productList__item">
-                        <span className="productList__Item--property">{salue.product.code}</span>
-                        <span className="productList__Item--property">{salue.product.description}</span>
-                        <span className="productList__Item--property">{salue.product.value}</span>
-                        <span className="productList__Item--property">{salue.quantitySold}</span>
-                        <span className="productList__Item--property">{salue.result}</span>
+                        <div className="productList__item--header">
+                            <span className="productList__Item--property">{salue.product.code}</span>
+                            <span className="productList__Item--property">{salue.product.description}</span>
+                        </div>
+                        <div className="productList__item--body">
+                            <span className="productList__Item--property">{salue.product.value}</span>
+                            <span className="productList__Item--property">{salue.quantitySold}</span>
+                            <span className="productList__Item--property">{salue.result}</span>
+                        </div>
                     </ul>)
                 })
                 }

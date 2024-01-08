@@ -2,6 +2,9 @@ import { Note } from "../../Note"
 
 import InlineArray from "../InlineArray"
 import "./noteElement.css"
+function addZero(_number: number): string {
+    return _number < 10 ? `0${_number}` : _number.toString();
+  }
 
 const NoteElement = ({note}: {note: Note}) => { 
 
@@ -9,13 +12,13 @@ const NoteElement = ({note}: {note: Note}) => {
     const month = note.date.getMonth() + 1
     const year =  note.date.getFullYear() 
     
-    const date = [day, month, year]
+    const date:string[] = [day.toString(), month.toString(), year.toString()]
 
     const hour =    note.date.getHours()
     const minutes = note.date.getMinutes()
     const seconds = note.date.getSeconds()
 
-    const clock = [hour, minutes, seconds]
+    const clock: string[] = [addZero(hour), addZero(minutes), addZero(seconds)]
 
     return(
         <section className="noteElement">

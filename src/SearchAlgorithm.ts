@@ -23,6 +23,7 @@ export class SearchAlgorithm {
         const sales3 = this._nearestSales(value)
         
         const allSales = [sales1, sales2, sales3]  
+        console.log(allSales)
 
         return this._salesComparator(allSales, value)
 
@@ -173,13 +174,12 @@ export class SearchAlgorithm {
         return saleList
     }
     private _salesComparator(competitiveSales: Sale[][] , value: number){
-        let nearestSale: Sale[];
-        let closestDifference: number
-        
+        let nearestSale: Sale[] = null;
+        let closestDifference: number = null
         
         for(const venda of competitiveSales){
+        
             let currentDifference: number = difference(this._saleValue(venda), value)
-
             if(nearestSale == null && closestDifference == null){
                 nearestSale = competitiveSales[0]
                 closestDifference = currentDifference
@@ -188,7 +188,10 @@ export class SearchAlgorithm {
                 closestDifference = currentDifference
                 nearestSale = venda
             }
+        
+
         }
+        console.log("venda mais proxima", nearestSale)
         return nearestSale
         
     }
