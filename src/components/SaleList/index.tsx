@@ -5,12 +5,15 @@ import SystemInput from "../SystemInput"
 import "./saleList.css"
 import { Indexer } from "../../Indexer"
 import { clipboard } from "electron"
+import {useRecoilValue}from 'recoil'
+import { saleItemListState } from "../../state/atom"
 
 
 const SaleList = ({items, index, selectItem}:{items: SaleItem[], index:number, selectItem(index:number):void}) => { 
 
-    
+
     useEffect(()=>{ 
+        if(items[index])
         clipboard.writeText(items[index].product.code)
     }, [items[index]])
 
@@ -23,7 +26,9 @@ const SaleList = ({items, index, selectItem}:{items: SaleItem[], index:number, s
 
     return (
         <div className="saleList__container">
+           { items.length > 0 &&
             <ul className="saleList__list">
+                
                 {items.map((item, id) => { 
                     return (
                     <li key={id} className={items[index] === item?"saleList__item saleList__item--copied" : "saleList__item"} onClick={(event) => { handleOnClick(event, item, id)}}>
@@ -35,7 +40,7 @@ const SaleList = ({items, index, selectItem}:{items: SaleItem[], index:number, s
                 })
                 }
 
-            </ul>
+            </ul>}
         </div>
     )
 }
