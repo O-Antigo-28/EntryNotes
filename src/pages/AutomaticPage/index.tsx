@@ -190,10 +190,10 @@ const AutomaticPage = () => {
             nextNote()
             break;
           case Directions.UP:
-            previosItem()
+            // previosItem()
             break;
           case Directions.DOWN:
-            nextItem()
+            // nextItem()
             break;
             }
       } )
