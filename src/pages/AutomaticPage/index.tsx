@@ -55,7 +55,13 @@ const AutomaticPage = () => {
   
   // const [downloadedFiles, setdownloadedFiles] = useState<boolean>(false)
 
+  function handleKeyDown(){ 
 
+  }
+
+  function handleKeyUp(){ 
+
+  }
  
   function nextNote(){ 
     notes.next()
