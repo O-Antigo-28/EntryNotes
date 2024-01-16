@@ -8,10 +8,10 @@ const SystemInput = ({children, value, style}: {children: ReactNode, value:strin
         
     }
     return (
-        <div className="systemInput__container" style={style}>
+        <div className="systemInput__container"  >
             <label className="systemInput__label" htmlFor={systemInputID}>{children}</label>
             
-            <input className="systemInput__value" onChange={handleChange} type="text" id={systemInputID} value={value} />
+            <input className="systemInput__value" onChange={handleChange} style={style} type="text" id={systemInputID} value={value} />
         </div>
     )
 }

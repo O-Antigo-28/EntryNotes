@@ -27,7 +27,7 @@ export class SearchAlgorithm {
 
         const bestSale = this._salesComparator(allSales, value) 
         const total = this._saleValue(bestSale)
-        const diff = total - value
+        const diff = value - total
 
         return new Sale(total, diff, bestSale)
 

@@ -1,3 +1,4 @@
+import "./automatic.css"
 import { useParams, useLocation} from "react-router-dom"
 import LinkButton from "../../components/LinkButton"
 import Title from "../../components/Title"
@@ -21,72 +22,80 @@ import SystemInput from "../../components/SystemInput"
 import AppLogo from "../../components/AppLogo"
 import { Sale } from "../../Sale"
 import {IDGenerator} from "../../IDGenerator"
+import ButtonContainer from "../../components/ButtonContainer"
+import NoteElement from "../../components/NoteElement"
+import Button from "../../components/Button"
+
+import {ipcRenderer} from "electron"
+import { Directions } from "../../Directions"
+
 const CAIXA_FILE_ENCODING = "win1252"
 
-
-
 const AutomaticPage = () => {
-  
+
   const {stockPath, redePath, caixaPath}  = useParams()
-
   const [notes, setNotes] = useState<Indexer<Note>>(new Indexer<Note>([]))
-  // const [sales, setSales] = useState<Indexer<SaleItem[]>>(new Indexer<SaleItem[]>([]))
   const [sales, setSales] = useState<Indexer<Sale>>(new Indexer<Sale>([]))
-  
   const [products, setProducts] = useState<Product[]>([])
-  const [difference, setDifference] = useState<number>(0)
-  const [total, setTotal] = useState<number>(0)
-
-  // const [downloadedFiles, setdownloadedFiles] = useState<boolean>(false)
-
-  // // const [currentNote, setCurrentNote] = useState<Note>()
+  const [processingCompleted, setProcessingCompleted] = useState(false)
   const [rangeValue, setRangeValue] = useState<number>(0)
+  const [items, setItems] = useState<Indexer<SaleItem>>(new Indexer<SaleItem>([]))
+  const [ready, setReady] = useState(false)
+  const [currentItemID, setCurrentItemID] = useState<number>(0)
 
-  // const [SI_TotalProducts, setSI_TotalProducts]= useState(0)
-  // const [SI_Difference, setSI_Difference] = useState(0) 
-
+  
   function eraseData(){ 
     setNotes(new Indexer<Note>([]))
     setSales(new Indexer<Sale>([]))
+    setItems(new Indexer<SaleItem>([]))
     setProducts([])
-    setDifference(0)
-    setTotal(0)
+
     IDGenerator.reset()
-
   }
+  
+  // const [downloadedFiles, setdownloadedFiles] = useState<boolean>(false)
+
+
  
-  
-
-  function handleKeyDown(){ 
-
-  }
-
-  function handleKeyUp(){ 
-
-  }
-  
   function nextNote(){ 
     notes.next()
-    sales.next()
-
-    // setCurrentNote(notes.next())
+    setItems(new Indexer<SaleItem>(sales.next().itens))
     setRangeValue(notes.index)
   }
+
   function previosNote(){ 
-    // setCurrentNote(notes.previous())
-    sales.previous()
     notes.previous()
+    setItems(new Indexer<SaleItem>(sales.previous().itens))
     setRangeValue(notes.index)
+  }
 
+  // function nextItem(){
+  //   setItems((oldItems)=> { 
+  //     oldItems.next()
+  //     return oldItems
+  //   })
+  //   console.log(items.index)
+  //   console.log(items.length)
+  //   console.log(items.content)
+  //   setCurrentItemID(items.index)
+
+  // }
+  function handleSelectItem(index: number){
+    items.setIndex(index)
+    console.log(processingCompleted)
+    console.log(ready)
+    console.log(items)
+    setCurrentItemID(items.index)
   }
-  function loadNotes(notes: Indexer<Note>){
-    if(notes.length > 0){ 
-    //  setCurrentNote(notes.content[0]) 
-    }
-    
-  }
+
+  // function previosItem(){
+  //   console.log(items)
+  //   items.previous()
+  //   setCurrentItemID(items.index)
+
+  // }
+
   function updateProductList(productList: Product[], productsSold: SaleItem[]){
-        
     for(const sale of productsSold){
         const currentQuantity = sale.product.quantity
         const quantitySold = sale.quantitySold
@@ -95,7 +104,6 @@ const AutomaticPage = () => {
         productList[productID].quantity = ( currentQuantity - quantitySold)
     }
 }
-
 
   useEffect(() => {
     let ignore = false
@@ -127,22 +135,24 @@ const AutomaticPage = () => {
               notes.content.forEach(note => {
                 const salueList = algorithm.generateSales(note.value)
                 console.log(salueList)
+
                 updateProductList(products, salueList.itens)
                 allSales.push(salueList)
               });
               
-              
-              // setSales(new Indexer<SaleItem[]>(allSales))
               setSales(new Indexer<Sale>(allSales))
+              setSales((oldSales)=> {
+                setProcessingCompleted(true) 
+                return oldSales
+              })
 
-
+              
               
               return products
             })
 
             return notes
           })
-          // setdownloadedFiles(true)
         }
         
 
@@ -158,6 +168,42 @@ const AutomaticPage = () => {
     }
     
   }, []); 
+
+  useEffect(()=> { 
+    if(processingCompleted){ 
+      setItems(new Indexer<SaleItem>(sales.current().itens))
+      setItems((items) => {
+        console.log(items)
+
+        setReady(true)
+        return items
+      })
+
+
+      ipcRenderer.send('register-the-commands')
+      ipcRenderer.on('accelerator-directions', (event, key)=>{ 
+        switch(key){
+          case Directions.LEFT:
+            previosNote()
+            break;
+          case Directions.RIGHT:
+            nextNote()
+            break;
+          case Directions.UP:
+            previosItem()
+            break;
+          case Directions.DOWN:
+            nextItem()
+            break;
+            }
+      } )
+  
+      
+    }
+
+  
+  }, [processingCompleted])
+
   function addToStateIndexer<T>(setStateList: React.Dispatch<React.SetStateAction<Indexer<T>>>, addedList: T[]): void{
     setStateList((oldIndexer: Indexer<T>)=>{ 
       if(oldIndexer.content.length === 0){
@@ -171,29 +217,39 @@ const AutomaticPage = () => {
 
   }
 
-
-
-  
   return (
     <section className="automaticPage" onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
-      
 
-      {(notes.length> 0 && sales.length > 0)
+      {(ready && items.length > 0) 
        &&
-      <div >
-        <NotesPanel nextNote={nextNote} previousNote={previosNote} index={notes.index} currentNote={notes.content[notes.index]}/>
-        {/* <ValueSystemInput value={SI_TotalProducts}>total produtos</ValueSystemInput>
-        <ValueSystemInput  value={SI_Difference}>diferença</ValueSystemInput> */}
-        <div>
-          <ValueSystemInput value={difference}>diferença</ValueSystemInput>
-          <ValueSystemInput value={total}>tot. produtos</ValueSystemInput>
+      <div>
+        <div className="automaticPage__Panel">
+
+          <div className="automaticPage__notePanel">
+            <NoteElement note={notes.current()}/>
+            <ButtonContainer style={{flexDirection: "row"}}>
+              <Button listener={previosNote}>anterior</Button>
+              <Button listener={nextNote}>próximo</Button>
+              {/**             
+               * <Button listener={previosItem}>anterior</Button>
+                <Button listener={nextItem}>próximo</Button> 
+                */}
+ 
+            </ButtonContainer>
+          </div>
+        
+          <div className="automaticPage__results">
+            <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={sales.current().total}>tot. produtos</ValueSystemInput>
+            <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={sales.current().difference} colors={true} >diferença</ValueSystemInput>
+          </div>
+
         </div>
 
-        <SaleList sale={sales.content[sales.index]}/>
         
-      </div>}
-
-        <LinkButton leaving={eraseData} to={MyRoutes.HOME}>Voltar</LinkButton>
+        <SaleList items={items.content} selectItem={handleSelectItem} index={currentItemID}/>
+      </div>
+      }
+      <LinkButton leaving={eraseData}  to={MyRoutes.HOME}>Voltar</LinkButton>
 
     </section>
     

@@ -17,7 +17,10 @@ export class Indexer<T>{
         return this.current()
     }
     private _isNotLast(): boolean{ 
-        return (this._array.length - 1) != this._index
+        if(this._array.length == 0 ){ 
+           return false
+        }
+        return ((this._array.length - 1) != this._index)
     }
     private _isNotFirst(): boolean{ 
         return this._index != 0
@@ -32,7 +35,7 @@ export class Indexer<T>{
     public get content(): T[]{ 
         return this._array
     }
-    public set index(newIndex: number) {
+    public setIndex(newIndex: number) {
         if(!this._isContained(this.index)){
             throw RangeError()
         }
@@ -55,6 +58,7 @@ export class Indexer<T>{
         
 
     }
+    
     private _isContained(index: number){
         return (index >= 0 && (index <= this._array.length - 1))
     }
