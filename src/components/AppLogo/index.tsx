@@ -3,11 +3,9 @@ import "./applogo.css"
 const AppLogo = ({children}: {children: ReactNode}) => { 
 
     return (
-            <h2 className="appLogo">
-                {children}
-                
-            </h2>
-   
+        <h2 className="appLogo">
+            {children}
+        </h2>
     )
 }
 

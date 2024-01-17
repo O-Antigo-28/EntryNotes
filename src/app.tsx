@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { MyRoutes } from './MyRoutes';
-import {BrowserRouter, Routes, Route} from "react-router-dom"
+import {BrowserRouter, Routes, Route, HashRouter} from "react-router-dom"
 import ModeChoicePage from './pages/ModeChoicePage';
 import NotExistsPage from './pages/NotExistsPage';
 import AutomaticFileSelection from './pages/AutomaticFileSelection';
@@ -43,13 +43,13 @@ const root = createRoot(document.getElementById("react-container"));
 function App(){ 
     return (
         <RecoilRoot>
-            <BrowserRouter>
+            <HashRouter>
                 <Routes>
                     {routes.map((route, index) => { 
                         return <Route path={route.path} key={route.path + index} element={route.element}/>
                     })}
                 </Routes>
-            </BrowserRouter>
+            </HashRouter>
         </RecoilRoot>
     ) 
 }

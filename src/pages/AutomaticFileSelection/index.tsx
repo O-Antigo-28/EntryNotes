@@ -48,9 +48,9 @@ const AutomaticFileSelection = () => {
     }
 
     return (
-    <>
+    <div className="automaticFileSelection">
         <Header><></></Header>
-        <main>
+        <main className="automaticFileSelection__main">
             <Title>Configurando Modo Automático</Title>
 
             <FormFileSelector filesType={filesType} onChange={(newFilesType) =>{setFilesType(newFilesType)}} />
@@ -63,7 +63,7 @@ const AutomaticFileSelection = () => {
             {allVeryWell && <Navigate to={`${MyRoutes.BASE_AUTO_MODE}/${encodeURIComponent(filesType[0].myFile.path)}/${encodeURIComponent(filesType[2].myFile.path)}/${encodeURIComponent(filesType[1].myFile.path)}/`} />}
 
         </main>
-    </>
+    </div>
     )
 }
 

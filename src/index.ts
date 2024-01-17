@@ -21,10 +21,13 @@ const createWindow = (): void => {
   mainWindow = new BrowserWindow({
     height: 600,
     width: 400,
+    resizable: false,
+    autoHideMenuBar: true,
     webPreferences: {
       preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
       nodeIntegration: true,
-      contextIsolation:false
+      contextIsolation:false,
+      
   
     },
     alwaysOnTop:true
@@ -34,8 +37,8 @@ const createWindow = (): void => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  mainWindow.menuBarVisible = false
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
 };
 
 function registerCommands(){ 

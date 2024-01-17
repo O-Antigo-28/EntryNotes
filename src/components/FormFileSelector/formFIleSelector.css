@@ -1,0 +1,12 @@
+
+.formFileSelector{
+    font-family:inter;
+    font-weight: 200;
+}
+
+.formFileSelector__selectors{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+}

@@ -1,5 +1,5 @@
 export enum MyRoutes{ 
-    HOME = "/main_window",
+    HOME = "/",
     AUTO_FILE_SELECTION = "/automatic/fileSelection",
     MANUAL_FILE_SELECTION = "/manual/fileSelection",
     AUTO_MODE = "/automatic/:stockPath/:redePath/:caixaPath/",

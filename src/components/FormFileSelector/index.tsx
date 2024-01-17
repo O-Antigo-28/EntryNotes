@@ -23,9 +23,9 @@ const FormFileSelector = ({filesType, onChange}: {filesType: {fileType: FileType
 
     }
     return(
-        <section>
+        <section className="formFileSelector">
             <h3>procure os arquivos</h3>
-            <div>
+            <div className="formFileSelector__selectors">
                 {filesType.map((item, index) => { 
                     return <FileSelector fileType={item.fileType} key={index} onChange={handleChoiceFile}/>
                 })}
