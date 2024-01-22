@@ -6,7 +6,6 @@ import "./saleList.css"
 import { Indexer } from "../../Indexer"
 import { clipboard } from "electron"
 import {useRecoilValue}from 'recoil'
-import { saleItemListState } from "../../state/atom"
 
 
 const SaleList = ({items, index, selectItem}:{items: SaleItem[], index:number, selectItem(index:number):void}) => { 

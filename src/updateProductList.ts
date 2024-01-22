@@ -6,6 +6,7 @@ export function updateProductList(productList: Product[], productsSold: SaleItem
         const currentQuantity = sale.product.quantity
         const quantitySold = sale.quantitySold
         const productID = sale.product.id
+        console.log(sale.product.id)
   
         productList[productID].quantity = ( currentQuantity - quantitySold)
     }

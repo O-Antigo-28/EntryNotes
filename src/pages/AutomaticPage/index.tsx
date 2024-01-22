@@ -1,10 +1,8 @@
 import "./automatic.css"
-import { useParams, useLocation} from "react-router-dom"
+import { useParams} from "react-router-dom"
 import LinkButton from "../../components/LinkButton"
-import Title from "../../components/Title"
 import { MyRoutes } from "../../MyRoutes"
-import React, {  useState, useEffect, useReducer} from "react"
-import NotesPanel from "../../components/NotesPanel"
+import {  useEffect, useReducer} from "react"
 import { RedeNoteExtractor } from "../../models/NoteExtractor/RedeNoteExtractor"
 import { Note } from "../../Note"
 import { Indexer } from "../../Indexer"
@@ -14,22 +12,15 @@ import ValueSystemInput from "../../components/ValueSystemInput"
 
 import { CSVExtractor } from "../../CSVExtractor"
 import SaleList from "../../components/SaleList"
-import {Product} from "../../Product"
 import {SaleItem} from "../../SaleItem"
 import { ProductExtractor } from "../../ProductExtrator"
-import { SearchAlgorithm } from "../../SearchAlgorithm"
-import SystemInput from "../../components/SystemInput"
-import AppLogo from "../../components/AppLogo"
 import { Sale } from "../../Sale"
-import {IDGenerator} from "../../IDGenerator"
 import ButtonContainer from "../../components/ButtonContainer"
 import NoteElement from "../../components/NoteElement"
 import Button from "../../components/Button"
 
 import {ipcRenderer} from "electron"
 import { Directions } from "../../Directions"
-import { useRecoilState, useSetRecoilState } from "recoil"
-import { saleItemListState } from "../../state/atom"
 
 import { reducerAutomaticPage } from "./reducerAutomaticPage"
 
@@ -42,16 +33,18 @@ const AutomaticPage = () => {
 
   const {stockPath, redePath, caixaPath}  = useParams()
 
+  const [state, dispatch] = useReducer(reducerAutomaticPage, {
+      ready: false,
+      indexItem: 0,
+      items: new Indexer<SaleItem>([]),
+      notes: new Indexer<Note>([]),
+      sales: new Indexer<Sale>([]), 
+      products: []}
+    )
 
-  
-  const setSaleItemList = useSetRecoilState<SaleItem[]>(saleItemListState)
-  
-  const [state, dispatch] = useReducer(reducerAutomaticPage, {ready: false, indexItem: 0,items: new Indexer<SaleItem>([]), notes: new Indexer<Note>([]), sales: new Indexer<Sale>([]), products: []})
-
-  // const [downloadedFiles, setdownloadedFiles] = useState<boolean>(false)
 
   function handleKeyDown(){ 
-
+    
   }
 
   function handleKeyUp(){ 
@@ -91,15 +84,12 @@ const AutomaticPage = () => {
         // STOCK
         const rawProductsData = await CSVExtractor(decodeURIComponent(stockPath));
         const productExtractor = new ProductExtractor(rawProductsData)
-        console.log(productExtractor.products)
         // REDE
         const rawRedeData = await CSVExtractor(decodeURIComponent(redePath));
         const redeExtractor = new RedeNoteExtractor(rawRedeData);
-        console.log(redeExtractor.notes)
         // CAIXA
         const rawCaixaData = await(CSVExtractor(decodeURIComponent(caixaPath), CAIXA_FILE_ENCODING))
         const caixaExtractor = new CaixaNoteExtractor(rawCaixaData)
-        console.log(caixaExtractor.notes)
 
         if(!ignore){ 
           dispatch({type: "LOAD_PRODUCTS", products: productExtractor.products})
@@ -121,15 +111,15 @@ const AutomaticPage = () => {
     fetchData();
 
     return () => { 
-      dispatch({type: "ERASE_DATA"})
+      console.log("era pra ser desmontado")
+      eraseData()
       ignore = true
     }
     
   }, []); 
 
-  useEffect(()=> { 
-    if(state.ready){
-      ipcRenderer.send('register-the-commands')
+  function registerCommandsOfAutomaticPage(){
+    ipcRenderer.send('register-the-commands')
       ipcRenderer.on('accelerator-directions', (event, key)=>{ 
         switch(key){
           case Directions.LEFT:
@@ -146,12 +136,18 @@ const AutomaticPage = () => {
             break;
         }
       })
+  }
+
+  useEffect(()=> { 
+    if(state.ready){
+      registerCommandsOfAutomaticPage()
     }
 
   }, [state.ready])
 
   return (
     <section className="automaticPage" onKeyDown={handleKeyDown} onKeyUp={handleKeyUp}>
+      
 
       {( state.ready) 
        &&
@@ -169,6 +165,7 @@ const AutomaticPage = () => {
           <div className="automaticPage__results">
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().total}>tot. produtos</ValueSystemInput>
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().difference} colors={true} >diferença</ValueSystemInput>
+            <Button presetStyle="p" listener={() => {}}>AUTO</Button>
           </div>
 
         </div>

@@ -6,11 +6,13 @@ import Header from "../../components/Header"
 import FileSelector from "../../components/FileSelector"
 import ButtonContainer from "../../components/ButtonContainer"
 import Button from "../../components/Button"
+import {Navigate} from 'react-router-dom'
 import { useState } from "react"
 import { MyRoutes } from "../../MyRoutes"
 import { MyFile } from "../../MyFile"
 import { FileType } from "../../FileType"
 import FormFileSelector from "../../components/FormFileSelector"
+
 
 const ManualFileSelection = () => {
 
@@ -41,7 +43,8 @@ const ManualFileSelection = () => {
     }
     return (
     <>
-        <Header><></></Header>
+        <Header><></>
+        </Header>
         <main className="automaticFileSelection__main">
             <Title>Configurando modo manual</Title>
 
@@ -52,6 +55,7 @@ const ManualFileSelection = () => {
                 <Button listener={check}>Confirmar</Button>
                 <LinkButton to={MyRoutes.HOME}>voltar</LinkButton>
             </ButtonContainer>
+            {/* { allVeryWell && <Navigate to={`${MyRoutes.BASE_MANUAL_MODE}/${encodeURIComponent(filesType[0])}`}/>} */}
         </main>
         
     </>

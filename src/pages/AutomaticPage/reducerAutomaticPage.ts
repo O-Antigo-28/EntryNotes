@@ -7,8 +7,10 @@ import { IStatesAutomaticPage } from "./IStateAutomaticPage"
 import { ActionAutomaticPage } from "./ActionAutomaticPage"
 import { SearchAlgorithm } from "../../SearchAlgorithm"
 import { updateProductList } from "../../updateProductList"
+import { useUpdateProductList } from "../../state/productList"
 
 export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAutomaticPage> = (state, action) => { 
+    // const updateProductList = useUpdateProductList () 
     switch(action.type){
       case 'ADDING_TO_NOTES_LIST':{
         return state.notes.length === 0? {...state, notes: new Indexer<Note>(action.notes)} : {...state, notes: new Indexer<Note>([...state.notes.content].concat(action.notes))}
@@ -28,6 +30,7 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
         return {...state, items: new Indexer<SaleItem>(state.sales.current().itens), indexItem: 0}
       }
       case 'ERASE_DATA': { 
+        console.log(state.products)
         IDGenerator.reset()
         return {ready: false, indexItem: 0, items: new Indexer<SaleItem>([]), notes: new Indexer<Note>([]), sales: new Indexer<Sale>([]), products: []}
       }
@@ -46,6 +49,7 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
         return {...state, indexItem: state.items.index}
       }
       case 'LOAD_PRODUCTS': { 
+
         return {...state, products: action.products} 
       }
       case 'GENERATE_SALES':{
