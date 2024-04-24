@@ -2,6 +2,7 @@ import "./automaticFileSelection.css"
 import Header from "../../components/Header"
 import { ReactNode, useState } from "react"
 import FileSelector from "../../components/FileSelector"
+import { FileChooser } from "./../../FileChooser"
 import { FileExtensions } from "../../FileExtensions"
 import LinkButton from "../../components/LinkButton"
 import ButtonContainer from "../../components/ButtonContainer"
@@ -10,42 +11,67 @@ import Title from "../../components/Title"
 import { MyRoutes } from "../../MyRoutes"
 import { FileType } from "../../FileType"
 import { Navigate } from "react-router-dom"
-import { MyFile } from "../../MyFile"
+import { FileIdentifier } from "../../FileIdentifier"
 import FormFileSelector from "../../components/FormFileSelector"
+import { useRecoilValue } from "recoil"
+import {  useIDCaixaFIValue, useIDEstoqueFIValue, useIDRedeFIValue } from "./../../atoms/fileIdentifiers"
 
 
 
+
+const stockExtensions = [
+    FileExtensions.CSV
+]
+
+const redeExtensions = [
+    FileExtensions.CSV,
+    FileExtensions.EXCEL
+]
+
+const caixaExtensions = [ 
+    FileExtensions.CSV,
+    FileExtensions.EXCEL
+]
+
+
+
+
+const fileTypeRede = new FileType("REP.REDE", redeExtensions)
+const fileTypeCaixa = new FileType("REP.CAIXA", caixaExtensions)
+const fileTypeStock = new FileType("REP.ESTOQUE", stockExtensions)
 
 const AutomaticFileSelection = () => {
+    const idFIRede = useIDRedeFIValue()
+    const idFICaixa = useIDCaixaFIValue()
+    const idFIStock = useIDEstoqueFIValue()
+
     const [allVeryWell, setAllVeryWell] = useState(false)
 
-
-
-    const [filesType, setFilesType] = useState([ 
-        {fileType: new FileType("estoque", [FileExtensions.CSV]), myFile: null}, 
-        {fileType: new FileType("caixa", [FileExtensions.CSV]),   myFile: null},
-        {fileType: new FileType("rede",  [FileExtensions.CSV]),   myFile: null}
+    const [fileChoosers, setFileChoosers] = useState([ 
+        new FileChooser(idFIRede, fileTypeRede),
+        new FileChooser(idFICaixa, fileTypeCaixa), 
+        new FileChooser(idFIStock, fileTypeStock)
     ])
 
 
 
-    function check(): void{
-        let isNotValidFiles: boolean = false 
-        filesType.forEach((item) => { 
-            if(!item.fileType || !item.myFile){
-                isNotValidFiles = true
-                return
-            }
-            else if(item.myFile.path === undefined || item.myFile.fileName === undefined ){
-                isNotValidFiles = true
-                return
-            }
+    // function read(): void{
+    //     let isNotValidFiles: boolean = false 
+    //     filesType.forEach((item) => { 
+    //         if(!item.fileType || !item.myFile){
+    //             isNotValidFiles = true
+    //             return
+    //         }
+    //         else if(item.myFile.path === undefined || item.myFile.fileName === undefined ){
+    //             isNotValidFiles = true
+    //             return
+    //         }
             
-        })
-        if(!isNotValidFiles){
-            setAllVeryWell(true)
-        }
-    }
+    //     })
+    //     if(!isNotValidFiles){
+    //         setAllVeryWell(true)
+    //     }
+    // }
 
     return (
     <div className="automaticFileSelection">
@@ -53,10 +79,10 @@ const AutomaticFileSelection = () => {
         <main className="automaticFileSelection__main">
             <Title>Configurando Modo Automático</Title>
 
-            <FormFileSelector filesType={filesType} onChange={(newFilesType) =>{setFilesType(newFilesType)}} />
+            <FormFileSelector filesType={filesType} />
 
             <ButtonContainer>
-                <Button listener={check}>confirmar</Button>
+                <Button listener={read}>confirmar</Button>
                 <LinkButton to={MyRoutes.HOME}>Voltar</LinkButton>
             </ButtonContainer>
 

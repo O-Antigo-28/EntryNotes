@@ -3,34 +3,63 @@ import { PaymentMethod, Flag, PAYMENT_METHODS, NOTE_FLAGS, MACHINE_NAMES, Note }
 import { normalizeString } from "../../normalizeString";
 
 export class CaixaNoteExtractor extends NoteExtractor{
+    protected _dataIsCurrent(_table: Object[]): boolean {
+      console.log(_table)
+      console.log("caixa")
+      return false
+    }
+    protected _extractDate(date:string = "1/1/1999", ):Date{
+      if (typeof date != "string"){
+          return new Date(2020)
+        }
+  
+  
+      let [day, month, year] = date.split("/")
+      
+  
+      if(year.length > 4){
+        year = year.slice(0, 4)
+      }
+      
+      const [hour, minutes, seconds] = this._extractClock("435")
+  
+      
+      return new Date(parseInt(year), parseInt(month) -1 , parseInt(day), parseInt(hour), parseInt(minutes), parseInt(seconds) )
+    }
+  
+    protected _extractClock(clock: string): string[] {
+      return ["algo", "alfo", "algo"]
 
-    // protected _extractNotes(_table: Object[]): void {
-    //     const APPROVED_SALE = "APROVADA"
-    //     _table.forEach((object: { 
-    //         "Data da venda": string,
-    //         "Hora da venda": string,
-    //         "Produto":string,
-    //         "Parcelas":string,
-    //         "Bandeira":string,
-    //         "Status":string,
-    //         "Valor bruto":string, 
-    //     })=> { 
-    //         if(object["Data da venda"].length > 3){ 
+    }
 
-    //             const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.Produto, object.Parcelas)
-    //             const flag: Flag = this._extractFlag(object.Bandeira)
-    //             const date: Date = this._extractDate(object["Data da venda"])
-    //             const value = this._extractValue(object["Valor bruto"])
-                
-    //             if(normalizeString(object.Status) == APPROVED_SALE && flag != NOTE_FLAGS.NONEXISTENT && paymentMethod != PAYMENT_METHODS.NONEXISTENT){ 
-    //               this._appendNote(new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, date, flag ))
-    //             }   
-    //         }
+    protected _oldNotesMethod(_table: Object[]): void {
+      const APPROVED_SALE = "APROVADA"
+      _table.forEach((object: { 
+          "Data da venda": string,
+          "Hora da venda": string,
+          "Produto":string,
+          "Parcelas":string,
+          "Bandeira":string,
+          "Status":string,
+          "Valor bruto":string, 
+      })=> { 
+          if(object["Data da venda"].length > 3){ 
 
-    //     }) 
-    // } 
+              const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.Produto, object.Parcelas)
+              const flag: Flag = this._extractFlag(object.Bandeira)
+              const date: Date = this._extractDate(object["Data da venda"])
+              const value = this._extractValue(object["Valor bruto"])
+              
+              if(normalizeString(object.Status) == APPROVED_SALE && flag != NOTE_FLAGS.NONEXISTENT && paymentMethod != PAYMENT_METHODS.NONEXISTENT){ 
+                this._appendNote(new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, date, flag ))
+              }   
+          }
 
-    protected _extractNotes(_table: Object[]): void {
+      }) 
+    }
+
+
+    protected _newNotesMethod(_table: Object[]): void{
       const APPROVED_SALE = "AUTORIZADA"
 
   
@@ -53,8 +82,8 @@ export class CaixaNoteExtractor extends NoteExtractor{
           
           console.log(object)
       })
-      
     }
+
     protected _extractFlag(flagRaw:string): Flag{
 
         flagRaw = normalizeString(flagRaw)

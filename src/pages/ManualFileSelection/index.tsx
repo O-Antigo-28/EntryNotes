@@ -9,7 +9,7 @@ import Button from "../../components/Button"
 import {Navigate} from 'react-router-dom'
 import { useState } from "react"
 import { MyRoutes } from "../../MyRoutes"
-import { MyFile } from "../../MyFile"
+import { FileIdentifier } from "../../MyFile"
 import { FileType } from "../../FileType"
 import FormFileSelector from "../../components/FormFileSelector"
 

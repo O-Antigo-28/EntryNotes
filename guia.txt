@@ -1,0 +1,6 @@
+1. melhorar o gerenciamento de estados da aplicação
+    * usar o recoil
+    * tipos de arquivo{
+        nome do arquivo 
+        s
+    }

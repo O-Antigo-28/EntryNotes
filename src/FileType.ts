@@ -1,17 +1,22 @@
+type TypeDataFile = "REP.ESTOQUE" | "REP.CAIXA" | "REP.REDE"
+
 export class FileType{ 
     constructor(
-        private _name: string,
-        private _accepts: string[]
+        private _typeData: TypeDataFile,
+        private _accepts: string[],
     ){ 
-
+     
     }
-    get name(): string { 
-        return this._name
+    
+    get typeData(): string { 
+        return this._typeData
     }
 
     get accepts(): string[]{ 
         return this._accepts
     }
+
+
 
     public acceptsToString(): string{
         let acceptsString = ""

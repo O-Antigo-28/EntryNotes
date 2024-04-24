@@ -8,10 +8,24 @@ import { extractValue } from "../../extractValue";
 export abstract class NoteExtractor{
   private _notes: Note[] = []
   constructor(protected _table: Object[]){
+
     this._extractNotes(this._table)
   }
+  protected abstract _oldNotesMethod(_table: Object[]): void
+  protected abstract _newNotesMethod(_table: Object[]):void
+  protected _extractNotes(_table: Object[]){
+    if (this._dataIsCurrent(_table)){
+      // console.log("é atual", _table)
+      this._newNotesMethod(_table)
+    }
+    else{
+      // console.log("não é atual",  _table)
+      this._oldNotesMethod(_table)
+    }
+  }
 
-  protected abstract _extractNotes(_table: Object[]): void
+
+  protected abstract _dataIsCurrent(_table: Object[]): boolean
 
   public get notes() {
     return this._notes
@@ -20,22 +34,9 @@ export abstract class NoteExtractor{
   protected _appendNote(note: Note):void{
     this._notes.push(note)
   }
-  protected _extractDate(date:string = "1/1/1999", clock: string = "23:59:59"):Date{
-    if (typeof clock != "string" || typeof date != "string"){
-        return new Date(2020)
-      }
-    let [day, month, year] = date.split("/")
-    
+  protected abstract _extractDate(date:string):Date
+  protected abstract _extractClock(clock: string): string[]
 
-    if(year.length > 4){
-      year = year.slice(0, 4)
-    }
-    
-    const [hour, minutes, seconds] = clock.split(":")
-
-    
-    return new Date(parseInt(year), parseInt(month) -1 , parseInt(day), parseInt(hour), parseInt(minutes), parseInt(seconds) )
-  }
   protected abstract _extractFlag(flagRaw:string): Flag
 
   protected _extractPaymentMethod(modality: string, installments: string): PaymentMethod{ 
@@ -74,5 +75,6 @@ export abstract class NoteExtractor{
   protected _extractValue(rawValue:string): number{
     return extractValue(rawValue)
   }
+
 
 }

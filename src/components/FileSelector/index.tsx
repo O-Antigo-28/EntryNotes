@@ -4,8 +4,8 @@ import infoSVG from '../../assets/icons/fileSelector/info-circle.svg'
 import checkSVG from '../../assets/icons/fileSelector/check-circle-fill.svg'
 import "./fileSelector.css"
 import { FileType } from "../../FileType"
-import {MyFile} from "../../MyFile"
-const FileSelector = ({onChange, fileType} : {fileType: FileType, onChange(file: MyFile, fileTypeName: string): void }) => { 
+import {FileIdentifier} from "../../FileIdentifier"
+const FileSelector = ({onChange, fileType, children} : {fileType: FileType, onChange(file: FileIdentifier, fileTypeName: string): void, children?: React.ReactNode }) => { 
     
     const[ path, setPath] = useState("")
     const selectorFileId = useId()
@@ -14,11 +14,11 @@ const FileSelector = ({onChange, fileType} : {fileType: FileType, onChange(file:
         const selectedFile = e.target.files[0]
         if(selectedFile){ 
 
-            const choosenFile = new MyFile(selectedFile.name, selectedFile.path)
+            const choosenFile = new FileIdentifier(selectedFile.name, selectedFile.path)
             
             setPath(selectedFile.name)
 
-            onChange(choosenFile, fileType.name)
+            onChange(choosenFile, fileType.typeData)
         }
     }
 
@@ -26,14 +26,16 @@ const FileSelector = ({onChange, fileType} : {fileType: FileType, onChange(file:
         <section className="fileSelector">
             <div className="container__fileSelector">
                 <div>
-                    <h4 className="fileSelector__title">{fileType.name}</h4>
+                    <h4 className="fileSelector__title">{fileType.typeData}</h4>
                     <p>{path}</p>
                 </div>
 
                 <div>
                     <label className="inputLabel" htmlFor={selectorFileId}>buscar</label>
-                    <input onChange={(event) => {handleOnChange(event) }} type="file" id={selectorFileId} accept={fileType.acceptsToString()} style={{display: "none"}} />
+                    <input onChange={(event) => {handleOnChange(event) }} type="file"  id={selectorFileId} accept={fileType.acceptsToString()} style={{display: "none"}} />
                 </div>
+
+                {children}
             </div>
 
             <div className="fileSelector__containerInfo">

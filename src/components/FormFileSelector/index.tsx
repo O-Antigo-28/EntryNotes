@@ -1,33 +1,50 @@
 import "./formFileSelector.css"
-import { MyFile } from "../../MyFile"
+import { FileIdentifier } from "../../FileIdentifier"
 import { FileType } from "../../FileType"
 import FileSelector from "../FileSelector"
+import { useId } from "react"
+import CheckBox from "../../components/CheckBox"
+import { FileChooser } from "../../FileChooser"
+import { useIDCaixaFIValue, caixaFileIdentifier, useIDRedeFIValue, redeFileIdentifier, useIDEstoqueFIValue, stockFileIdentifier, useSetFileInFileIdentifier } from "./../../atoms/fileIdentifiers"
 
-const FormFileSelector = ({filesType, onChange}: {filesType: {fileType: FileType, myFile: MyFile}[], onChange(newFilesType: {fileType: FileType, myFile: MyFile}[]):void}) => { 
+const FormFileSelector = ({fileChoosers}: {fileChoosers: FileChooser[]} ) => {
+    const caixaID = useIDCaixaFIValue();
+    const redeID = useIDRedeFIValue();
+    const stockID = useIDEstoqueFIValue();
 
-    function handleChoiceFile(choiceFile: MyFile, name: string): void{
-        filesType.forEach((file, index) => { 
-            if(file.fileType.name === name){ 
-                onChange(updateFile(index, choiceFile))
-                return
-            } 
-        })
+    function handleChoiceFile(choiceFile: FileIdentifier, name: string): void{
+        // identificar qual arquivo foi modificado 
+        switch (choiceFile.id){
+            case caixaID:
+                useSetFileInFileIdentifier()
+
+                break;
+            case redeID:
+
+                break;
+            case stockID:
+
+                break;
+        }
+        // fileChoosers.forEach((fileType, index) => {
+        //     if(fileType.typeData === name){
+        //         (updateFile(index, choiceFile))
+        //         return
+        //     }
+        // })
 
     }
 
-    function updateFile(index: number, data: MyFile){ 
-        const updatedFiles = [...filesType]
-        updatedFiles[index].myFile = data
-        return updatedFiles
-    
+    function updateFile(index: number, data: FileIdentifier) {
 
     }
+
     return(
         <section className="formFileSelector">
             <h3>procure os arquivos</h3>
             <div className="formFileSelector__selectors">
-                {filesType.map((item, index) => { 
-                    return <FileSelector fileType={item.fileType} key={index} onChange={handleChoiceFile}/>
+                {fileChoosers.map((fileChooser, index) => {
+                    return <FileSelector fileType={fileChooser.fileType} key={index} onChange={handleChoiceFile}></FileSelector>
                 })}
             </div>
         </section>

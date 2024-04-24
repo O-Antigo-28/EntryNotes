@@ -83,6 +83,7 @@ const AutomaticPage = () => {
       try {
         // STOCK
         const rawProductsData = await CSVExtractor(decodeURIComponent(stockPath));
+        
         const productExtractor = new ProductExtractor(rawProductsData)
         // REDE
         const rawRedeData = await CSVExtractor(decodeURIComponent(redePath));
