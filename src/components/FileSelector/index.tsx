@@ -5,34 +5,42 @@ import checkSVG from '../../assets/icons/fileSelector/check-circle-fill.svg'
 import "./fileSelector.css"
 import { FileType } from "../../FileType"
 import {FileIdentifier} from "../../FileIdentifier"
-const FileSelector = ({onChange, fileType, children} : {fileType: FileType, onChange(file: FileIdentifier, fileTypeName: string): void, children?: React.ReactNode }) => { 
-    
-    const[ path, setPath] = useState("")
+import { FileChooser } from "../../FileChooser"
+import { useGetFileIdentifierByID, useUpdateFileIdentifierByID } from "./../../atoms/fileIdentifiers"
+const FileSelector = ({fileChooser, children} : {fileChooser: FileChooser, children?: React.ReactNode }) => { 
+    const updateFileIdentifier = useUpdateFileIdentifierByID()
+    const getFileIdentifierByID = useGetFileIdentifierByID()
+    const[ path, setPath] = useState<string>("")
     const selectorFileId = useId()
-
+    
+    
     function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) { 
         const selectedFile = e.target.files[0]
+
         if(selectedFile){ 
-
-            const choosenFile = new FileIdentifier(selectedFile.name, selectedFile.path)
             
+            console.log(`o arquivo ${selectedFile.name} tem o id: ${fileChooser.idFileIdentifier}`)
+            updateFileIdentifier(fileChooser.idFileIdentifier, selectedFile.name, selectedFile.path)
             setPath(selectedFile.name)
-
-            onChange(choosenFile, fileType.typeData)
+            
         }
+        // etapa de verificação
+        const fileIdentifier = getFileIdentifierByID(fileChooser.idFileIdentifier)
+        console.log(`O FileIdentifier de ID: ${fileIdentifier.id} foi atualizado com sucesso com o arquivo de caminho ${fileIdentifier.path} `)
+
     }
 
     return (
         <section className="fileSelector">
             <div className="container__fileSelector">
                 <div>
-                    <h4 className="fileSelector__title">{fileType.typeData}</h4>
+                    <h4 className="fileSelector__title">{fileChooser.fileType.typeData}</h4>
                     <p>{path}</p>
                 </div>
 
                 <div>
                     <label className="inputLabel" htmlFor={selectorFileId}>buscar</label>
-                    <input onChange={(event) => {handleOnChange(event) }} type="file"  id={selectorFileId} accept={fileType.acceptsToString()} style={{display: "none"}} />
+                    <input onChange={(event) => {handleOnChange(event) }} type="file" id={selectorFileId} accept={fileChooser.fileType.acceptsToString()} style={{display: "none"}} />
                 </div>
 
                 {children}

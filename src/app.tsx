@@ -8,7 +8,7 @@ import ManualFileSelection from './pages/ManualFileSelection';
 import AutomaticPage from './pages/AutomaticPage';
 import ManualPage from './pages/ManualPage';
 import { RecoilRoot } from 'recoil';
-const routes = [
+const routes= [
     {
         path: MyRoutes.HOME,
         element: <ModeChoicePage/>
@@ -23,7 +23,7 @@ const routes = [
     },
     {
         path: MyRoutes.MANUAL_MODE,
-        element: <ManualPage/>
+        element: <ManualPage/>, 
     },
     { 
         path: MyRoutes.AUTO_MODE, 
@@ -41,7 +41,7 @@ const root = createRoot(document.getElementById("react-container"));
 function App(){ 
     return (
         <RecoilRoot>
-                <HashRouter>
+            <HashRouter>
                 <Routes>
                     {routes.map((route, index) => { 
                         return <Route path={route.path} key={route.path + index} element={route.element}/>

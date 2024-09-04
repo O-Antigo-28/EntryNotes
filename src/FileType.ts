@@ -1,14 +1,15 @@
 type TypeDataFile = "REP.ESTOQUE" | "REP.CAIXA" | "REP.REDE"
-
+type Priority = "OPTIONAL" | "NESCESSARY" 
 export class FileType{ 
     constructor(
         private _typeData: TypeDataFile,
         private _accepts: string[],
+        private _optional?: Priority
     ){ 
-     
+     this._optional ?? "NESCESSARY"
     }
     
-    get typeData(): string { 
+    get typeData(): TypeDataFile { 
         return this._typeData
     }
 
@@ -16,6 +17,10 @@ export class FileType{
         return this._accepts
     }
 
+    get isOptional(): boolean{
+        console.log(this._optional)
+        return this._optional == "OPTIONAL"
+    }
 
 
     public acceptsToString(): string{

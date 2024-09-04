@@ -6,7 +6,9 @@ export class FileChooser{
         private _fileType: FileType,
         ){
     }
-
+    public get idFileIdentifier(): string{
+        return this._idFileIdentifier
+    }
     public get fileType(): FileType{
         return this._fileType
     }

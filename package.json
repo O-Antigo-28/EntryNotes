@@ -47,10 +47,12 @@
   },
   "dependencies": {
     "@types/uuid": "^9.0.8",
+    "bootstrap": "^5.3.3",
     "electron-squirrel-startup": "^1.0.0",
     "iconv-lite": "^0.6.3",
     "papaparse": "^5.4.1",
     "react": "^18.2.0",
+    "react-bootstrap": "^2.10.4",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",
     "recoil": "^0.7.7",
