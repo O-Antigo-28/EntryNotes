@@ -58,6 +58,8 @@ export class RedeNoteExtractor extends NoteExtractor{
         const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.modalidade, object["número de parcelas"])
         const flag: Flag = this._extractFlag(object.bandeira)
         const date: Date = this._extractDate(obterDataAtualFormatada())
+        const time: Date = this._extractClock(object["hora da venda"])
+        date.setHours(time.getHours(), time.getMinutes(), time.getSeconds())
         const value = this._extractValue(object["valor da venda"])
         
         if(normalizeString(object["status da venda"]) == APPROVED_SALE && flag != NOTE_FLAGS.NONEXISTENT && paymentMethod != PAYMENT_METHODS.NONEXISTENT){ 
@@ -86,13 +88,16 @@ export class RedeNoteExtractor extends NoteExtractor{
       year = year.slice(0, 4)
     }
     
-    const [hour, minutes, seconds] = this._extractClock("435")
+  
 
     
-    return new Date(parseInt(year), parseInt(month) -1 , parseInt(day), parseInt(hour), parseInt(minutes), parseInt(seconds) )
+    return new Date(parseInt(year), parseInt(month) -1 , parseInt(day))
     }
-    protected _extractClock(clock: string): string[] {
-      return ["algo", "alfo", "algo"]
+    protected _extractClock(clock: string): Date {
+      const [hours, minutes, seconds] = clock.split(":")
+      const time: Date = new Date()
+      time.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds))
+      return time;
     } 
   
   

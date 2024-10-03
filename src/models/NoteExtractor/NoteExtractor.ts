@@ -35,7 +35,7 @@ export abstract class NoteExtractor{
     this._notes.push(note)
   }
   protected abstract _extractDate(date:string):Date
-  protected abstract _extractClock(clock: string): string[]
+  protected abstract _extractClock(clock: string): Date
 
   protected abstract _extractFlag(flagRaw:string): Flag
 

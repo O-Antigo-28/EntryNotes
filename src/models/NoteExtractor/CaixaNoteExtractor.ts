@@ -4,9 +4,8 @@ import { normalizeString } from "../../normalizeString";
 
 export class CaixaNoteExtractor extends NoteExtractor{
     protected _dataIsCurrent(_table: Object[]): boolean {
-      console.log(_table)
-      console.log("caixa")
-      return false
+
+      return true
     }
     protected _extractDate(date:string = "1/1/1999", ):Date{
       if (typeof date != "string"){
@@ -21,14 +20,17 @@ export class CaixaNoteExtractor extends NoteExtractor{
         year = year.slice(0, 4)
       }
       
-      const [hour, minutes, seconds] = this._extractClock("435")
+    
   
       
-      return new Date(parseInt(year), parseInt(month) -1 , parseInt(day), parseInt(hour), parseInt(minutes), parseInt(seconds) )
+      return new Date(parseInt(year), parseInt(month) -1 , parseInt(day) )
     }
   
-    protected _extractClock(clock: string): string[] {
-      return ["algo", "alfo", "algo"]
+    protected _extractClock(clock: string): Date {
+      const time:  Date = new Date()
+      const [hours, minutes] = clock.split("h")
+      time.setHours(parseInt(hours), parseInt(minutes))
+      return time
 
     }
 
@@ -73,14 +75,21 @@ export class CaixaNoteExtractor extends NoteExtractor{
         }) => {
           const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.Produto, object.Parcelado)
           const flag: Flag = this._extractFlag(object.Bandeira)
-          const date: Date = this._extractDate(object["Data da venda"])
-          const value = this._extractValue(object["Valor bruto"])
           
+          const rawDataAndRawTime = object["Data da venda"]
+          console.log("data da venda ", rawDataAndRawTime)
+          // estrutura é data e hora "dd/mm/aaaa às ho/hmm"
+          const [rawDate, rawTime] =rawDataAndRawTime.split(" às ")
+          console.log(`rawDate ${rawDate} / rawTime ${rawTime}`)
+
+          let date: Date = this._extractDate(rawDate)
+          const time: Date = this._extractClock(rawTime)
+          const value = this._extractValue(object["Valor bruto"])
+          date.setHours(time.getHours(), time.getMinutes())
           if(normalizeString(object.Status) == APPROVED_SALE && flag != NOTE_FLAGS.NONEXISTENT && paymentMethod != PAYMENT_METHODS.NONEXISTENT){ 
             this._appendNote(new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, date, flag ))
           } 
           
-          console.log(object)
       })
     }
 
