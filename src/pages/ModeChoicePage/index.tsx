@@ -4,13 +4,14 @@ import LinkButton from "../../components/LinkButton"
 import Header from "../../components/Header"
 import Title from "../../components/Title"
 import ButtonContainer from "../../components/ButtonContainer"
+import { MyRoutes } from "../../MyRoutes"
 const ModeChoicePage = () => {
 
     const pageQuestion = "Qual modo você irá escolher?"
 
     const modes = [
-        {name: "Automático", link: "/automatic/fileSelection"},
-        {name: "Manual", link:"/manual/fileSelection"}
+        {name: "Automático", link:MyRoutes.AUTO_FILE_SELECTION},
+        {name: "Manual", link:MyRoutes.MANUAL_MODE}
     ]
 
     return (
