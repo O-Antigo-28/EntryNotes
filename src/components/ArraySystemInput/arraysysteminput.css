@@ -2,18 +2,32 @@
     border-radius: 4px;
     background-color: #ffffff;
     padding: 8px;
+    height: 2.4rem;
     position: relative;
+    box-sizing: border-box;
 
 }
 .label__ArraySystemInput{ 
-    top: -8px; 
+    top: -12px; 
+    display: block;
     left: 8px;
+    color: #222;
     font-family: baloo;
     position: absolute;
+    z-index: 999;
+    font-weight: 300;
+    
 }
 
 .input__ArraySystemInput{
-    font-family: k2d; 
+    display: block;
+    background-color: inherit;
+    font-family: k2d;
+    text-align: end;
     position: absolute; 
+    top: 15%;
+    right: 8px;
+    max-width: calc(100% - 10px);
+    border: none;
 
 }
