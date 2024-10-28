@@ -1,0 +1,19 @@
+.ArraySystemInput{ 
+    border-radius: 4px;
+    background-color: #ffffff;
+    padding: 8px;
+    position: relative;
+
+}
+.label__ArraySystemInput{ 
+    top: -8px; 
+    left: 8px;
+    font-family: baloo;
+    position: absolute;
+}
+
+.input__ArraySystemInput{
+    font-family: k2d; 
+    position: absolute; 
+
+}
