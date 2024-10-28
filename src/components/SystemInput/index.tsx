@@ -1,5 +1,5 @@
 import "./systemInput.css"
-import { CSSProperties, ChangeEvent, ReactNode, useId, useState } from "react"
+import { CSSProperties, ChangeEvent, ReactNode, useId} from "react"
 
 const SystemInput = ({children, value, style}: {children: ReactNode, value:string, style?: CSSProperties}) => { 
     const systemInputID = useId()

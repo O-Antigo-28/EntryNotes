@@ -6,8 +6,9 @@
     align-items: center;
     padding: 1rem;
     width: 100%;
+    height: 3.4rem;
     max-width: 100%;
-    background-color: #fff;
+    background-color: #EEEEEE;
     box-sizing: border-box;
     border-radius: 6px;
 }
@@ -16,15 +17,19 @@
 .systemInput__label{
     display: block;
     position: absolute;
-    top:-1.1rem;
-    left: -1px;
+    top:6px;
+    left: 8px;
     font-family: baloo;
     font-size: 0.81rem;
+    z-index: 999;
+    color: #222;
 }
 .systemInput__value{
     position: absolute;
+    background-color: inherit;
     font-family: k2d;
-    right:0px;
+    right:8px;
+    bottom: 8px;
     max-width: calc(100% - 10px);
     display: inline;
     text-align: end;
