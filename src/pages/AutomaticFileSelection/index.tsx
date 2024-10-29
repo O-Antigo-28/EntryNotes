@@ -111,8 +111,6 @@ const AutomaticFileSelection = () => {
         let numberOfFileChooser = filesChoosers.length
         
         while(isValidFiles && count < numberOfFileChooser){
-            console.log(filesIdentifiers[count].fileName === StockConfigFilename)
-            console.log(filesIdentifiers[count].fileName)
             if (!filesChoosers[count].fileType.isOptional && !filesIdentifiers[count].fileIdentified()){
                 isValidFiles = false
                 return
@@ -125,7 +123,7 @@ const AutomaticFileSelection = () => {
 
             count++
         }
-
+        //
         setAllVeryWell(isValidFiles)
     }
 
@@ -144,8 +142,12 @@ const AutomaticFileSelection = () => {
             <MyVerticallyCenteredModal show={showModalInvalidStockInvalid}
             onHide={() => {setShowModalInvalidStockInvalid(false)}}/>
 
-            {allVeryWell && <Navigate to={`${MyRoutes.BASE_AUTO_MODE}/${encodeURIComponent(stockFileIdentifier.path)}/${encodeURIComponent(redeFileIdentifier.path)}/${encodeURIComponent(caixaFileIdentifier.path)}/`} />}
+            {allVeryWell ? ((redeFileIdentifier.path.length > 0 || caixaFileIdentifier.path.length > 0) ? <Navigate to={MyRoutes.AUTO_MODE}/> : <Navigate to={MyRoutes.MANUAL_MODE}/>) : <></>}
+          
 
+
+            <p>{redeFileIdentifier.path}</p>
+            <p>{caixaFileIdentifier.path}</p>
         </main>
     </div>
     )
