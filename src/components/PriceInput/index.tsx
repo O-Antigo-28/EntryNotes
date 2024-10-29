@@ -1,6 +1,7 @@
 
 import React, { useState } from "react"
 import "./priceinput.css"
+import SystemInput from "../../components/SystemInput";
 function PriceInput({value, setValue}: {value: string, setValue: React.Dispatch<React.SetStateAction<string>>}){
 
   const [firstChar, setFirstChar] = useState(true)
@@ -60,15 +61,7 @@ function PriceInput({value, setValue}: {value: string, setValue: React.Dispatch<
 
   return (
     <div>
-      <label>Valor:</label>
-      <input className="InputPriceInput"
-        type="text"
-        value={value}
-        onKeyDown={handleKeyDown}
-        onChange={handleChange}
-        
-        placeholder="R$ 0.00"
-      />
+      <SystemInput value={value} maxLength={8} onKeyDown={handleKeyDown} onChange={handleChange}>valor: </SystemInput>
     </div>
   );
 };
