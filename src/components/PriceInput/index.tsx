@@ -1,8 +1,11 @@
 
-import React, { useState } from "react"
+import React, { InputHTMLAttributes, useState } from "react"
 import "./priceinput.css"
 import SystemInput from "../../components/SystemInput";
-function PriceInput({value, setValue}: {value: string, setValue: React.Dispatch<React.SetStateAction<string>>}){
+interface IPriceInput extends InputHTMLAttributes<HTMLInputElement> {
+  setValue:React.Dispatch<React.SetStateAction<string>>,
+}
+const PriceInput: React.FC<IPriceInput> = ({value, setValue}) => {
 
   const [firstChar, setFirstChar] = useState(true)
   const [commaIsDefined, setCommaIsDefined] = useState<boolean>();
@@ -11,7 +14,7 @@ function PriceInput({value, setValue}: {value: string, setValue: React.Dispatch<
   
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    
+   
     if(commaIsDefined){
 
     }
@@ -61,7 +64,7 @@ function PriceInput({value, setValue}: {value: string, setValue: React.Dispatch<
 
   return (
     <div>
-      <SystemInput value={value} maxLength={8} onKeyDown={handleKeyDown} onChange={handleChange}>valor: </SystemInput>
+      <SystemInput propValue={value.toString()} maxLength={8} onKeyDown={handleKeyDown} onChange={handleChange}>valor: </SystemInput>
     </div>
   );
 };

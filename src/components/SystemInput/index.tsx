@@ -2,16 +2,17 @@ import "./systemInput.css"
 import React, { CSSProperties, ChangeEvent, ReactNode, useId, InputHTMLAttributes} from "react"
 interface ISystemInput extends InputHTMLAttributes<HTMLInputElement> { 
     children: ReactNode, 
+    propValue: string
 
 }
-const SystemInput: React.FC<ISystemInput> = ({children, value, style, onKeyDown, onChange}) => { 
+const SystemInput: React.FC<ISystemInput> = ({children, propValue, style, onKeyDown, onChange, maxLength, readOnly}) => { 
     const systemInputID = useId()
  
     return (
         <div className="systemInput__container"  >
             <label className="systemInput__label" htmlFor={systemInputID}>{children}</label>
             
-            <input className="systemInput__value" onKeyDown={onKeyDown} onChange={onChange} style={style} type="text" id={systemInputID} value={value} defaultValue={value}/>
+            <input className="systemInput__value" onKeyDown={onKeyDown} onChange={onChange} style={style} type="text" id={systemInputID} value={propValue} maxLength={maxLength} readOnly={readOnly}/>
         </div>
     )
 }
