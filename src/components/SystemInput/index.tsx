@@ -11,7 +11,7 @@ const SystemInput: React.FC<ISystemInput> = ({children, value, style, onKeyDown,
         <div className="systemInput__container"  >
             <label className="systemInput__label" htmlFor={systemInputID}>{children}</label>
             
-            <input className="systemInput__value" onKeyDown={onKeyDown} onChange={onChange} style={style} type="text" id={systemInputID} value={value} />
+            <input className="systemInput__value" onKeyDown={onKeyDown} onChange={onChange} style={style} type="text" id={systemInputID} value={value} defaultValue={value}/>
         </div>
     )
 }
