@@ -11,60 +11,92 @@ import undoIcon from "../../assets/icons/ManualPage/undoIcon.svg"
 import ValueSystemInput from "../../components/ValueSystemInput"
 import SaleList from "../../components/SaleList"
 import { CSVExtractor } from "../../CSVExtractor"
-import { useStockFileIdentifier } from "../../atoms/fileIdentifiers"
+import { useRedeFileIdentifier, useStockFileIdentifier } from "../../atoms/fileIdentifiers"
 import { ProductExtractor } from "../../ProductExtrator"
-import { SearchAlgorithm } from "../../SearchAlgorithm"
+import { SearchAlgorithm, updateProductList } from "../../SearchAlgorithm"
 import { Sale } from "../../Sale"
+import {SaleItem} from "../../SaleItem"
+import { Navigate } from "react-router-dom"
+import { Product } from "../../Product"
+
 
 const ManualPage = () => { 
 
-    let searchAlgorithm: SearchAlgorithm = null; 
+    
+    
+    const [items, setItems]= useState<Array<SaleItem>>([])
+    const [productList, setProductList] = useState<Array<Product>>([])
+    
     
 
     const stockFileID = useStockFileIdentifier()
-
+    const [index, setIndex] = useState(0); 
     const [noteValue, setNoteValue] = useState("0.00")
     const [resultValue, setResultValue] = useState(0.00)
     const [totalProducts, setTotalProducts] = useState(0.00)
 
-
+    function clean(){
+        setNoteValue("0.00")
+        setResultValue(0.00)
+        setTotalProducts(0.00)
+        setItems([])
+    }
 
     useEffect(() => {
         const fetchData = async () => {
             try{
-                const rawProductsData =  await CSVExtractor(stockFileID.path)
+                const rawProductsData = await CSVExtractor(stockFileID.path)
+                console.log("rawProducts", rawProductsData)
                 const productExtrator = new ProductExtractor(rawProductsData)
-                const productsList = productExtrator.products
-                searchAlgorithm = new SearchAlgorithm(productsList)
+                setProductList(productExtrator.products)
+                console.log("productsLIst")
+
             }
             catch(error){ 
                 console.error(error); 
             }
   
         }; // End fetchData
-
+    
         fetchData()
-        return () => {
-
-        }
+ 
 
       
 
     }, [])
+
+
     useEffect(() => { 
-        const searchProducts = async (value: number) => {
-            const sale: Sale = searchAlgorithm.generateSales(value)
-            setResultValue(sale.difference)
-            setTotalProducts(sale.total)
+        const searchProducts = async (value: string) => {
+            const value2 = value.replace(/\D+/g, '').replace(/^0+/, '');
+            
+            if(value2.length >= 3){
+                const searchAlgorithm = new SearchAlgorithm(productList)
+                const sale: Sale = searchAlgorithm.generateSales(parseFloat(value))
+                setResultValue(sale.difference)
+                setTotalProducts(sale.total)
+                setItems(sale.itens)
+            }
+            else if(value === "0.00"){
+                clean()
+            }
+
+
+   
 
 
             
         }
-        searchProducts(parseFloat(noteValue));
+        searchProducts(noteValue);
 
 
     }, [noteValue])
-
+    function handleConfirm(e: React.MouseEvent<HTMLButtonElement>) {
+        if(items.length > 0){ 
+            updateProductList(productList, items)
+            clean()
+        }
+    }
 
     return (
         <>
@@ -73,7 +105,7 @@ const ManualPage = () => {
                 <Stack direction="vertical">
                     <PriceInput value={noteValue} setValue={setNoteValue}/>
                     <Stack className="mt-auto" direction="horizontal" gap={1}>
-                        <Button variant="secondary">Localizar</Button>
+                        <Button variant="secondary" onClick={handleConfirm}>Confirmar</Button>
 
                         <Button className="ms-auto" variant="secondary"><img src={undoIcon}/></Button>
                         <Button variant="secondary"><img src={redoIcon}/></Button>
@@ -81,12 +113,12 @@ const ManualPage = () => {
                 </Stack>
                 <Stack direction="vertical" gap={2}>
                     <ValueSystemInput value={totalProducts}>total em produtos</ValueSystemInput>
-                    <ValueSystemInput value={resultValue}>resultado</ValueSystemInput>
+                    <ValueSystemInput value={resultValue} colors>resultado</ValueSystemInput>
                 </Stack>
             </Stack>
          
-            <LinkButton to={MyRoutes.HOME} >Voltar para o inicio</LinkButton>
-         
+            {stockFileID.path.length < 3 && <Navigate to={MyRoutes.AUTO_FILE_SELECTION}/>}
+            {items.length>0 && <SaleList  items={items} index={index} selectItem={(index) => setIndex(index)}/>}
         </>
     )
 }
