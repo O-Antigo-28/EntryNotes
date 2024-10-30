@@ -8,7 +8,8 @@ const ValueSystemInput = ({children, value, fixed = 2, style, colors}: {children
         if(!style){
             style = {} 
         }
-        style.color = value >= 0? COLOR_SIMILAR_TO_GREEN : COLOR_SIMILAR_TO_RED
+        style.color = value > 0? COLOR_SIMILAR_TO_GREEN : COLOR_SIMILAR_TO_RED
+        style.color = value === 0? "black": style.color
     }
 
     return (
