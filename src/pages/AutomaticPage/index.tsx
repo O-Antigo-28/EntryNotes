@@ -23,6 +23,7 @@ import {ipcRenderer} from "electron"
 import { Directions } from "../../Directions"
 
 import { reducerAutomaticPage } from "./reducerAutomaticPage"
+import { useCaixaFileIdentifier, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
 
 
 const CAIXA_FILE_ENCODING = "win1252"
@@ -31,8 +32,13 @@ const CAIXA_FILE_ENCODING = "win1252"
 
 const AutomaticPage = () => {
 
-  const {stockPath, redePath, caixaPath}  = useParams()
+  const stockPath = useStockFileIdentifier().path
+  const redePath = useRedeFileIdentifier().path
+  const caixaPath = useCaixaFileIdentifier().path
 
+  console.log(stockPath)
+  console.log(redePath)
+  console.log(caixaPath)
   const [state, dispatch] = useReducer(reducerAutomaticPage, {
       ready: false,
       indexItem: 0,
@@ -83,24 +89,33 @@ const AutomaticPage = () => {
       try {
         // STOCK
         const rawProductsData = await CSVExtractor(decodeURIComponent(stockPath));
-        
         const productExtractor = new ProductExtractor(rawProductsData)
-        // REDE
-        const rawRedeData = await CSVExtractor(decodeURIComponent(redePath));
-        const redeExtractor = new RedeNoteExtractor(rawRedeData);
-        // CAIXA
-        const rawCaixaData = await(CSVExtractor(decodeURIComponent(caixaPath), CAIXA_FILE_ENCODING))
-        const caixaExtractor = new CaixaNoteExtractor(rawCaixaData)
+        
+  
 
-        if(!ignore){ 
+       
+
+        if(!ignore){
+
           dispatch({type: "LOAD_PRODUCTS", products: productExtractor.products})
-      
-          dispatch({type: 'ADDING_TO_NOTES_LIST', notes: redeExtractor.notes})
-          dispatch({type: 'ADDING_TO_NOTES_LIST', notes: caixaExtractor.notes})
+
+          // REDE
+          if(redePath.length > 3){
+            const rawRedeData = await CSVExtractor(decodeURIComponent(redePath));
+            const redeExtractor = new RedeNoteExtractor(rawRedeData);
+            dispatch({type: 'ADDING_TO_NOTES_LIST', notes: redeExtractor.notes})
+          }
+
+          // CAIXA
+          if(caixaPath.length > 3){
+            const rawCaixaData = await(CSVExtractor(decodeURIComponent(caixaPath), CAIXA_FILE_ENCODING))
+            const caixaExtractor = new CaixaNoteExtractor(rawCaixaData)
+            dispatch({type: 'ADDING_TO_NOTES_LIST', notes: caixaExtractor.notes})
+          }
+
 
           dispatch({type: 'GENERATE_SALES'})
           dispatch({type: 'UPDATE_SALE_LIST'})
-
           dispatch({type: 'START'})
         }
         
