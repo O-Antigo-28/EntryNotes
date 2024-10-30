@@ -7,7 +7,7 @@ const ArraySystemInput = ({children, value}: {children: ReactNode, value: string
     return (
         <div className="ArraySystemInput">
             <label className="label__ArraySystemInput" htmlFor={arraySystemInputID}>{children}</label>
-            <input className="input__ArraySystemInput" type="text" name="" id={arraySystemInputID} value={value} />
+            <input className="input__ArraySystemInput" type="text" name="" id={arraySystemInputID} value={value} readOnly />
         </div>
     )
 }
