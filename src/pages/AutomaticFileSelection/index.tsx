@@ -1,7 +1,7 @@
 import "./automaticFileSelection.css"
 import Header from "../../components/Header"
-import { ReactNode, useState } from "react"
-import FileSelector from "../../components/FileSelector"
+import React, {ReactNode, useRef, useState } from "react"
+
 import { FileChooser } from "./../../FileChooser"
 import { FileExtensions } from "../../FileExtensions"
 import LinkButton from "../../components/LinkButton"
@@ -12,56 +12,21 @@ import { FileType } from "../../FileType"
 import { Navigate } from "react-router-dom"
 import { FileIdentifier } from "../../FileIdentifier"
 import FormFileSelector from "../../components/FormFileSelector"
-import { useRecoilValue } from "recoil"
-import {  stockFileIdentifier, useCaixaFileIdentifier, useFileIdentifierByID, useIDCaixaFIValue, useIDEstoqueFIValue, useIDRedeFIValue, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
+import WarningModal from "../../components/WarningModal"
 
+import { useCaixaFileIdentifier, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
 import Button from 'react-bootstrap/Button';
-const StockConfigFilename = "POSICAODEESTOQUE.CSV"
+const FILENAME_SIMILAR_STOCK = "POSICAODEESTOQUE.CSV"
+const FILENAME_SIMILAR_REDE = "Rede_Rel_Vendas_Do_Dia.... .csv"
+const FILENAME_SIMILAR_CAIXA = "Relatorio_De_Vendas_"
+
+const REDE_INSPECT_FILENAME = /^Rede_Rel_Vendas_*/
+const CAIXA_INSPECT_FILENAME = /^Relatorio_de_Vendas_*/
+
 
 // import Button from 'react-bootstrap/Button';
-import Modal, { ModalProps } from 'react-bootstrap/Modal';
-import Alert from 'react-bootstrap/Alert';
-function MyVerticallyCenteredModal(props: ModalProps) {
-  return (
-    <Modal
-
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
-          Algo deu errado
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <h4>Arquivo de configuração de estoque está incorreto.</h4>
-        <p>
-          por favor tente escolher o arquivo com o nome {StockConfigFilename}
-        </p>
-      </Modal.Body>
-
-    </Modal>
-  );
-}
-
-// function App() {
-//   const [modalShow, setModalShow] = React.useState(false);
-
-//   return (
-//     <>
-//       <Button variant="primary" onClick={() => setModalShow(true)}>
-//         Launch vertically centered modal
-//       </Button>
 
 
-//       />
-//     </>
-//   );
-// }
-
-// render(<App />);
 
 const stockExtensions = [
     FileExtensions.CSV
@@ -77,7 +42,9 @@ const caixaExtensions = [
     FileExtensions.EXCEL
 ]
 
-
+function createCorrectionMessageForFilenames(to: string, CorrectFilename: string, incorrectFilename: string){
+  return `o arquivo selecionado ${incorrectFilename} para ${to} não é o correto! Tente um arquivo parecido com ${CorrectFilename}`
+}
 
 
 const fileTypeRede = new FileType("REP.REDE", redeExtensions, "OPTIONAL")
@@ -91,6 +58,10 @@ const AutomaticFileSelection = () => {
     
     const [showModalInvalidStockInvalid, setShowModalInvalidStockInvalid] = useState<boolean>(false)
     const [allVeryWell, setAllVeryWell] = useState(false)
+    const contentModal = useRef<string | Array<string>>("")
+
+
+    const subject = typeof contentModal.current === "string" ? "Selecione outro arquivo": "Selecione outros arquivos"
 
 
     const filesIdentifiers: FileIdentifier[] = [
@@ -110,20 +81,58 @@ const AutomaticFileSelection = () => {
         let count = 0 
         let numberOfFileChooser = filesChoosers.length
         
+        
         while(isValidFiles && count < numberOfFileChooser){
+            // VERIFICANDO OS ARQUIVOS QUE NÃO FORAM SELECIONADOS SÃO OPCIONAIS 
             if (!filesChoosers[count].fileType.isOptional && !filesIdentifiers[count].fileIdentified()){
                 isValidFiles = false
                 return
             }
-
-            if(filesChoosers[count].fileType.typeData === "REP.ESTOQUE" && filesIdentifiers[count].fileName !== StockConfigFilename){
-                setShowModalInvalidStockInvalid(true)
-                isValidFiles = false
-            }
-
             count++
         }
-        //
+
+        if(isValidFiles){
+          { // VERIFICANDO SE OS ARQUIVOS SELECIONADOS TEM O NOME CORRETO PARA CADA ARQUIVO
+
+            const messageForEachIncorrectFilename: string[] = []
+
+            if(redeFileIdentifier.fileName.length > 3 && !REDE_INSPECT_FILENAME.test(redeFileIdentifier.fileName)){
+              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(fileTypeRede.typeData ,FILENAME_SIMILAR_REDE, redeFileIdentifier.fileName))
+              console.log(REDE_INSPECT_FILENAME.test(redeFileIdentifier.fileName))
+              isValidFiles = false
+            }
+
+            if(caixaFileIdentifier.fileName.length > 3 && !CAIXA_INSPECT_FILENAME.test(caixaFileIdentifier.fileName)){
+              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(fileTypeCaixa.typeData, FILENAME_SIMILAR_CAIXA, caixaFileIdentifier.fileName))
+              isValidFiles = false
+            }
+
+            if(stockFileIdentifier.fileName !== FILENAME_SIMILAR_STOCK){
+              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(fileTypeStock.typeData, FILENAME_SIMILAR_STOCK, stockFileIdentifier.fileName))
+              isValidFiles = false
+            }
+            
+
+            if(!isValidFiles){
+              if( messageForEachIncorrectFilename.length === 1){ 
+                contentModal.current = messageForEachIncorrectFilename[0]
+                setShowModalInvalidStockInvalid(true)
+              }
+              else if(messageForEachIncorrectFilename.length > 1){
+                contentModal.current = messageForEachIncorrectFilename
+                setShowModalInvalidStockInvalid(true)
+              }
+      
+            }
+            
+          } // END VERIFICANDO OS NOMES
+
+          
+        }
+
+
+
+        
         setAllVeryWell(isValidFiles)
     }
 
@@ -139,15 +148,11 @@ const AutomaticFileSelection = () => {
                 <Button variant="primary" onClick={validateFiles}>confirmar</Button>
                 <LinkButton to={MyRoutes.HOME}>Voltar</LinkButton>
             </ButtonContainer>  
-            <MyVerticallyCenteredModal show={showModalInvalidStockInvalid}
-            onHide={() => {setShowModalInvalidStockInvalid(false)}}/>
+            <WarningModal subject={subject}  content={contentModal.current}  modalProps={{show: showModalInvalidStockInvalid, onHide:() => {setShowModalInvalidStockInvalid(false)}
+            }}/>
 
             {allVeryWell ? ((redeFileIdentifier.path.length > 0 || caixaFileIdentifier.path.length > 0) ? <Navigate to={MyRoutes.AUTO_MODE}/> : <Navigate to={MyRoutes.MANUAL_MODE}/>) : <></>}
-          
-
-
-            <p>{redeFileIdentifier.path}</p>
-            <p>{caixaFileIdentifier.path}</p>
+        
         </main>
     </div>
     )
