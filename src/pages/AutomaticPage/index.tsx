@@ -24,7 +24,7 @@ import { Directions } from "../../Directions"
 
 import { reducerAutomaticPage } from "./reducerAutomaticPage"
 import { useCaixaFileIdentifier, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
-
+import { registerAcceleratorsDirections, unregisterAcceleratorsDirections } from "../IpcCommunication"
 
 const CAIXA_FILE_ENCODING = "win1252"
 
@@ -129,13 +129,14 @@ const AutomaticPage = () => {
     return () => { 
       console.log("era pra ser desmontado")
       eraseData()
+      unregisterAcceleratorsDirections()
       ignore = true
     }
     
   }, []); 
 
   function registerCommandsOfAutomaticPage(){
-    ipcRenderer.send('register-the-commands')
+    registerAcceleratorsDirections()
       ipcRenderer.on('accelerator-directions', (event, key)=>{ 
         switch(key){
           case Directions.LEFT:

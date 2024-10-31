@@ -12,6 +12,7 @@ import ValueSystemInput from "../../components/ValueSystemInput"
 import SaleList from "../../components/SaleList"
 import { CSVExtractor } from "../../CSVExtractor"
 import { useRedeFileIdentifier, useStockFileIdentifier } from "../../atoms/fileIdentifiers"
+import { registerAcceleratorsDirections, unregisterAcceleratorsDirections } from "../IpcCommunication"
 import { ProductExtractor } from "../../ProductExtrator"
 import { SearchAlgorithm, updateProductList } from "../../SearchAlgorithm"
 import { Indexer } from "../../Indexer"
@@ -44,14 +45,6 @@ const ManualPage = () => {
  
     const [items, setItems]= useState<Indexer<SaleItem>>(new Indexer([]))
 
-    
-    function registerCommandsOfManualPage(){
-        ipcRenderer.send('register-the-acceletators-directions-commands')
-        console.log("registrou")
-    }
-    function unRegisterCommandsOfManualPage(){
-        ipcRenderer.send('unregister-the-acceletators-directions-commands')
-    }
 
     const [index, setIndex] = useState(0); 
     const [noteValue, setNoteValue] = useState("0.00")
@@ -72,7 +65,7 @@ const ManualPage = () => {
                 try{
                     const rawProductsData = await CSVExtractor(stockFileID.path)
                     const productExtrator = new ProductExtractor(rawProductsData)
-                    registerCommandsOfManualPage()
+                    registerAcceleratorsDirections()
                     productList.current = productExtrator.products
                     
                 }
@@ -83,8 +76,8 @@ const ManualPage = () => {
             }
 
             return () => {
+                unregisterAcceleratorsDirections()
                 ignore =true
-                unRegisterCommandsOfManualPage()
             }
 
 
