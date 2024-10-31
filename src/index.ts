@@ -13,8 +13,23 @@ if (require('electron-squirrel-startup')) {
 }
 
 let mainWindow: BrowserWindow = null
+interface Accelerator{ 
+  accelerator: string, message: number
+}
+interface AccelaratorsForIPC{
+  channel: string,
+  commands: Array<Accelerator>
+}
 
-
+const acceleratorsDirectionsForIPC: AccelaratorsForIPC = {
+  channel: "accelerator-directions", 
+  commands:[
+    {accelerator: 'CmdOrCtrl+Left', message:  Directions.LEFT},
+    {accelerator: 'CmdOrCtrl+Right', message: Directions.RIGHT}, 
+    {accelerator: 'CmdOrCtrl+Up', message: Directions.UP},
+    {accelerator: 'CmdOrCtrl+Down', message: Directions.DOWN}
+  ]
+}
 
 const createWindow = (): void => {
   // Create the browser window.
@@ -26,7 +41,6 @@ const createWindow = (): void => {
       nodeIntegration: true,
       contextIsolation:false,
       
-  
     },
     alwaysOnTop:true
   });
@@ -39,29 +53,27 @@ const createWindow = (): void => {
   // Open the DevTools.
 };
 
-function registerCommands(){ 
-  const commandType = "accelerator-directions" 
-  globalShortcut.register('CmdOrCtrl+Left', ()=>{
-    mainWindow.webContents.send(commandType, Directions.LEFT)
+function registerAccelerators(accelerators: AccelaratorsForIPC){ 
+  accelerators.commands.forEach((commandToRegister) => { 
+    globalShortcut.register(commandToRegister.accelerator, () => {
+      mainWindow.webContents.send(accelerators.channel, commandToRegister.message)
+    })
   })
-  globalShortcut.register('CmdOrCtrl+Right', () => { 
-    mainWindow.webContents.send(commandType, Directions.RIGHT)
-  })
-  globalShortcut.register('CmdOrCtrl+Up', () => { 
-    mainWindow.webContents.send(commandType, Directions.UP)
-  })
-  globalShortcut.register('CmdOrCtrl+Down', () => { 
-    mainWindow.webContents.send(commandType, Directions.DOWN)
-  })
-  
 }
-
+function UnregisterAccelerators(accelerator: AccelaratorsForIPC){
+  accelerator.commands.forEach((commandToUnregister) => { 
+    globalShortcut.unregister(commandToUnregister.accelerator)
+  })
+}
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  ipcMain.on('register-the-commands', (event) => { 
-    registerCommands()
+  ipcMain.on('register-the-acceletators-directions-commands', () => { 
+    registerAccelerators(acceleratorsDirectionsForIPC)
+    ipcMain.on("unregister-the-acceletators-directions-commands", () => {
+      UnregisterAccelerators(acceleratorsDirectionsForIPC)
+    })  
   })
   nativeTheme.themeSource = 'dark'
    
