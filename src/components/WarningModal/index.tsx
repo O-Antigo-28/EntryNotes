@@ -34,3 +34,5 @@ const WarningModal: React.FC<IWarningModal> = ({modalProps, subject, content}) =
     );
   }
   
+
+export default WarningModal
