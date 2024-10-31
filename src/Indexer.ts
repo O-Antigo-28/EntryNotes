@@ -36,7 +36,7 @@ export class Indexer<T>{
         return this._array
     }
     public setIndex(newIndex: number) {
-        if(!this._isContained(this.index)){
+        if(!this.isContained(this.index)){
             throw RangeError()
         }
         
@@ -51,7 +51,7 @@ export class Indexer<T>{
     }
 
     public search(index: number): T{
-        if(!this._isContained(index)){ 
+        if(!this.isContained(index)){ 
             throw new RangeError("Erro no indexer")
         }
         return this._array[index]
@@ -59,7 +59,7 @@ export class Indexer<T>{
 
     }
     
-    private _isContained(index: number){
+    public isContained(index: number){
         return (index >= 0 && (index <= this._array.length - 1))
     }
 }
