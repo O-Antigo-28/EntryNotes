@@ -4,18 +4,16 @@ import "./button.css"
 type TPresetStyle = 'p' | 'lg'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     children: ReactNode,
-    listener(...args: any):void,
+    
     presetStyle?: TPresetStyle,
     
 }
 
-const Button : React.FC<ButtonProps> = ({children, listener, presetStyle = 'lg', ...props}) => { 
-    function handleClick(): void{
-        listener()
-    }
+const Button : React.FC<ButtonProps> = ( {children, presetStyle = 'lg',  onClick}) => { 
+
     return (
         <>
-            <button className={presetStyle === 'lg'? "button button--large": "button button--small"}  style={props.style} onClick={handleClick}>
+            <button className={presetStyle === 'lg'? "button button--large": "button button--small"}  onClick={onClick}>
                 {children}
             </button>
         </>

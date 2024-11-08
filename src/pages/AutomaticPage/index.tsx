@@ -174,15 +174,15 @@ const AutomaticPage = () => {
           <div className="automaticPage__notePanel">
             <NoteElement note={state.notes.current()}/>
             <ButtonContainer style={{flexDirection: "row", height: "2rem"}}>
-              <Button presetStyle="p" listener={previosNote}>anterior</Button>
-              <Button presetStyle="p" listener={nextNote}>próximo</Button>
+              <Button presetStyle="p" onClick={previosNote}>anterior</Button>
+              <Button presetStyle="p" onClick={nextNote}>próximo</Button>
             </ButtonContainer>
           </div>
         
           <div className="automaticPage__results">
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().total}>tot. produtos</ValueSystemInput>
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().difference} colors={true} >diferença</ValueSystemInput>
-            <Button presetStyle="p" listener={() => {}}>AUTO</Button>
+            <Button presetStyle="p" onClick={() => {}}>AUTO</Button>
           </div>
 
         </div>

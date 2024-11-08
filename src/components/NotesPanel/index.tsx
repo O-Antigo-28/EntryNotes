@@ -39,8 +39,8 @@ const NotesPanel = ({currentNote, index, nextNote, previousNote}: { currentNote:
             <NoteElement note={currentNote}/>
 
             <ButtonContainer style={{flexDirection:"row"}}>
-                <Button listener={handlePreviousNote}>Anterior</Button>
-                <Button listener={handleNextNote}>Próximo</Button>
+                <Button onClick={handlePreviousNote}>Anterior</Button>
+                <Button onClick={handleNextNote}>Próximo</Button>
             </ButtonContainer>
         </section>
     )
