@@ -6,7 +6,7 @@ interface IPriceInput extends InputHTMLAttributes<HTMLInputElement> {
   setValue:React.Dispatch<React.SetStateAction<string>>,
   refInput?: React.MutableRefObject<any>
 }
-const PriceInput: React.FC<IPriceInput> = ({value, setValue}) => {
+const PriceInput: React.FC<IPriceInput> = ({value, setValue, refInput}) => {
   const [firstChar, setFirstChar] = useState(true)
   const [commaIsDefined, setCommaIsDefined] = useState<boolean>();
   const [charsBeforeComma, setCharsBeforeComma] = useState<number>(); 
@@ -64,7 +64,7 @@ const PriceInput: React.FC<IPriceInput> = ({value, setValue}) => {
 
   return (
     <div>
-      <SystemInput propValue={value.toString()} maxLength={8} onKeyDown={handleKeyDown} onChange={handleChange}>valor: </SystemInput>
+      <SystemInput propValue={value.toString()} maxLength={8} refInput={refInput} onKeyDown={handleKeyDown} onChange={handleChange}>valor: </SystemInput>
     </div>
   );
 };
