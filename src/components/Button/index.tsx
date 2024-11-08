@@ -9,11 +9,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     
 }
 
-const Button : React.FC<ButtonProps> = ( {children, presetStyle = 'lg',  onClick}) => { 
+const Button : React.FC<ButtonProps> = ( props, {children, presetStyle = 'lg'}) => { 
 
     return (
         <>
-            <button className={presetStyle === 'lg'? "button button--large": "button button--small"}  onClick={onClick}>
+            <button className={presetStyle === 'lg'? "button button--large": "button button--small"}   {...props}>
                 {children}
             </button>
         </>
