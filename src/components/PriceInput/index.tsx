@@ -4,9 +4,9 @@ import "./priceinput.css"
 import SystemInput from "../../components/SystemInput";
 interface IPriceInput extends InputHTMLAttributes<HTMLInputElement> {
   setValue:React.Dispatch<React.SetStateAction<string>>,
+  refInput?: React.MutableRefObject<any>
 }
 const PriceInput: React.FC<IPriceInput> = ({value, setValue}) => {
-
   const [firstChar, setFirstChar] = useState(true)
   const [commaIsDefined, setCommaIsDefined] = useState<boolean>();
   const [charsBeforeComma, setCharsBeforeComma] = useState<number>(); 
