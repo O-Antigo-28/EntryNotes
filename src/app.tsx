@@ -4,7 +4,7 @@ import {BrowserRouter, Routes, Route, HashRouter} from "react-router-dom"
 import ModeChoicePage from './pages/ModeChoicePage';
 import NotExistsPage from './pages/NotExistsPage';
 import AutomaticFileSelection from './pages/AutomaticFileSelection';
-
+import {StrictMode} from 'react'
 import AutomaticPage from './pages/AutomaticPage';
 import ManualPage from './pages/ManualPage';
 import { RecoilRoot } from 'recoil';
@@ -38,15 +38,17 @@ const root = createRoot(document.getElementById("react-container"));
 
 function App(){ 
     return (
-        <RecoilRoot>
-            <HashRouter>
-                <Routes>
-                    {routes.map((route, index) => { 
-                        return <Route path={route.path} key={route.path + index} element={route.element}/>
-                    })}
-                </Routes>
-            </HashRouter>
-        </RecoilRoot>
+        <StrictMode>
+            <RecoilRoot>
+                <HashRouter>
+                    <Routes>
+                        {routes.map((route, index) => { 
+                            return <Route path={route.path} key={route.path + index} element={route.element}/>
+                        })}
+                    </Routes>
+                </HashRouter>
+            </RecoilRoot>
+        </StrictMode>
 
     ) 
 }
