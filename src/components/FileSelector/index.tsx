@@ -1,33 +1,38 @@
-import React, { useId, useState } from "react"
+import React, { useId, useRef, useState } from "react"
 import questionSVG from '../../assets/icons/fileSelector/question-circle.svg'
 import infoSVG from '../../assets/icons/fileSelector/info-circle.svg'
 import checkSVG from '../../assets/icons/fileSelector/check-circle-fill.svg'
+import closeXFill from '../../assets/icons/fileSelector/x-red-circle-fill.svg'
+import closeX from '../../assets/icons/fileSelector/x-red-circle.svg'
+import { BsXCircle } from "react-icons/bs";
 import "./fileSelector.css"
-import { FileType } from "../../FileType"
-import {FileIdentifier} from "../../FileIdentifier"
 import { FileChooser } from "../../FileChooser"
-import { useGetFileIdentifierByID, useUpdateFileIdentifierByID } from "./../../atoms/fileIdentifiers"
+import { useUpdateFileIdentifierByID } from "./../../atoms/fileIdentifiers"
 const FileSelector = ({fileChooser, children} : {fileChooser: FileChooser, children?: React.ReactNode }) => { 
     const updateFileIdentifier = useUpdateFileIdentifierByID()
-    const getFileIdentifierByID = useGetFileIdentifierByID()
+    const refInputFile = useRef(null)
+
+
     const[ path, setPath] = useState<string>("")
     const selectorFileId = useId()
     
     
     function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) { 
         const selectedFile = e.target.files[0]
-
         if(selectedFile){ 
             
-            console.log(`o arquivo ${selectedFile.name} tem o id: ${fileChooser.idFileIdentifier}`)
             updateFileIdentifier(fileChooser.idFileIdentifier, selectedFile.name, selectedFile.path)
             setPath(selectedFile.name)
             
         }
-        // etapa de verificação
-        const fileIdentifier = getFileIdentifierByID(fileChooser.idFileIdentifier)
-        console.log(`O FileIdentifier de ID: ${fileIdentifier.id} foi atualizado com sucesso com o arquivo de caminho ${fileIdentifier.path} `)
+        refInputFile.current.value = null
 
+
+    }
+    function handleClickEraseFile(){
+        refInputFile.current.value = null
+        updateFileIdentifier(fileChooser.idFileIdentifier, "", "")
+        setPath("")
     }
 
     return (
@@ -40,7 +45,7 @@ const FileSelector = ({fileChooser, children} : {fileChooser: FileChooser, child
 
                 <div>
                     <label className="inputLabel" htmlFor={selectorFileId}>buscar</label>
-                    <input onChange={(event) => {handleOnChange(event) }} type="file" id={selectorFileId} accept={fileChooser.fileType.acceptsToString()} style={{display: "none"}} />
+                    <input onChange={handleOnChange} type="file" id={selectorFileId} accept={fileChooser.fileType.acceptsToString()} ref={refInputFile} style={{display: "none"}} />
                 </div>
 
                 {children}
@@ -49,7 +54,7 @@ const FileSelector = ({fileChooser, children} : {fileChooser: FileChooser, child
             <div className="fileSelector__containerInfo">
                 {path.length <= 0 && <img src={questionSVG} alt="" />}
                 {path.length > 0 && <img src={checkSVG} alt=""/>}
-                {path.length > 0 && <img src={infoSVG} alt=""/>}
+                {path.length > 0 && <img src={closeX} onClick={handleClickEraseFile} alt=""/>}
 
             </div>
 
