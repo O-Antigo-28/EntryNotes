@@ -9,7 +9,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     
 }
 
-const Button : React.FC<ButtonProps> = ( {children, presetStyle = 'lg'}, props) => { 
+const Button : React.FC<ButtonProps> = (  {children, presetStyle = 'lg', ...props}) => { 
 
     return (
         <>
