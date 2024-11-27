@@ -3,11 +3,9 @@ import { SaleItem } from "./SaleItem"
 
 export function updateProductList(productList: Product[], productsSold: SaleItem[]){
     for(const sale of productsSold){
-        const currentQuantity = sale.product.quantity
-        const quantitySold = sale.quantitySold
-        const productID = sale.product.id
-        console.log(sale.product.id)
-  
-        productList[productID].quantity = ( currentQuantity - quantitySold)
+        const productToBeChanged = productList.find((product) => product.code === sale.product.code)
+        const currentQuantity = productToBeChanged.quantity - sale.quantitySold
+        Object.assign(productToBeChanged, {...productToBeChanged, _quantity: currentQuantity})
+
     }
   }

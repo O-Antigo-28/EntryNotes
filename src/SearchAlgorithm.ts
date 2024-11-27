@@ -213,13 +213,3 @@ function difference(firstValue: number, SecondValue: number){
     return Math.abs(SecondValue - firstValue)
 }
 
-export function updateProductList(productList: Product[], productsSold: SaleItem[]){
-        
-    for(const sale of productsSold){
-        const currentQuantity = sale.product.quantity
-        const quantitySold = sale.quantitySold
-        const productID = sale.product.id
-
-        productList[productID].quantity = ( currentQuantity - quantitySold)
-    }
-}
