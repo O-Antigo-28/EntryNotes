@@ -1,6 +1,5 @@
 export class Product{
     constructor(
-        private _id: number, 
         private _code: string, 
         private _description: string, 
         private _provider: string, 
@@ -10,9 +9,6 @@ export class Product{
         
     }
 
-    get id(): number {
-        return this._id
-    }
     get code(): string{
         return this._code
     }

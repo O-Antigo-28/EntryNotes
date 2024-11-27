@@ -1,8 +1,6 @@
 import { CSVExtractor } from "./CSVExtractor";
 import { Product } from "./Product";
 import { extractValue } from "./extractValue";
-import {v4 as uuidv4} from 'uuid'
-import { IDGenerator } from "./IDGenerator";
 
 
 export class ProductExtractor{ 
@@ -22,7 +20,8 @@ export class ProductExtractor{
             PRECOVENDA: string, 
             PRECOCUSTO: string
         }) => {
-            if(product.PRODUTO.length > 3){ 
+            const code = product.PRODUTO
+            if(code){ 
                 const stock = extractValue(product.ESTOQUE)
                 const totalValue = extractValue(product.PRECOVENDA)
                 
@@ -30,7 +29,7 @@ export class ProductExtractor{
                 if(stock && stock > 0){
                     productValue = totalValue / stock
                 }
-                this._appendProduct(new Product(IDGenerator.newID, product.PRODUTO, product.DESCRICAO, product.FORNECEDOR, stock, productValue ))
+                this._appendProduct(new Product(code, product.DESCRICAO, product.FORNECEDOR, stock, productValue ))
             }
 
         });
