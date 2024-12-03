@@ -78,6 +78,9 @@ const AutomaticPage = () => {
   function handleSelectItem(index: number){
     dispatch({type: 'SELECT_ITEM', index: index})
   }
+  function autoMode(){
+    dispatch({type: 'AUTO_MODE'})
+  }
 
   function previosItem(){
     dispatch({type: 'PREVIOUS_ITEM'})
@@ -127,7 +130,6 @@ const AutomaticPage = () => {
     fetchData();
 
     return () => { 
-      console.log("era pra ser desmontado")
       eraseData()
       unregisterAcceleratorsDirections()
       ignore = true
@@ -182,7 +184,7 @@ const AutomaticPage = () => {
           <div className="automaticPage__results">
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().total}>tot. produtos</ValueSystemInput>
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().difference} colors={true} >diferença</ValueSystemInput>
-            <Button presetStyle="p" onClick={() => {}}>AUTO</Button>
+            <Button presetStyle="p" onClick={autoMode}>AUTO</Button>
           </div>
 
         </div>

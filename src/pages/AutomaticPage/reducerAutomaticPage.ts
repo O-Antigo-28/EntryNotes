@@ -73,6 +73,13 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
       case 'STOP': { 
         return {...state, ready: false}
       }
+      case 'AUTO_MODE': { 
+        async function sendSales(){
+          
+        }
+        sendSales()
+        return state
+      }
       default:
         return state
     }

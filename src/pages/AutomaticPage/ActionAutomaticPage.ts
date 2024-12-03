@@ -13,4 +13,5 @@ export type ActionAutomaticPage =
 {type: 'LOAD_PRODUCTS', products: Product[]} | 
 {type: 'GENERATE_SALES'} | 
 {type: 'START'}| 
-{type: 'STOP'}
+{type: 'STOP'} | 
+{type: 'AUTO_MODE'}
