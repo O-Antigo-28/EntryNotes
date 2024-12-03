@@ -11,12 +11,15 @@
     background-color: #EEEEEE;
     box-sizing: border-box;
     border-radius: 6px;
+    overflow: hidden;
 }
 
 
 .systemInput__label{
     display: block;
     position: absolute;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     top:6px;
     left: 8px;
     font-family: baloo;
