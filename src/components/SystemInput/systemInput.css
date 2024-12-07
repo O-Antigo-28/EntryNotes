@@ -33,6 +33,7 @@
     font-family: k2d;
     right:8px;
     bottom: 8px;
+    width: 100%;
     max-width: calc(100% - 10px);
     display: inline;
     text-align: end;

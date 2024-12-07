@@ -1,12 +1,13 @@
 
-import React, { InputHTMLAttributes, useState } from "react"
+import React, { InputHTMLAttributes, ReactNode, useState } from "react"
 import "./priceinput.css"
 import SystemInput from "../../components/SystemInput";
 interface IPriceInput extends InputHTMLAttributes<HTMLInputElement> {
   setValue:React.Dispatch<React.SetStateAction<string>>,
+  children?: ReactNode,
   refInput?: React.MutableRefObject<any>
 }
-const PriceInput: React.FC<IPriceInput> = ({value, setValue, refInput}) => {
+const PriceInput: React.FC<IPriceInput> = ({value, setValue, children, refInput, ...props}) => {
   const [firstChar, setFirstChar] = useState(true)
   const [commaIsDefined, setCommaIsDefined] = useState<boolean>();
   const [charsBeforeComma, setCharsBeforeComma] = useState<number>(); 
@@ -64,7 +65,7 @@ const PriceInput: React.FC<IPriceInput> = ({value, setValue, refInput}) => {
 
   return (
     <div>
-      <SystemInput propValue={value.toString()} maxLength={8} refInput={refInput} onKeyDown={handleKeyDown} onChange={handleChange}>valor: </SystemInput>
+      <SystemInput  propValue={value.toString()} maxLength={8} refInput={refInput} onKeyDown={handleKeyDown} onChange={handleChange} {...props}>{children} </SystemInput>
     </div>
   );
 };

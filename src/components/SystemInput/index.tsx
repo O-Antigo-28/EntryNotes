@@ -6,7 +6,7 @@ interface ISystemInput extends InputHTMLAttributes<HTMLInputElement> {
     refInput?: React.MutableRefObject<any>
 
 }
-const SystemInput: React.FC<ISystemInput> = ({children, propValue, style, onKeyDown, onChange, maxLength, readOnly, refInput}) => { 
+const SystemInput: React.FC<ISystemInput> = ({children, propValue, style, onKeyDown, onChange, maxLength, readOnly, refInput, ...props}) => { 
     const systemInputID = useId()
 
     
@@ -14,7 +14,7 @@ const SystemInput: React.FC<ISystemInput> = ({children, propValue, style, onKeyD
         <div className="systemInput__container"  >
             <label className="systemInput__label" htmlFor={systemInputID}>{children}</label>
             
-            <input className="systemInput__value" onKeyDown={onKeyDown} ref={refInput} onChange={onChange} style={style} type="text" id={systemInputID} value={propValue} maxLength={maxLength} readOnly={readOnly}/>
+            <input className="systemInput__value" onKeyDown={onKeyDown} ref={refInput} onChange={onChange} style={style} type="text" id={systemInputID} value={propValue} maxLength={maxLength} readOnly={readOnly} {...props}/>
         </div>
     )
 }
