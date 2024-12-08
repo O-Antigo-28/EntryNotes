@@ -1,21 +1,15 @@
-export type UnitOfMeasure = "kg" | "un" | "g" | "l" | "ml"  | "dz" | "pct" | "fd" | "cx"
-interface ILabel {
-    code: string, 
-    description: string,
-    unitOfMeasure: UnitOfMeasure, 
-    value: string
-    promotionalValue?: string
-
-}
+import { ILabel } from "./ILabel";
+import { BarcodeEAN13 } from "./TBarcodeEAN13";
+import { UnitOfMeasure } from "./TUnitOfMeasure";
 
 
 export class Label implements ILabel{
     constructor(
-        public code: string,
+        public code: BarcodeEAN13,
         public description: string,
         public unitOfMeasure: UnitOfMeasure,
-        public value: string, 
-        public promotionalValue: string
+        public value: number, 
+        public promotionalValue?: number
         
            
     ){
