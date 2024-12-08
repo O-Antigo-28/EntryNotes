@@ -6,7 +6,7 @@ const DEFAULT_FILE_ENCODING = "utf8"
 
 function isCSVFile(path: string){ 
   const excelTypeFile = /\.csv$/
-  return excelTypeFile.test(path);
+  return excelTypeFile.test(path.toLocaleLowerCase());
 }
 
 export async function CSVExtractor(path: string, encoding: string= DEFAULT_FILE_ENCODING) :Promise<Object[]> {
