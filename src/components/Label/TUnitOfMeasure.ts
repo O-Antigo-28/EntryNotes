@@ -1,0 +1,1 @@
+export type UnitOfMeasure = "kg" | "un" | "g" | "l" | "ml"  | "dz" | "pct" | "fd" | "cx"

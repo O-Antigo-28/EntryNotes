@@ -1,0 +1,1 @@
+export type BarcodeEAN13 = string & {__length: 13}
