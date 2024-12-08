@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom" 
-import "./notexistspage.css"
+import "./notExistsPage.css"
 import LinkButton from "../../components/LinkButton"
 import Title from "../../components/Title"
 
