@@ -8,8 +8,9 @@ export function getDecimal(value: number, fixed?: number):number{
     }
 
     const precision = 10 ** Math.floor(fixed ?? defaultFixed)
+    console.log(precision) 
 
-    return value - Math.floor(value * precision)
+    return (value - Math.floor(value)) * precision
     
 }
 export function hasDecimalPlaces(value: number): boolean{
