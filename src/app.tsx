@@ -9,27 +9,12 @@ import AutomaticPage from './pages/AutomaticPage';
 import ManualPage from './pages/ManualPage';
 import { RecoilRoot } from 'recoil';
 import 'swiper/css';
+import Labels from './pages/Labels';
 
 const routes= [
     {
         path: MyRoutes.HOME,
-        element: <ModeChoicePage/>
-    },
-    {
-        path: MyRoutes.AUTO_FILE_SELECTION, 
-        element: <AutomaticFileSelection/>
-    }, 
-    {
-        path: MyRoutes.MANUAL_MODE,
-        element: <ManualPage/>, 
-    },
-    { 
-        path: MyRoutes.AUTO_MODE, 
-        element: <AutomaticPage/>
-    }, 
-    {
-        path: MyRoutes.OTHERS, 
-        element: <NotExistsPage/>
+        element: <Labels/>
     }
 
 ]
