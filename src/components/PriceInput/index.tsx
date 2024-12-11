@@ -52,6 +52,7 @@ const PriceInput: React.FC<IPriceInput> = ({value, setValue, children, refInput,
   };
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
+    e.stopPropagation()
     if(/\d/g.test(e.key) && value === "0.00"){
       e.preventDefault()  
       setValue("0.0" + e.key)
