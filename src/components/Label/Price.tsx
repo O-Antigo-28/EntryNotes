@@ -1,12 +1,15 @@
 import {hasDecimalPlaces, getDecimal} from "../../decimais"
+import { IPrice } from "./IPrice"
+import "./price.css"
 import { Currency } from "./TCurrency"
-const Price = ({value, currency="R$"}: {value: number, currency?: Currency}) => { 
+const Price = ({value, currency="R$"}: IPrice) => { 
     const integer = String(Math.floor(value))
     let decimal = "00"
     
     if(hasDecimalPlaces(value)){
-      decimal = getDecimal(value).toFixed(2).replace("0.", "")
+      decimal = getDecimal(value).toString()
     }
+    
   
     const DELIMITER_OF_VALUE = ","
   

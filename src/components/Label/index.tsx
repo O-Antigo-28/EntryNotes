@@ -3,26 +3,31 @@ import React, {ReactNode}from 'react'
 import { Label } from './Label';
 import Price from './Price';
 import './label.css'
+import { mapUnitsOfMeasure } from '../../mapUnitsOfMeasure';
+import AnchoredPrice from './AnchoredPrice';
 
 
 
 
-const LabelElement = ({description, code, unitOfMeasure, value, promotionalValue}: Label) => {
+const LabelElement = ({description, code, unitOfMeasure, valueProduct, promotionalValue}: Label) => {  
+  
+  let valueArea: ReactNode = <Price value={valueProduct}/>
+  
 
-  if(promotionalValue){
+  if (promotionalValue)
+    valueArea = <AnchoredPrice oldValue={valueProduct} value={promotionalValue}/> 
 
-  }
 
   return(
     <div className="label">
       <span className="label__description">{description}</span>
-      <span className="label__code">{code}</span>
-      <Price value={value}/>
-      <span className="label__unit-measure">{unitOfMeasure}</span>
-     
 
-      {promotionalValue && <span className="label__promotional">Promoção</span> }
-      <img src="" alt="" />
+      <div className="label__highlight">
+        <span className='label__price'>
+         {valueArea}
+          </span>
+        <span className="label__unit-measure">por {mapUnitsOfMeasure.get(unitOfMeasure)}</span>
+      </div>
     </div>
   )
 }

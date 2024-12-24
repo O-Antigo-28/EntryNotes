@@ -1,0 +1,39 @@
+.price{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    font-weight: bolder;
+    justify-content: flex-end;
+ 
+
+}
+.price--old{
+    
+}
+.price__currency{
+    font-size: 1rem;
+}
+.value{
+    display: flex;
+    flex-direction: row;
+
+    align-items: start;
+
+    overflow: hidden;
+    
+}
+
+.value__integer{
+    display: block;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2rem;
+    
+
+}
+
+.value__decimal, .value__delimiter{
+
+    font-size: 1.5rem;
+}

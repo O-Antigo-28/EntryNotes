@@ -1,13 +1,12 @@
 
-import React, { InputHTMLAttributes, ReactNode, useState } from "react"
+import React, { InputHTMLAttributes, ReactNode, useState, forwardRef } from "react"
 import "./priceinput.css"
 import SystemInput from "../../components/SystemInput";
 interface IPriceInput extends InputHTMLAttributes<HTMLInputElement> {
   setValue:React.Dispatch<React.SetStateAction<string>>,
   children?: ReactNode,
-  refInput?: React.MutableRefObject<any>
 }
-const PriceInput: React.FC<IPriceInput> = ({value, setValue, children, refInput, ...props}) => {
+const PriceInput = forwardRef<HTMLInputElement, IPriceInput>(({ value, setValue, children, onChange, ...props}, ref) => {
   const [firstChar, setFirstChar] = useState(true)
   const [commaIsDefined, setCommaIsDefined] = useState<boolean>();
   const [charsBeforeComma, setCharsBeforeComma] = useState<number>(); 
@@ -15,7 +14,6 @@ const PriceInput: React.FC<IPriceInput> = ({value, setValue, children, refInput,
   
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-   
     if(commaIsDefined){
 
     }
@@ -49,6 +47,9 @@ const PriceInput: React.FC<IPriceInput> = ({value, setValue, children, refInput,
     // Transforma o valor numérico para o formato de moeda
     inputValue = (inputInt / 100).toFixed(2);
     setValue(inputValue);
+    
+    e.target.value = inputValue
+    onChange(e)
   };
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
@@ -66,10 +67,10 @@ const PriceInput: React.FC<IPriceInput> = ({value, setValue, children, refInput,
 
   return (
     <div>
-      <SystemInput  propValue={value.toString()} maxLength={8} refInput={refInput} onKeyDown={handleKeyDown} onChange={handleChange} {...props}>{children} </SystemInput>
+      <SystemInput  propValue={value.toString()} maxLength={8} onKeyDown={handleKeyDown} onChange={handleChange} {...props} ref={ref}>{children} </SystemInput>
     </div>
   );
-};
+})
 
 
 

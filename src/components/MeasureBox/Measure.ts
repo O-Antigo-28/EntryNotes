@@ -1,9 +1,10 @@
+import { IMeasure } from "./IMeasure"
 import { LengthUnit } from "./TLengthUnit"
-class Measure{
+class Measure implements IMeasure{
     constructor(
       public width: number,
       public height: number,
-      public unit: LengthUnit
+      public lengthUnit: LengthUnit
     ){
       
     

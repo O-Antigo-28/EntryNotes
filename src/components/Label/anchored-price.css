@@ -1,0 +1,20 @@
+.anchored-price{ 
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.anchored-price__item{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+.anchored-price__old-price{
+    font-weight: lighter;
+    padding-left: 0.3rem;
+    font-style: italic;
+
+    font-size: 105%;
+    text-rendering: optimizeLegibility;
+    text-decoration: line-through;
+
+}

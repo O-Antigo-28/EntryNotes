@@ -4,7 +4,7 @@ export interface ILabel {
     description: string
     code: BarcodeEAN13
     unitOfMeasure: UnitOfMeasure
-    value: number
+    valueProduct: number
     promotionalValue?: number
   
   }
