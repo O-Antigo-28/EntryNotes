@@ -151,7 +151,7 @@ const AutomaticFileSelection = () => {
             <WarningModal subject={subject}  content={contentModal.current}  modalProps={{show: showModalInvalidStockInvalid, onHide:() => {setShowModalInvalidStockInvalid(false)}
             }}/>
 
-            {allVeryWell ? ((redeFileIdentifier.path.length > 0 || caixaFileIdentifier.path.length > 0) ? <Navigate to={MyRoutes.AUTO_MODE}/> : <Navigate to={MyRoutes.MANUAL_MODE}/>) : <></>}
+            {allVeryWell ? ((redeFileIdentifier.path.length > 0 || caixaFileIdentifier.path.length > 0) ? <Navigate to={MyRoutes.BASE_AUTO_MODE}/> : <Navigate to={MyRoutes.BASE_MANUAL_MODE}/>) : <></>}
         
         </main>
     </div>

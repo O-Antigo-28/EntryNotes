@@ -24,7 +24,7 @@ const routes= [
         element: <ManualPage/>, 
     },
     { 
-        path: MyRoutes.AUTO_MODE, 
+        path: MyRoutes.BASE_AUTO_MODE, 
         element: <AutomaticPage/>
     }, 
     {
