@@ -36,9 +36,6 @@ const AutomaticPage = () => {
   const redePath = useRedeFileIdentifier().path
   const caixaPath = useCaixaFileIdentifier().path
 
-  console.log(stockPath)
-  console.log(redePath)
-  console.log(caixaPath)
   const [state, dispatch] = useReducer(reducerAutomaticPage, {
       ready: false,
       indexItem: 0,

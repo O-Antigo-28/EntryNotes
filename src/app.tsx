@@ -20,7 +20,7 @@ const routes= [
         element: <AutomaticFileSelection/>
     }, 
     {
-        path: MyRoutes.MANUAL_MODE,
+        path: MyRoutes.BASE_MANUAL_MODE,
         element: <ManualPage/>, 
     },
     { 

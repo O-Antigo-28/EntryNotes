@@ -11,7 +11,7 @@ const ModeChoicePage = () => {
 
     const modes = [
         {name: "Automático", link:MyRoutes.AUTO_FILE_SELECTION},
-        {name: "Manual", link:MyRoutes.MANUAL_MODE}
+        {name: "Manual", link:MyRoutes.BASE_MANUAL_MODE}
     ]
 
     return (

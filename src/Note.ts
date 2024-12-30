@@ -27,7 +27,14 @@ export enum MACHINE_NAMES{
     REDE = 'REDE',
     CAIXA = 'CAIXA'
 }
-export class Note{ 
+export interface INote{
+    machineName:MachineName | string,
+    paymentMethod: PaymentMethod | string,
+    value: number,
+    date: Date,
+    flag: Flag | string 
+}
+export class Note implements INote{ 
     constructor(
         private _machineName:MachineName,
         private _paymentMethod: PaymentMethod,

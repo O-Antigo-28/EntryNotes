@@ -1,5 +1,10 @@
 import { SaleItem } from "./SaleItem"
-export class Sale{ 
+export interface ISale{
+  itens: SaleItem[]
+  difference: number,
+  total: number,
+}
+export class Sale implements ISale{ 
     constructor(
       private _total: number,
       private _difference: number,

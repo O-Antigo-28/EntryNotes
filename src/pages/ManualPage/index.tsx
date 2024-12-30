@@ -30,6 +30,7 @@ const ManualPage = () => {
     
     const stockFileID = useStockFileIdentifier()
     const productList = useRef<Array<Product>>([])
+    const refPriceInput = useRef(null);
     
     const previousItem = () => {
         const previousIndex = index - 1
@@ -143,13 +144,17 @@ const ManualPage = () => {
             clean()
         }
     }
-
+    function handleKeydown() {
+        console.log("tentando focar")
+        if(refPriceInput.current)
+            refPriceInput.current.focus()
+    }
     return (
-        <>
+        <div style={{height: "100%"}} onKeyDown={handleKeydown}>
             <Header><></></Header>
             <Stack className="m-2" direction="horizontal" gap={3}>
                 <Stack direction="vertical">
-                    <PriceInput value={noteValue} setValue={setNoteValue}/>
+                    <PriceInput value={noteValue} refInput={refPriceInput} setValue={setNoteValue}/>
                     <Stack className="mt-auto" direction="horizontal" gap={1}>
                         <Button variant="secondary" onClick={handleConfirm}>Confirmar</Button>
 
@@ -165,7 +170,7 @@ const ManualPage = () => {
          
             {stockFileID.path.length < 3 && <Navigate to={MyRoutes.AUTO_FILE_SELECTION}/>}
             {items.length>0 && <SaleList  items={items.content} index={index} selectItem={(index) => setIndex(index)}/>}
-        </>
+        </div>
     )
 }
 

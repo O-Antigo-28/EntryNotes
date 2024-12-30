@@ -7,7 +7,9 @@ import { IStatesAutomaticPage } from "./IStateAutomaticPage"
 import { ActionAutomaticPage } from "./ActionAutomaticPage"
 import { SearchAlgorithm } from "../../SearchAlgorithm"
 import { updateProductList } from "../../updateProductList"
+import { ipcRenderer } from "electron"
 import { useUpdateProductList } from "../../state/productList"
+import { NoteSale } from "./../../NoteSale"
 
 export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAutomaticPage> = (state, action) => { 
     // const updateProductList = useUpdateProductList () 
@@ -74,8 +76,21 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
         return {...state, ready: false}
       }
       case 'AUTO_MODE': { 
-        async function sendSales(){
+        async function initServer(){
           
+        }
+        async function initAutoMode(){
+
+        }
+        async function sendSales(){
+          if (state.notes.length != state.sales.length)
+            throw Error("o número de vendas não é o mesmo numero de notinhas")
+          for(let index = 0; index < state.sales.length; index ++){
+            
+            const noteSale = Object.assign({}, state.sales.content[index], state.notes.content[index])
+            ipcRenderer.send("send-sales", noteSale as NoteSale )
+
+          }
         }
         sendSales()
         return state
