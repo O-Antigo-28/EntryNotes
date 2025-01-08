@@ -55,14 +55,19 @@ const createWindow = (): void => {
   // Open the DevTools.
 };
 
-function sendNoteSale(notesale:NoteSale){
+async function sendNoteSale(notesale:NoteSale){
   console.log("estamos tentando chefe")
-  fetch("http://127.0.0.1:5000/receive_sale", {
+  const response = await fetch("http://127.0.0.1:5000/receive_sale", {
     method: 'POST', 
     headers: {
       'Content-Type' : 'application/json'
     },
-    body: JSON.stringify(notesale)}).then((response) => response.json()).then((data) => console.log(data)).catch((e) => console.log(e))
+    body: JSON.stringify(notesale)})
+    const data = await response.json()
+
+    if(data["message"] == "mensagem recebida"){
+      mainWindow.webContents.send("message-send-notes", "OK")
+    }
 
 }
 
@@ -104,9 +109,21 @@ function listenerInitServer(){
 
 }
 
-function listenerSendSales(){
+async function listenerSendSales(){
   ipcMain.on("send-sales", (event, notesale) => { 
     sendNoteSale(notesale)
+
+  })
+  ipcMain.on("finish_sales", async () => { 
+
+    const response = await fetch("http://127.0.0.1:5000/finish_sales", {
+      method: 'POST', 
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({message: "finish"})})
+      const data = await response.json()
+
   })
 }
 // This method will be called when Electron has finished

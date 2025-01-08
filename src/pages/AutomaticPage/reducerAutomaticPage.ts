@@ -82,15 +82,38 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
         async function initAutoMode(){
 
         }
+
+        function waitSendingSale(){
+          return new Promise<string>((resolve) => { 
+            ipcRenderer.on("message-send-notes", (event, message:string) => {
+              console.log("eu recebi a mensagem ", message)
+              ipcRenderer.removeAllListeners("message-send-notes")
+              resolve(message)
+            })
+          })
+        }
         async function sendSales(){
           if (state.notes.length != state.sales.length)
             throw Error("o número de vendas não é o mesmo numero de notinhas")
+          let count: number = 0
           for(let index = 0; index < state.sales.length; index ++){
-            
             const noteSale = Object.assign({}, state.sales.content[index], state.notes.content[index])
+            if (count >=3){
+              throw Error(`não foi possivel mandar a nota de valor ${noteSale.value} e maquina ${noteSale.machineName}`)
+            }
             ipcRenderer.send("send-sales", noteSale as NoteSale )
 
+            const message:string = await waitSendingSale()
+            console.log(message)
+            if(message.toUpperCase() !== "OK"){
+              index--;
+              count++;
+            }else{
+              count = 0;
+            }
+            
           }
+          ipcRenderer.send("finish_sales")
         }
         sendSales()
         return state
