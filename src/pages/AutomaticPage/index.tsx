@@ -8,6 +8,8 @@ import { Note } from "../../Note"
 import { Indexer } from "../../Indexer"
 
 import { CaixaNoteExtractor } from "../../models/NoteExtractor/CaixaNoteExtractor"
+import { CaixaNoteExtractorOld } from "../../models/NoteExtractor/CaixaNoteExtractorOld"
+
 import ValueSystemInput from "../../components/ValueSystemInput"
 
 import { CSVExtractor } from "../../CSVExtractor"
@@ -25,9 +27,31 @@ import { Directions } from "../../Directions"
 import { reducerAutomaticPage } from "./reducerAutomaticPage"
 import { useCaixaFileIdentifier, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
 import { registerAcceleratorsDirections, unregisterAcceleratorsDirections } from "../IpcCommunication"
+import { RedeNoteExtractorOld } from "../../models/NoteExtractor/RedeNoteExtractorOld"
 
 const CAIXA_FILE_ENCODING = "win1252"
+function hasChangedPath(currentPath: string, oldListPath: string[]){
+  let changed = true
+  oldListPath.forEach(oldPath => {
+    if(currentPath.includes(oldPath))
+      changed = false;
+  });
+  return changed;
 
+  
+}
+function isHistoricCaixaPath(caixaPath: string): boolean{
+  return caixaPath.includes("Relatorio_de_Vendas_Historico_de_Vendas_")
+}
+function isHistoricRedePath(redePath: string): boolean{
+  const baseRedePath = "Rede_Rel_Vendas"
+  const redeOneDayPath = "Rede_Rel_Vendas_Do_Dia_"
+  if(!redePath.includes(baseRedePath)){
+    throw new Error("Não é um arquivo da rede"+ redePath)
+  }
+  const isHistoric = !redePath.includes(redeOneDayPath)
+  return isHistoric
+}
 
 
 const AutomaticPage = () => {
@@ -102,14 +126,26 @@ const AutomaticPage = () => {
           // REDE
           if(redePath.length > 3){
             const rawRedeData = await CSVExtractor(decodeURIComponent(redePath));
-            const redeExtractor = new RedeNoteExtractor(rawRedeData);
+            let redeExtractor: RedeNoteExtractor | RedeNoteExtractorOld;
+            if (isHistoricRedePath(redePath)){
+              redeExtractor = new RedeNoteExtractorOld()
+              redeExtractor.extractNotes(rawRedeData)
+            }
+            else {
+              console.log(redePath)
+              redeExtractor = new RedeNoteExtractor(redePath)
+              redeExtractor.extractNotes(rawRedeData)
+            }
+
             dispatch({type: 'ADDING_TO_NOTES_LIST', notes: redeExtractor.notes})
           }
 
           // CAIXA
           if(caixaPath.length > 3){
             const rawCaixaData = await(CSVExtractor(decodeURIComponent(caixaPath), CAIXA_FILE_ENCODING))
-            const caixaExtractor = new CaixaNoteExtractor(rawCaixaData)
+            
+            const caixaExtractor = isHistoricCaixaPath(caixaPath) ? new CaixaNoteExtractorOld() : new CaixaNoteExtractor()
+            caixaExtractor.extractNotes(rawCaixaData)
             dispatch({type: 'ADDING_TO_NOTES_LIST', notes: caixaExtractor.notes})
           }
 
