@@ -1,6 +1,8 @@
 import { MachineName,Flag, MACHINE_NAMES, NOTE_FLAGS, PaymentMethod, PAYMENT_METHODS,Note } from "../../Note"
 import { normalizeString } from "../../normalizeString"
 import { NoteExtractor } from "./NoteExtractor"
+import { combineDateAndTime } from "./combineDateAndTime";
+import { splitAndCheckLength } from "./splitAndCheckLength";
 function obterDataAtualFormatada() {
   const data = new Date();
 
@@ -10,20 +12,13 @@ function obterDataAtualFormatada() {
 
   const dataFormatada = `${dia}/${mes}/${ano}`;
   return dataFormatada;
+  
 }
 
 function adicionaZero(numero: number) {
   return numero < 10 ? `0${numero}` : numero;
 }
-interface ISpreadsheetRedeOld{
-  "data da venda": string,
-  "hora da venda": string,
-  "status da venda": string,
-  "valor da venda original": string,
-  "número de parcelas": string
-  "bandeira": string,
-  "modalidade": string      
-}
+
 interface ISpreadsheetRedeNew{
   "hora da venda":string,
   "status da venda":string,
@@ -35,102 +30,46 @@ interface ISpreadsheetRedeNew{
 }
 
 export class RedeNoteExtractor extends NoteExtractor{
-    protected _oldNotesMethod(_table: Object[]): void {
-      const APPROVED_SALE = "APROVADA"
-      _table.forEach((object: ISpreadsheetRedeOld               
-        ) =>  {
-        if(object["data da venda"].length > 3){ 
-            const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.modalidade, object["número de parcelas"])
-            const flag: Flag = this._extractFlag(object.bandeira)
-            const date: Date = this._extractDate(object["data da venda"])
-            const value = this._extractValue(object["valor da venda original"])
-            
-            if(normalizeString(object["status da venda"]) == APPROVED_SALE && flag != NOTE_FLAGS.NONEXISTENT && paymentMethod != PAYMENT_METHODS.NONEXISTENT){ 
-              this._appendNote(new Note(MACHINE_NAMES.REDE, paymentMethod, value, date, flag ))
-            }   
-        }
 
-      }) 
+  constructor(private path: string){
+    super()
+    console.log("path rede", path)
+    if(!path){
+      throw new Error("Path no redeNoteExtractor não foi passado")
     }
-    protected _newNotesMethod(_table: Object[]): void {
-      const APPROVED_SALE = "APROVADA"
-      _table.forEach((object: ISpreadsheetRedeNew) => { 
-        const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.modalidade, object["número de parcelas"])
-        const flag: Flag = this._extractFlag(object.bandeira)
-        const date: Date = this._extractDate(obterDataAtualFormatada())
-        const time: Date = this._extractClock(object["hora da venda"])
-        date.setHours(time.getHours(), time.getMinutes(), time.getSeconds())
-        const value = this._extractValue(object["valor da venda"])
-        
-        if(normalizeString(object["status da venda"]) == APPROVED_SALE && flag != NOTE_FLAGS.NONEXISTENT && paymentMethod != PAYMENT_METHODS.NONEXISTENT){ 
-          this._appendNote(new Note(MACHINE_NAMES.REDE, paymentMethod, value, date, flag ))
-        }   
-      })
-    }
-    protected _dataIsCurrent(_table: Object[]): boolean {
-      if(_table)
-      if(_table.length > 0){
-        return !_table[0].hasOwnProperty("data da venda")
+  }
+  public extractNotes(_table: Object[]): void {
+    _table.forEach((object: ISpreadsheetRedeNew) => { 
+      const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.modalidade, object["número de parcelas"])
+      const flag: Flag = this._extractFlag(object.bandeira)
+      const date: Date = this._extractDate("Rede_Rel_Vendas_Do_Dia_31_10_2024-31_10_2024-d2d87d53-6a94-4f03-a36d-7192fdf4c2f0.csv")
+      const time: Date = this._extractClock(object["hora da venda"])
+      const combinedDateAndTime = combineDateAndTime(date, time)
+      date.setHours(time.getHours(), time.getMinutes(), time.getSeconds())
+      const value = this._extractValue(object["valor da venda"])
+      const note = new Note(MACHINE_NAMES.REDE, paymentMethod, value, combinedDateAndTime, flag)
+      if(this._isValidNote(object["status da venda"], note)){ 
+        this._appendNote(note)
+      }   
+    })
+  }
+    protected _extractDate(path: string): Date {
+
+      const regex = /Dia_(.*?)-/g
+      let math;
+
+      if ( (math = regex.exec(path)) !== null){
+        const [day, month, year] = splitAndCheckLength(math[1], "_", 3)
+        return new Date(parseInt(year), parseInt(month) -1, parseInt(day)) 
+      }
+      else{
+        throw new Error("Não foi possivel extrair a data a partir do nome do arquivo: " + path)
       }
 
     }
-    protected _extractDate(date: string): Date {
-      if (typeof date != "string"){
-        return new Date(2020)
-      }
 
-
-    let [day, month, year] = date.split("/")
-    
   
 
-    if(year.length > 4){
-      year = year.slice(0, 4)
-    }
-    
-  
-
-    
-    return new Date(parseInt(year), parseInt(month) -1 , parseInt(day))
-    }
-    protected _extractClock(clock: string): Date {
-      const [hours, minutes, seconds] = clock.split(":")
-      const time: Date = new Date()
-      time.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds))
-      return time;
-    } 
-  
-  
-    protected _extractFlag(flagRaw:string): Flag{
-
-      flagRaw = normalizeString(flagRaw)
-  
-      switch (flagRaw) {
-        case NOTE_FLAGS.ALELO:
-        case "VR":
-          return NOTE_FLAGS.ALELO
-  
-        case NOTE_FLAGS.ELO:
-          return NOTE_FLAGS.ELO
-  
-        case NOTE_FLAGS.HIPERCARD:
-          return NOTE_FLAGS.HIPERCARD
-  
-        case NOTE_FLAGS.MAESTRO:
-          return NOTE_FLAGS.MAESTRO
-  
-        case NOTE_FLAGS.VISA:
-          return NOTE_FLAGS.VISA
-  
-        case NOTE_FLAGS.MASTERCARD:
-          return NOTE_FLAGS.MASTERCARD
-  
-  
-  
-        default:
-          return NOTE_FLAGS.NONEXISTENT
-      }
-    }
    
 
 }

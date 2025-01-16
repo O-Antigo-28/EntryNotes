@@ -1,31 +1,55 @@
 import { Note, MachineName, Flag, NOTE_FLAGS, PAYMENT_METHODS, PaymentMethod} from "../../Note";
 import { normalizeString } from "../../normalizeString";
-
+import { splitAndCheckLength } from "./splitAndCheckLength";
 
 
 import { extractValue } from "../../extractValue";
 
 export abstract class NoteExtractor{
   private _notes: Note[] = []
-  constructor(protected _table: Object[]){
+  constructor(){
+    
 
-    this._extractNotes(this._table)
   }
-  protected abstract _oldNotesMethod(_table: Object[]): void
-  protected abstract _newNotesMethod(_table: Object[]):void
-  protected _extractNotes(_table: Object[]){
-    if (this._dataIsCurrent(_table)){
-      // console.log("é atual", _table)
-      this._newNotesMethod(_table)
+  public abstract extractNotes(_table: Object[]): void
+  protected checkExistenceOfRawTable(_table: Object[]): boolean{
+    try{
+      if(!_table)
+        throw new Error("O objeto que foi passado dos dados brutos do extrator de historico de notas é invalido");
+  
+      if(_table.length <= 0)
+        throw new Error("Não existe nenhum dado passado para o extrator caixa");
+      return true
     }
-    else{
-      // console.log("não é atual",  _table)
-      this._oldNotesMethod(_table)
+    catch(e){
+      console.error("A tabela é nula ou não possui itens")
+      return false
     }
   }
 
 
-  protected abstract _dataIsCurrent(_table: Object[]): boolean
+  protected _isValidNote(status: string, note: Note){
+    const APPROVED_SALE = "APROVADA"
+    const status_sale = normalizeString(status)
+    try{
+      if(status_sale !== APPROVED_SALE){
+        throw new Error("A Nota não foi aprovada")
+      }
+
+      if(note.flag === NOTE_FLAGS.NONEXISTENT){
+        throw new Error("A Nota não tem bandeira")
+      }
+
+      if(note.paymentMethod === PAYMENT_METHODS.NONEXISTENT){
+        throw new Error("A Nota não tem método de pagamento")
+      }      
+      return true
+    }
+    catch(e){
+      console.error(e)
+      return false
+    }
+  }
 
   public get notes() {
     return this._notes
@@ -35,9 +59,51 @@ export abstract class NoteExtractor{
     this._notes.push(note)
   }
   protected abstract _extractDate(date:string):Date
-  protected abstract _extractClock(clock: string): Date
 
-  protected abstract _extractFlag(flagRaw:string): Flag
+  protected _extractClock(clock: string): Date{
+    if(!clock){
+      throw new Error("Não foi informad o horário")
+  }
+    const clockDelimiter = ":"
+    const lengthOfFormat = 3; // [hh, mm, ss]
+    const [hour, min, sec] = splitAndCheckLength(clock, clockDelimiter, lengthOfFormat)
+    const extractedClock = new Date()
+    extractedClock.setHours(parseInt(hour), parseInt(min), parseInt(sec), 0 )
+    return extractedClock;
+  }
+
+  protected _extractFlag(flagRaw:string): Flag{
+    flagRaw = normalizeString(flagRaw)
+    
+    switch (flagRaw) {
+      case "VR":
+      case NOTE_FLAGS.ALELO:
+        return NOTE_FLAGS.ALELO
+
+      case "ELO FULL":
+      case NOTE_FLAGS.ELO:
+        return NOTE_FLAGS.ELO
+
+      case NOTE_FLAGS.HIPERCARD:
+        return NOTE_FLAGS.HIPERCARD
+
+      case "MDS":
+      case NOTE_FLAGS.MAESTRO:
+        return NOTE_FLAGS.MAESTRO
+
+      case NOTE_FLAGS.VISA:
+        return NOTE_FLAGS.VISA
+
+      case NOTE_FLAGS.MASTERCARD:
+        return NOTE_FLAGS.MASTERCARD
+
+
+
+      default:
+        return NOTE_FLAGS.NONEXISTENT
+    }
+  }
+  
 
   protected _extractPaymentMethod(modality: string, installments: string): PaymentMethod{ 
     installments = installments.replace(/\D/g, '')
@@ -65,7 +131,7 @@ export abstract class NoteExtractor{
   
       case "VOUCHER":
         return PAYMENT_METHODS.TICKET
-      
+
       default: 
         return PAYMENT_METHODS.NONEXISTENT
 
