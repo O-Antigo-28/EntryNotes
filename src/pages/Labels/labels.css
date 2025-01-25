@@ -3,7 +3,13 @@
     padding: 0.5rem;
   
 }
-
+.labels{ 
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .container-PriceInput{
     width: 50%;
 }

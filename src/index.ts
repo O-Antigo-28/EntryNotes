@@ -12,7 +12,7 @@ if (require('electron-squirrel-startup')) {
 
 }
 
-let mainWindow: BrowserWindow = null
+let mainWindow: BrowserWindow | null = null
 interface Accelerator{ 
   accelerator: string, message: number
 }
@@ -45,36 +45,19 @@ const createWindow = (): void => {
     alwaysOnTop:true
   });
 
-  mainWindow.webContents.openDevTools()
-
+  mainWindow.menuBarVisible = false
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
   //mainWindow.menuBarVisible = false
   // Open the DevTools.
 };
 
-function registerAccelerators(accelerators: AccelaratorsForIPC){ 
-  accelerators.commands.forEach((commandToRegister) => { 
-    globalShortcut.register(commandToRegister.accelerator, () => {
-      mainWindow.webContents.send(accelerators.channel, commandToRegister.message)
-    })
-  })
-}
-function UnregisterAccelerators(accelerator: AccelaratorsForIPC){
-  accelerator.commands.forEach((commandToUnregister) => { 
-    globalShortcut.unregister(commandToUnregister.accelerator)
-  })
-}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  ipcMain.on('register-the-acceletators-directions-commands', () => { 
-    registerAccelerators(acceleratorsDirectionsForIPC)
-    ipcMain.on("unregister-the-acceletators-directions-commands", () => {
-      UnregisterAccelerators(acceleratorsDirectionsForIPC)
-    })  
-  })
+
   nativeTheme.themeSource = 'dark'
    
   createWindow()

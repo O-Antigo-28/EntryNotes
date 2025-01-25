@@ -13,19 +13,36 @@ import { mapUnitsOfMeasure } from "./../../mapUnitsOfMeasure"
 import MeasureBox from "../../components/MeasureBox"
 import { PrintableLabel } from "./PrintableLabel"
 import { useForm, SubmitHandler, Controller} from "react-hook-form"
-
+import Price from "../../components/Label/Price"
+import {z} from "zod"
+import {zodResolver} from "@hookform/resolvers/zod"
+import { useReactToPrint } from "react-to-print";
 const Labels = () => { 
+
+    const contentRef = useRef<HTMLUListElement>(null);
+    const reactToPrintFn = useReactToPrint({ contentRef });
 
     const [printableLabels, setPrintableLabels] = useState<Array<PrintableLabel>>([])
     const [showModal, setShowModal] = useState(false)
-    const currentPrintableLabel = useRef(null)
+    const currentPrintableLabel = useRef<PrintableLabel | null>(null)
     
-    const[ valueProduct, setValueProduct ]= useState<string>("")
-    const[ promotionalValueProduct, setPromotionalValueProduct] = useState<string>("")
+    const[ valueProduct, setValueProduct]= useState<string>("0.00")
+    const[ promotionalValueProduct, setPromotionalValueProduct] = useState<string>("0.00")
     const[widthValue, setWidthValue] = useState<string>("10")
     const[heightValue, setHeightValue] = useState<string>("3.40")
 
-    const {register, handleSubmit, formState:{errors}, control, reset, setFocus} = useForm<PrintableLabel>()
+    const printableLabelSchema = z.object({
+        code: z.string().min(6, {message: "O Formato minimo é o UPC-E"}).max(13, {message: "O formato máximo é o EAN13"}).regex(/^\d+$/),
+        description: z.string().max(35), 
+        unitOfMeasure: z.enum(["kg", "un" , "g", "l", "ml", "dz",  "pct", "fd" , "cx"]),
+        valueProduct: z.coerce.number(),
+        promotionalValue: z.coerce.number(),
+        width: z.coerce.number(), 
+        height: z.coerce.number(),
+        lengthUnit: z.enum(["mm" , "cm"])
+    })
+    type FormPrintableLabel = z.infer<typeof printableLabelSchema>;
+    const {register, handleSubmit, formState:{errors}, control, reset, setFocus} = useForm<FormPrintableLabel>({resolver: zodResolver(printableLabelSchema)})
 
     function updatePrintableLabel(old: PrintableLabel, current: PrintableLabel){
         Object.assign(old, current);
@@ -46,9 +63,12 @@ const Labels = () => {
     }
     function handleUpdateLabel(){
         if(currentPrintableLabel.current){
-            const printableLabelToUpdate = printableLabels.find((printableLabel) => (printableLabel.code === currentPrintableLabel.current.code))
-            updatePrintableLabel(printableLabelToUpdate, currentPrintableLabel.current)
-            setPrintableLabels((old) => (old))
+            const printableLabelToUpdate = printableLabels.find((printableLabel) => (printableLabel.code === currentPrintableLabel.current?.code))
+            if (printableLabelToUpdate){
+                updatePrintableLabel(printableLabelToUpdate, currentPrintableLabel.current)
+                setPrintableLabels((old) => (old))
+            }
+            
         }
         resetFields()
         handleCloseModal()
@@ -58,6 +78,8 @@ const Labels = () => {
 
     }
     function addInPrintableLabels (data: PrintableLabel) {
+        if (!data)
+            return
         console.log(data)
         console.log(PrintableLabel.isValid(data))
         if(!PrintableLabel.isValid(data)){
@@ -78,8 +100,17 @@ const Labels = () => {
     }
 
   
-    const onSubmit: SubmitHandler<PrintableLabel> = (data) => {
-        addInPrintableLabels(data)
+    const onSubmit: SubmitHandler<FormPrintableLabel> = (data) => {
+        console.log(data)
+        const printableLabel = new PrintableLabel(createBarcodeEAN13(data.code),
+        data.description,
+        data.unitOfMeasure, 
+        data.valueProduct,
+        data.width, 
+        data.height, 
+        data.lengthUnit, 
+        data.promotionalValue)
+        addInPrintableLabels(printableLabel)
     }
 
 
@@ -92,7 +123,7 @@ const Labels = () => {
                         <div style={{width: "27ch"}}>
                             <SystemInput maxLength={13} required {...register("code")}>Código de barras</SystemInput>
                         </div> 
-                        <SystemInput required {...register("description")}>Descrição</SystemInput>
+                        <SystemInput maxLength={35} required {...register("description")}>Descrição</SystemInput>
                     </Stack>    
 
                     <Form.Select {...register("unitOfMeasure")}>
@@ -111,8 +142,9 @@ const Labels = () => {
                         </div>
 
                         <div className="container-PriceInput">
-                            <Controller name="promotionalValue"
-                                
+                            <Controller 
+                                name="promotionalValue"
+                                defaultValue={0.00}
                                 control={control}
                                 render={({field}) => (
                                 <PriceInput {...field} value={promotionalValueProduct} setValue={setPromotionalValueProduct}>Valor Promocional</PriceInput>
@@ -164,16 +196,22 @@ const Labels = () => {
                     </Button>
                     </Modal.Footer>
                 </Modal>
-                <Stack style={{overflowY: "scroll" }}>
-                        {printableLabels.map((printableLabel) => {
-                            return( 
-                            <MeasureBox key={printableLabel.code} height={printableLabel.height}  width={printableLabel.width} lengthUnit={printableLabel.lengthUnit}>
-                                <LabelElement {...printableLabel} key={printableLabel.code}/>
-                            </MeasureBox>)
-                        })}
-                </Stack>
-            </form>  
 
+            </form>  
+            
+            <div className="labels">
+                <Button style={{margin: "auto"}} onClick={(e) => reactToPrintFn()}>Imprimir plaquinhas</Button>
+                
+                <ul style={{overflow: "hidden", display: "flex", flexDirection:"row", flexWrap: "wrap" }}  ref={contentRef}>
+                            {printableLabels.map((printableLabel) => {
+                                return( 
+                                <MeasureBox key={printableLabel.code} height={printableLabel.height}  width={printableLabel.width} lengthUnit={printableLabel.lengthUnit}>
+                                    <LabelElement {...printableLabel} key={printableLabel.code}/>
+                                </MeasureBox>)
+                            })}
+                </ul>
+
+            </div>
 
 
 

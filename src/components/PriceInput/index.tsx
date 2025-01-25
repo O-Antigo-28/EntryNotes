@@ -4,7 +4,9 @@ import "./priceinput.css"
 import SystemInput from "../../components/SystemInput";
 interface IPriceInput extends InputHTMLAttributes<HTMLInputElement> {
   setValue:React.Dispatch<React.SetStateAction<string>>,
+  value: string,
   children?: ReactNode,
+  onChange:(e: React.ChangeEvent) => void
 }
 const PriceInput = forwardRef<HTMLInputElement, IPriceInput>(({ value, setValue, children, onChange, ...props}, ref) => {
   const [firstChar, setFirstChar] = useState(true)
