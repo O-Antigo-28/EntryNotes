@@ -2,25 +2,17 @@ import Stack from "react-bootstrap/Stack"
 import Form  from "react-bootstrap/Form"
 import Modal from "react-bootstrap/Modal"
 import PriceInput from "../../../components/PriceInput"
-import Price from "../../../components/Label/Price"
 import Button from "react-bootstrap/Button"
 import "../labels.css"
 import React, { useState, useRef} from "react"
-import { createBarcodeEAN13 } from "../../../components/Label/createBarcode"
 import SystemInput from "../../../components/SystemInput"
-import {Label}  from "../../../components/Label/Label"
-import LabelElement from "../../../components/Label"
 import { mapUnitsOfMeasure } from "../../../mapUnitsOfMeasure"
-import MeasureBox from "../../../components/MeasureBox"
 import { PrintableLabel } from "../PrintableLabel"
 import { useForm, SubmitHandler, Controller} from "react-hook-form"
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
-import Tabs from "react-bootstrap/Tabs"
-import Tab  from "react-bootstrap/Tab"
-import { useReactToPrint } from "react-to-print";
-import Title from "../../../components/Title"
-import { useAddPrintableLabel, useUpdatePrintableLabel} from "../../../atoms/PritableLabelsAtom"
+
+import { PrintableLabelHookResponses, useAddPrintableLabel, useUpdatePrintableLabel} from "../../../atoms/PritableLabelsAtom"
 
 
 const QuickCreationLabels = () => {
@@ -37,7 +29,7 @@ const QuickCreationLabels = () => {
         const[heightValue, setHeightValue] = useState<string>("3.40")
     
         const printableLabelSchema = z.object({
-            code: z.string().min(6, {message: "O Formato minimo é o UPC-E"}).max(13, {message: "O formato máximo é o EAN13"}).regex(/^\d+$/),
+            code: z.string().min(1, {message: "digite algo pelo menos né"}).max(13, {message: "O formato máximo é o EAN13"}).regex(/^\d+$/),
             description: z.string().max(35), 
             unitOfMeasure: z.enum(["kg", "un" , "g", "l", "ml", "dz",  "pct", "fd" , "cx"]),
             valueProduct: z.coerce.number(),
@@ -62,24 +54,26 @@ const QuickCreationLabels = () => {
             setShowModal(false)
         }
         function handleUpdateLabel(){
-            updatePrintableLabel(currentPrintableLabel.current)
+            console.log(updatePrintableLabel(currentPrintableLabel.current))
             resetFields()
             handleCloseModal()
     
         }
-        if (currentPrintableLabel.current){
-    
-        }
+
         function addInPrintableLabels (data: PrintableLabel) {
-            addPrintableLabel(data)
+            switch(addPrintableLabel(data)){
+                case PrintableLabelHookResponses.HAS_CREATED:
+                    currentPrintableLabel.current = data
+                    setShowModal(true)
+                    return
+            }
             resetFields()
             
         }
     
       
         const onSubmit: SubmitHandler<FormPrintableLabel> = (data) => {
-            console.log(data)
-            const printableLabel = new PrintableLabel(createBarcodeEAN13(data.code),
+            const printableLabel = new PrintableLabel(data.code,
             data.description,
             data.unitOfMeasure, 
             data.valueProduct,
@@ -87,6 +81,8 @@ const QuickCreationLabels = () => {
             data.height, 
             data.lengthUnit, 
             data.promotionalValue)
+            currentPrintableLabel.current = printableLabel
+
             addInPrintableLabels(printableLabel)
         }
     

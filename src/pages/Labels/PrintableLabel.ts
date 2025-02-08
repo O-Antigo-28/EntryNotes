@@ -1,12 +1,12 @@
 import { LengthUnit } from "../../components/MeasureBox/TLengthUnit"
 import { UnitOfMeasure } from "./../../components/Label/TUnitOfMeasure"
-import { BarcodeEAN13 } from "../../components/Label/TBarcodeEAN13"
+
 import { ILabel } from "../../components/Label/ILabel"
 import { IMeasure } from "../../components/MeasureBox/IMeasure"
 
 export class PrintableLabel implements ILabel, IMeasure{
     constructor(
-        public code: BarcodeEAN13, 
+        public code: string, 
         public description: string, 
         public unitOfMeasure: UnitOfMeasure,
         public valueProduct: number, 

@@ -1,16 +1,10 @@
 
-import React, {ReactNode}from 'react'
+import {ReactNode} from 'react'
 import { Label } from './Label';
 import Price from './Price';
 import './label.css'
-import { mapUnitsOfMeasure } from '../../mapUnitsOfMeasure';
 import AnchoredPrice from './AnchoredPrice';
-import Barcode from 'react-barcode';
-import mercadinhoacb from "../../assets/icons/Label/mercadinhoacb.svg"
-
-const BarcodeComercial =({code}: {code: string}) => {
-  return <Barcode value={code} format='GenericBarcode' />
-}
+import BarcodeComercial from '../../components/BarcodeComercial';
 
 const LabelElement = ({description, code, unitOfMeasure, valueProduct, promotionalValue}: Label) => {  
   
@@ -36,7 +30,8 @@ const LabelElement = ({description, code, unitOfMeasure, valueProduct, promotion
 
 
         <span  className="label__barcode">
-          <Barcode value={code} format='EAN13' height={50} width={1}/>
+ 
+          <BarcodeComercial code={code} />
         </span>
 
 

@@ -1,0 +1,24 @@
+.ListPrintableLabelPanel{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+    padding: 1rem;
+
+}
+.ListPrintableLabelPanel__header{
+    display: flex;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(210, 208, 208);
+    padding: 1rem;
+    border-radius: 0 0 10px 10px;
+}
+.ListPrintableLabelPanel__title{
+    
+    flex-grow: 3;
+}
+

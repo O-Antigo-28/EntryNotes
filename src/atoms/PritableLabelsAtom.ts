@@ -1,5 +1,9 @@
-import { atom, useAtom, useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { PrintableLabel } from '../pages/Labels/PrintableLabel'
+import React from 'react'
+import { useReactToPrint } from 'react-to-print'
+import { ContentNode } from 'react-to-print/lib/types/ContentNode'
+
 
 const PrintableLabelsAtom = atom<PrintableLabel[]>([])
 
@@ -39,6 +43,20 @@ export const useAddPrintableLabel = () => {
         return PrintableLabelHookResponses.OK
     }
 }
+export const usePrintPrintableLabels = (refContainer: React.RefObject<ContentNode | undefined>) => {
+    const [printabelLabels, setPrintableLabels] = useAtom(PrintableLabelsAtom)
+    const reactToPrintFn = useReactToPrint({contentRef: refContainer, onAfterPrint() {
+        setPrintableLabels([])
+    },}) 
+    return():PrintableLabelHookResponses => {
+        if(printabelLabels.length === 0){
+            return PrintableLabelHookResponses.NO_DATA
+        }
+        reactToPrintFn()
+        return PrintableLabelHookResponses.OK
+    
+    }
+}
 export const useUpdatePrintableLabel = () => { 
     const [printableLabels, setPrintableLabels] = useAtom(PrintableLabelsAtom)
     return (currentLabel: PrintableLabel | null) => {
@@ -49,7 +67,12 @@ export const useUpdatePrintableLabel = () => {
             return PrintableLabelHookResponses.NOT_FOUND
 
         Object.assign(printableLabelToUpdate, currentLabel)
-        setPrintableLabels((old) => (old))
+        setPrintableLabels((old) => [...old])
+        return PrintableLabelHookResponses.OK
         
     }
+}
+export const useCountPrintableLabel = () => {
+    const printableLabelList = useAtomValue(PrintableLabelsAtom)
+    return printableLabelList.length
 }

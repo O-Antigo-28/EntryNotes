@@ -19,7 +19,6 @@
     display: flex;
     flex-direction: row;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
     align-items: start;
 
     overflow: hidden;
@@ -28,13 +27,14 @@
 
 .value__integer{
     display: block;
-    line-height: 1.2;
-    font-size: 2rem;
+    line-height: 1;
+    font-size: 4rem;
+    letter-spacing: -1px;
     
 
 }
 
 .value__decimal, .value__delimiter{
     display: block;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
 }
