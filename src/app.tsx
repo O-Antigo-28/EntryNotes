@@ -38,7 +38,6 @@ const root = createRoot(document.getElementById("react-container"));
 
 function App(){ 
     return (
-        <StrictMode>
             <RecoilRoot>
                 <HashRouter>
                     <Routes>
@@ -48,8 +47,6 @@ function App(){
                     </Routes>
                 </HashRouter>
             </RecoilRoot>
-        </StrictMode>
-
     ) 
 }
 root.render(

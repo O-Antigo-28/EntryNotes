@@ -8,7 +8,6 @@ import { ActionAutomaticPage } from "./ActionAutomaticPage"
 import { SearchAlgorithm } from "../../SearchAlgorithm"
 import { updateProductList } from "../../updateProductList"
 import { ipcRenderer } from "electron"
-import { useUpdateProductList } from "../../state/productList"
 import { NoteSale } from "./../../NoteSale"
 
 export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAutomaticPage> = (state, action) => { 
