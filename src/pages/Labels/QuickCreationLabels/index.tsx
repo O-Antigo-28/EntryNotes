@@ -25,8 +25,7 @@ const QuickCreationLabels = () => {
         
         const[ valueProduct, setValueProduct]= useState<string>("0.00")
         const[ promotionalValueProduct, setPromotionalValueProduct] = useState<string>("0.00")
-        const[widthValue, setWidthValue] = useState<string>("10")
-        const[heightValue, setHeightValue] = useState<string>("3.40")
+
     
         const printableLabelSchema = z.object({
             code: z.string().min(1, {message: "digite algo pelo menos né"}).max(13, {message: "O formato máximo é o EAN13"}).regex(/^\d+$/),
@@ -34,9 +33,7 @@ const QuickCreationLabels = () => {
             unitOfMeasure: z.enum(["kg", "un" , "g", "l", "ml", "dz",  "pct", "fd" , "cx"]),
             valueProduct: z.coerce.number(),
             promotionalValue: z.coerce.number(),
-            width: z.coerce.number(), 
-            height: z.coerce.number(),
-            lengthUnit: z.enum(["mm" , "cm"])
+
         })
         type FormPrintableLabel = z.infer<typeof printableLabelSchema>;
         const {register, handleSubmit, formState:{errors}, control, reset, setFocus} = useForm<FormPrintableLabel>({resolver: zodResolver(printableLabelSchema)})
@@ -77,9 +74,7 @@ const QuickCreationLabels = () => {
             data.description,
             data.unitOfMeasure, 
             data.valueProduct,
-            data.width, 
-            data.height, 
-            data.lengthUnit, 
+            10, 3.40, "cm",
             data.promotionalValue)
             currentPrintableLabel.current = printableLabel
 
@@ -125,31 +120,7 @@ const QuickCreationLabels = () => {
                     </Stack>
                             
 
-                    <h2 className="p-2 mt-5">Medidas das plaquinhas</h2>
-                    <Stack direction="horizontal" gap={2} className="p-2">
-                        <div className="container-PriceInput">
-                            <Controller
-                                name="width"
-                                defaultValue={10}
-                                control={control}
-                                render={({field}) => ( 
-                                <PriceInput {...field} required setValue={setWidthValue} value={widthValue}>Comprimento</PriceInput>)}/>
-                           
-                        </div>
-
-                        <div className="container-PriceInput">
-                            <Controller name="height" defaultValue={3.40} control={control} render={({field}) => (
-                                
-                                <PriceInput {...field} required setValue={setHeightValue} value={heightValue}>Altura</PriceInput>
-                            )}/>
-                           
-                        </div>
-
-                        <Form.Select style={{width: "30%"}} {...register("lengthUnit")}>
-                            <option value="cm">cm</option>
-                            <option value="mm">mm</option>
-                        </Form.Select>
-                    </Stack>
+       
 
                     <Button type="submit" variant="primary" className="w-100">Criar plaquinha</Button>
                 </Stack>
