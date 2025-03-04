@@ -20,7 +20,7 @@ import { Sale } from "../../Sale"
 import ButtonContainer from "../../components/ButtonContainer"
 import NoteElement from "../../components/NoteElement"
 import Button from "../../components/Button"
-
+import SystemInput from "../../components/SystemInput"
 import {ipcRenderer} from "electron"
 import { Directions } from "../../Directions"
 
@@ -219,7 +219,9 @@ const AutomaticPage = () => {
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().difference} colors={true} >diferença</ValueSystemInput>
             <Button presetStyle="p" onClick={autoMode}>AUTO</Button>
           </div>
-
+          <div>
+            <SystemInput propValue={`${state.notes.index + 1}/${state.notes.length}`}>Progresso</SystemInput>
+          </div>
         </div>
 
         
