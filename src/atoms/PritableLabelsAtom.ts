@@ -3,6 +3,7 @@ import { PrintableLabel } from '../pages/Labels/PrintableLabel'
 import React from 'react'
 import { useReactToPrint } from 'react-to-print'
 import { ContentNode } from 'react-to-print/lib/types/ContentNode'
+import { ipcRenderer} from 'electron'
 
 
 const PrintableLabelsAtom = atom<PrintableLabel[]>([])
@@ -38,6 +39,7 @@ export const useAddPrintableLabel = () => {
             return PrintableLabelHookResponses.HAS_CREATED
         }
 
+        ipcRenderer.send("ipc-create-label", data)
 
         setPrintableLabels((printableList) => [...printableList, data])
         return PrintableLabelHookResponses.OK
@@ -67,6 +69,7 @@ export const useUpdatePrintableLabel = () => {
             return PrintableLabelHookResponses.NOT_FOUND
 
         Object.assign(printableLabelToUpdate, currentLabel)
+        ipcRenderer.send("ipc-update-label", currentLabel)
         setPrintableLabels((old) => [...old])
         return PrintableLabelHookResponses.OK
         
