@@ -7,8 +7,7 @@ export class Label implements ILabel{
         public code: string,
         public description: string,
         public unitOfMeasure: UnitOfMeasure,
-        public valueProduct: number, 
-        public promotionalValue?: number
+        
         
            
     ){

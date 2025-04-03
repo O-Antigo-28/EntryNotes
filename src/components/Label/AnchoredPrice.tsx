@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
-import { IPrice } from "./IPrice"
+import { IPrice } from "../../IPrice"
 import "./anchored-price.css"
-import Price from "./Price";
+import Price from "./../Price/Price";
 interface IAnchoredPrice extends IPrice {
     oldValue: number;
 }

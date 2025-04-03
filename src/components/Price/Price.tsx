@@ -1,5 +1,5 @@
 import {hasDecimalPlaces, getDecimal} from "../../decimais"
-import { IPrice } from "./IPrice"
+import { IPrice } from "./../../IPrice"
 import "./price.css"
 
 const Price = ({value, currency="R$"}: IPrice) => { 

@@ -1,18 +1,19 @@
 
 import {ReactNode} from 'react'
 import { Label } from './Label';
-import Price from './Price';
+import Price from '../Price/Price';
 import './label.css'
-import AnchoredPrice from './AnchoredPrice';
+
 import BarcodeComercial from '../../components/BarcodeComercial';
+import { IPrice } from '../../IPrice';
 
-const LabelElement = ({description, code, unitOfMeasure, valueProduct, promotionalValue}: Label) => {  
+const LabelElement = ({description, code, unitOfMeasure, value, currency}: Label & IPrice) => {  
   
-  let valueArea: ReactNode = <Price value={valueProduct}/>
-  
+  let valueArea: ReactNode = <Price value={value} currency={currency}/>
 
-  if (promotionalValue)
-    valueArea = <AnchoredPrice oldValue={valueProduct} value={promotionalValue}/> 
+  // CRIAR A LÓGICA DO PREÇO PROMOCIONAL
+  // if (promotionalValue)
+  //   valueArea = <AnchoredPrice oldValue={value} value={promotionalValue}/> 
 
 
   return(
