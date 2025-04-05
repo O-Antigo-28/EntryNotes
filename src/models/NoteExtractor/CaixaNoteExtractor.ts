@@ -29,10 +29,8 @@ export class CaixaNoteExtractor extends NoteExtractor{
           const combinedDate = combineDateAndTime(date, time);
 
           const value = this._extractValue(object["Valor bruto"])
-          if(normalizeString(object.Status) == APPROVED_SALE && flag != NOTE_FLAGS.NONEXISTENT && paymentMethod != PAYMENT_METHODS.NONEXISTENT){ 
-            this._appendNote(new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDate, flag ))
-          } 
-          
+
+          this._appendNote(new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDate, flag ), object.Status)
       })
     }
     protected _extractDate(date:string):Date{

@@ -28,7 +28,7 @@ export abstract class NoteExtractor{
   }
 
 
-  protected _isValidNote(status: string, note: Note){
+  private _isValidNote(status: string, note: Note){
     const APPROVED_SALE = "APROVADA"
     const status_sale = normalizeString(status)
     try{
@@ -36,7 +36,7 @@ export abstract class NoteExtractor{
         throw new Error("A Nota não foi aprovada")
       }
 
-      if(note.flag === NOTE_FLAGS.NONEXISTENT){
+      if(note.flag === NOTE_FLAGS.NONEXISTENT && note.paymentMethod !== PAYMENT_METHODS.PIX){
         throw new Error("A Nota não tem bandeira")
       }
 
@@ -55,8 +55,9 @@ export abstract class NoteExtractor{
     return this._notes
   }
   
-  protected _appendNote(note: Note):void{
-    this._notes.push(note)
+  protected _appendNote(note: Note, status: string):void{
+    if(this._isValidNote(status, note))
+      this._notes.push(note)
   }
   protected abstract _extractDate(date:string):Date
 

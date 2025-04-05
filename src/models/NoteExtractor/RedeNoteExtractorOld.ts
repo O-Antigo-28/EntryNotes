@@ -25,9 +25,7 @@ export class RedeNoteExtractorOld extends NoteExtractor{
             const combinedDateAndTime = combineDateAndTime(date, clock)
             const value = this._extractValue(object["valor da venda original"])
             const note = new Note(MACHINE_NAMES.REDE, paymentMethod, value, combinedDateAndTime, flag )
-            if(this._isValidNote(object["status da venda"], note)){
-                this._appendNote(note)
-            }
+            this._appendNote(note, object["status da venda"])
 
         }
 

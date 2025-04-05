@@ -29,9 +29,7 @@ export class CaixaNoteExtractorOld extends NoteExtractor{
                     
           const note = new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDateAndTime, flag )
   
-          if (this._isValidNote(rawNote.Status, note)){
-            this._appendNote(note)
-          }
+          this._appendNote(note, rawNote.Status)
         });
       }catch(e){
         console.error(e)
@@ -51,8 +49,7 @@ export class CaixaNoteExtractorOld extends NoteExtractor{
           const value = this._extractValue(rawNote["Valor original da venda"])
     
           const note = new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDateAndTime, flag )
-          if(this._isValidNote(rawNote.Status, note))
-            this._appendNote(note)
+          this._appendNote(note, rawNote.Status)
 
       }
       });
