@@ -114,10 +114,6 @@ const AutomaticFileSelection = () => {
               isValidFiles = false
             }
 
-            if(pixFileIdentifier.fileName.length < 3){
-              isValidFiles = false
-            }
-
             if(stockFileIdentifier.fileName !== FILENAME_SIMILAR_STOCK){
               messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(stockFileType.typeData, FILENAME_SIMILAR_STOCK, stockFileIdentifier.fileName))
               isValidFiles = false
