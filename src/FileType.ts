@@ -1,4 +1,4 @@
-type TypeDataFile = "REP.ESTOQUE" | "REP.CAIXA" | "REP.REDE"
+type TypeDataFile = "REP.ESTOQUE" | "REP.CAIXA" | "REP.REDE" | "REP.PIX"
 type Priority = "OPTIONAL" | "NESCESSARY" 
 export class FileType{ 
     constructor(
@@ -18,7 +18,6 @@ export class FileType{
     }
 
     get isOptional(): boolean{
-        console.log(this._optional)
         return this._optional == "OPTIONAL"
     }
 

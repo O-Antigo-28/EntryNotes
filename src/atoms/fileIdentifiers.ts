@@ -6,6 +6,10 @@ export const redeFileIdentifier = atom({
     default: new FileIdentifier(uuidv4())
 })
 
+export const pixFileIdentifier = atom({
+    key: "pixFileIdentifier", 
+    default: new FileIdentifier(uuidv4())
+})
 
 export const caixaFileIdentifier = atom({
     key: "caixaFileIdentifier", 
@@ -34,7 +38,10 @@ export const useGetFileIdentifierByID= ()=> {
         return fileIDs.find((fileID) => fileID.id === id)
     }
 }
-
+export const useIDPixFIValue = () => {
+    const stateValue = useRecoilValue(pixFileIdentifier)
+    return stateValue.id
+}
 
 export const useIDCaixaFIValue = () => {
     const stateValue = useRecoilValue(caixaFileIdentifier)
@@ -63,6 +70,10 @@ export const useCaixaFileIdentifier = () => {
     const fileIdentifier = useRecoilValue(caixaFileIdentifier)
     return fileIdentifier
 }
+export const usePixFileIdentifier = () => {
+    const fileIdentifier = useRecoilValue(pixFileIdentifier)
+    return fileIdentifier
+}
 
 export const useFileIdentifierByID = (FileIdentifierID: string) => { 
     switch (FileIdentifierID){
@@ -86,6 +97,7 @@ export const useFileIdentifierByID = (FileIdentifierID: string) => {
 export const useUpdateFileIdentifierByID = () => {
 
     const listFIDsSetters = [
+        {FID: useIDPixFIValue(), setter: useSetFileInFileIdentifier(pixFileIdentifier)},
         {FID: useIDCaixaFIValue(), setter: useSetFileInFileIdentifier(caixaFileIdentifier)}, 
         {FID: useIDRedeFIValue(), setter: useSetFileInFileIdentifier(redeFileIdentifier)}, 
         {FID: useIDEstoqueFIValue(), setter: useSetFileInFileIdentifier(stockFileIdentifier)}

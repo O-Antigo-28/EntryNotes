@@ -14,7 +14,7 @@ import { FileIdentifier } from "../../FileIdentifier"
 import FormFileSelector from "../../components/FormFileSelector"
 import WarningModal from "../../components/WarningModal"
 
-import { useCaixaFileIdentifier, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
+import { useCaixaFileIdentifier, usePixFileIdentifier, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
 import Button from 'react-bootstrap/Button';
 const FILENAME_SIMILAR_STOCK = "POSICAODEESTOQUE.CSV"
 const FILENAME_SIMILAR_REDE = "Rede_Rel_Vendas_Do_Dia.... .csv"
@@ -41,20 +41,25 @@ const caixaExtensions = [
     FileExtensions.CSV,
     FileExtensions.EXCEL
 ]
+const pixExtension = [
+  FileExtensions.CSV,
+]
 
 function createCorrectionMessageForFilenames(to: string, CorrectFilename: string, incorrectFilename: string){
   return `o arquivo selecionado ${incorrectFilename} para ${to} não é o correto! Tente um arquivo parecido com ${CorrectFilename}`
 }
 
 
-const fileTypeRede = new FileType("REP.REDE", redeExtensions, "OPTIONAL")
-const fileTypeCaixa = new FileType("REP.CAIXA", caixaExtensions, "OPTIONAL")
-const fileTypeStock = new FileType("REP.ESTOQUE", stockExtensions)
+const redeFileType = new FileType("REP.REDE", redeExtensions, "OPTIONAL")
+const caixaFileType = new FileType("REP.CAIXA", caixaExtensions, "OPTIONAL")
+const fileTypePix = new FileType("REP.PIX", pixExtension, "OPTIONAL")
+const stockFileType = new FileType("REP.ESTOQUE", stockExtensions)
 
 const AutomaticFileSelection = () => {
     const redeFileIdentifier = useRedeFileIdentifier()
     const caixaFileIdentifier = useCaixaFileIdentifier()
     const stockFileIdentifier = useStockFileIdentifier()
+    const pixFileIdentifier = usePixFileIdentifier()
     
     const [showModalInvalidStockInvalid, setShowModalInvalidStockInvalid] = useState<boolean>(false)
     const [allVeryWell, setAllVeryWell] = useState(false)
@@ -65,14 +70,17 @@ const AutomaticFileSelection = () => {
 
 
     const filesIdentifiers: FileIdentifier[] = [
+        pixFileIdentifier,
         redeFileIdentifier,
         caixaFileIdentifier,
-        stockFileIdentifier]
+        stockFileIdentifier,
+      ]
 
     const filesChoosers: FileChooser[] = [ 
-        new FileChooser(redeFileIdentifier.id, fileTypeRede),
-        new FileChooser(caixaFileIdentifier.id, fileTypeCaixa), 
-        new FileChooser(stockFileIdentifier.id, fileTypeStock)
+        new FileChooser(pixFileIdentifier.id, fileTypePix),
+        new FileChooser(redeFileIdentifier.id, redeFileType),
+        new FileChooser(caixaFileIdentifier.id, caixaFileType), 
+        new FileChooser(stockFileIdentifier.id, stockFileType),
     ]
 
 
@@ -97,18 +105,21 @@ const AutomaticFileSelection = () => {
             const messageForEachIncorrectFilename: string[] = []
 
             if(redeFileIdentifier.fileName.length > 3 && !REDE_INSPECT_FILENAME.test(redeFileIdentifier.fileName)){
-              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(fileTypeRede.typeData ,FILENAME_SIMILAR_REDE, redeFileIdentifier.fileName))
-              console.log(REDE_INSPECT_FILENAME.test(redeFileIdentifier.fileName))
+              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(redeFileType.typeData ,FILENAME_SIMILAR_REDE, redeFileIdentifier.fileName))
               isValidFiles = false
             }
 
             if(caixaFileIdentifier.fileName.length > 3 && !CAIXA_INSPECT_FILENAME.test(caixaFileIdentifier.fileName)){
-              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(fileTypeCaixa.typeData, FILENAME_SIMILAR_CAIXA, caixaFileIdentifier.fileName))
+              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(caixaFileType.typeData, FILENAME_SIMILAR_CAIXA, caixaFileIdentifier.fileName))
+              isValidFiles = false
+            }
+
+            if(pixFileIdentifier.fileName.length < 3){
               isValidFiles = false
             }
 
             if(stockFileIdentifier.fileName !== FILENAME_SIMILAR_STOCK){
-              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(fileTypeStock.typeData, FILENAME_SIMILAR_STOCK, stockFileIdentifier.fileName))
+              messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(stockFileType.typeData, FILENAME_SIMILAR_STOCK, stockFileIdentifier.fileName))
               isValidFiles = false
             }
             
@@ -151,7 +162,7 @@ const AutomaticFileSelection = () => {
             <WarningModal subject={subject}  content={contentModal.current}  modalProps={{show: showModalInvalidStockInvalid, onHide:() => {setShowModalInvalidStockInvalid(false)}
             }}/>
 
-            {allVeryWell ? ((redeFileIdentifier.path.length > 0 || caixaFileIdentifier.path.length > 0) ? <Navigate to={MyRoutes.BASE_AUTO_MODE}/> : <Navigate to={MyRoutes.BASE_MANUAL_MODE}/>) : <></>}
+            {allVeryWell ? ((redeFileIdentifier.path.length > 0 || caixaFileIdentifier.path.length > 0 || pixFileIdentifier.path.length > 0) ? <Navigate to={MyRoutes.BASE_AUTO_MODE}/> : <Navigate to={MyRoutes.BASE_MANUAL_MODE}/>) : <></>}
         
         </main>
     </div>

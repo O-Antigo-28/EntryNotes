@@ -25,9 +25,10 @@ import {ipcRenderer} from "electron"
 import { Directions } from "../../Directions"
 
 import { reducerAutomaticPage } from "./reducerAutomaticPage"
-import { useCaixaFileIdentifier, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
+import { useCaixaFileIdentifier, usePixFileIdentifier, useRedeFileIdentifier, useStockFileIdentifier } from "./../../atoms/fileIdentifiers"
 import { registerAcceleratorsDirections, unregisterAcceleratorsDirections } from "../IpcCommunication"
 import { RedeNoteExtractorOld } from "../../models/NoteExtractor/RedeNoteExtractorOld"
+import { PixNoteExtractor } from "../../models/NoteExtractor/PixNoteExtractor"
 
 const CAIXA_FILE_ENCODING = "win1252"
 function hasChangedPath(currentPath: string, oldListPath: string[]){
@@ -59,6 +60,7 @@ const AutomaticPage = () => {
   const stockPath = useStockFileIdentifier().path
   const redePath = useRedeFileIdentifier().path
   const caixaPath = useCaixaFileIdentifier().path
+  const pixPath = usePixFileIdentifier().path
 
   const [state, dispatch] = useReducer(reducerAutomaticPage, {
       ready: false,
@@ -149,6 +151,13 @@ const AutomaticPage = () => {
             dispatch({type: 'ADDING_TO_NOTES_LIST', notes: caixaExtractor.notes})
           }
 
+          if(pixPath.length > 3){
+            const rawPixData = await(CSVExtractor(decodeURIComponent(pixPath), CAIXA_FILE_ENCODING))
+            const pixExtractor = new PixNoteExtractor()
+            pixExtractor.extractNotes(rawPixData)
+            dispatch({type: 'ADDING_TO_NOTES_LIST', notes: pixExtractor.notes})
+
+          }
 
           dispatch({type: 'GENERATE_SALES'})
           dispatch({type: 'UPDATE_SALE_LIST'})
