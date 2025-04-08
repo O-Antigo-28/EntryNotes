@@ -30,9 +30,10 @@ export abstract class NoteExtractor{
 
   private _isValidNote(status: string, note: Note){
     const APPROVED_SALE = "APROVADA"
+    const AUTHORIZED_SALE = "AUTORIZADA"
     const status_sale = normalizeString(status)
     try{
-      if(status_sale !== APPROVED_SALE){
+      if(status_sale !== APPROVED_SALE && status_sale !== AUTHORIZED_SALE){
         throw new Error("A Nota não foi aprovada")
       }
 
