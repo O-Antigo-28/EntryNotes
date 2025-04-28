@@ -226,10 +226,9 @@ const AutomaticPage = () => {
           <div className="automaticPage__results">
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().total}>tot. produtos</ValueSystemInput>
             <ValueSystemInput style={{backgroundColor:"#eeeeee"}} value={state.sales.current().difference} colors={true} >diferença</ValueSystemInput>
-            <Button presetStyle="p" onClick={autoMode}>AUTO</Button>
-          </div>
-          <div>
             <SystemInput propValue={`${state.notes.index + 1}/${state.notes.length}`}>Progresso</SystemInput>
+
+            <Button presetStyle="p" onClick={autoMode}>AUTO</Button>
           </div>
         </div>
 

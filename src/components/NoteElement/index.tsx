@@ -1,4 +1,4 @@
-import { Note } from "../../Note"
+import { Note, PAYMENT_METHODS } from "../../Note"
 
 import InlineArray from "../InlineArray"
 import "./noteElement.css"
@@ -20,16 +20,26 @@ const NoteElement = ({note}: {note: Note}) => {
 
     const clock: string[] = [addZero(hour), addZero(minutes), addZero(seconds)]
 
+    let headerNote = (               
+        <div className="elementSeparator">
+            <span className="machineName">{note.machineName}</span>
+            <div className="paymentMethod">
+                <span >{note.flag}</span>
+                <span> {note.paymentMethod}</span>
+            </div>
+        </div>
+    )
+
+    if(!note) return <></>
+    if(note.paymentMethod === PAYMENT_METHODS.PIX){
+        headerNote = (<div className="elementCenter">
+            <span className="paymentMethod">{note.paymentMethod}</span>
+        </div>)
+    }
     return(
         <section className="noteElement">
             <div className="noteElementContainer">
-                <div className="elementSeparator">
-                    <span className="machineName">{note.machineName}</span>
-                    <div className="paymentMethod">
-                        <span >{note.flag}</span>
-                        <span> {note.paymentMethod}</span>
-                    </div>
-                </div>
+                {headerNote}
                 <div className="elementSeparator">
                     <span>valor</span>
                     <span className="noteValue">{note.value.toFixed(2)}</span>
