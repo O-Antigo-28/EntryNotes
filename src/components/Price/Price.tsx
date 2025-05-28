@@ -4,7 +4,7 @@ import "./price.css"
 
 const Price = ({value, currency="R$"}: IPrice) => { 
     const integer = String(Math.floor(value))
-    let decimal: string = "";
+    let decimal = "";
 
 
     if(hasDecimalPlaces(value)){

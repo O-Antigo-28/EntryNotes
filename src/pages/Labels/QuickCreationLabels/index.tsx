@@ -11,8 +11,9 @@ import { PrintableLabel } from "../PrintableLabel"
 import { useForm, SubmitHandler, Controller} from "react-hook-form"
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
-
+import {findProductByBarcode} from "../../../findProductByBarcode"
 import { PrintableLabelHookResponses, useAddPrintableLabel, useUpdatePrintableLabel} from "../../../atoms/PritableLabelsAtom"
+import { ipcRenderer } from "electron"
 
 
 const QuickCreationLabels = () => {
@@ -29,17 +30,16 @@ const QuickCreationLabels = () => {
     
         const printableLabelSchema = z.object({
             code: z.string().min(1, {message: "digite algo pelo menos né"}).max(13, {message: "O formato máximo é o EAN13"}).regex(/^\d+$/),
-            description: z.string().max(35), 
+            description: z.string().max(70), 
             unitOfMeasure: z.enum(["kg", "un" , "g", "l", "ml", "dz",  "pct", "fd" , "cx"]),
             valueProduct: z.coerce.number(),
             promotionalValue: z.coerce.number(),
 
         })
         type FormPrintableLabel = z.infer<typeof printableLabelSchema>;
-        const {register, handleSubmit, formState:{errors}, control, reset, setFocus} = useForm<FormPrintableLabel>({resolver: zodResolver(printableLabelSchema)})
+        const {register, handleSubmit, formState:{errors}, control, reset, setFocus, getValues, setValue} = useForm<FormPrintableLabel>({resolver: zodResolver(printableLabelSchema)})
     
-     
-  
+
         function resetFields(){
             setPromotionalValueProduct("")
             setValueProduct("")
@@ -68,7 +68,30 @@ const QuickCreationLabels = () => {
             
         }
     
-      
+        async function searchProduct(){
+            const code = getValues('code');
+            console.log(code)
+            ipcRenderer.invoke('ipc-get-product-by-barcode', code ).then((product) => {
+                if (product) {
+                    setValue('description', product.description);
+                    setValue('valueProduct', product.value);
+                    setValueProduct(product.value)
+                } else {
+                    setValue('description', '');
+                    setValue('valueProduct', 0);
+                    setValueProduct(product.value)
+
+                }
+            })
+
+
+        }
+
+        const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+            if (event.key === 'Enter') {
+                searchProduct();
+            }
+        };
         const onSubmit: SubmitHandler<FormPrintableLabel> = (data) => {
             const printableLabel = new PrintableLabel(data.code,
             data.description,
@@ -88,7 +111,7 @@ const QuickCreationLabels = () => {
                 <Stack className="form" gap={2} >
                     <Stack direction={"horizontal"} gap={2}>              
                         <div style={{width: "27ch"}}>
-                            <SystemInput maxLength={13} required {...register("code")}>Código de barras</SystemInput>
+                            <SystemInput maxLength={13} required {...register("code")} onKeyDown={onKeyDown} >Código de barras</SystemInput>
                         </div> 
                         <SystemInput maxLength={35} required {...register("description")}>Descrição</SystemInput>
                     </Stack>    
