@@ -22,3 +22,9 @@
     flex-grow: 3;
 }
 
+
+.PrintableLabelList__List{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
