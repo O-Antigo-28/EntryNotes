@@ -129,12 +129,17 @@ export abstract class NoteExtractor{
         return PAYMENT_METHODS.CREDIT
     
       case PAYMENT_METHODS.DEBIT:
+      
         return PAYMENT_METHODS.DEBIT
   
       case "VOUCHER":
         return PAYMENT_METHODS.TICKET
 
       default: 
+        if(modality.includes(PAYMENT_METHODS.DEBIT))
+          return PAYMENT_METHODS.DEBIT
+        if(modality.includes(PAYMENT_METHODS.CREDIT))
+          return PAYMENT_METHODS.CREDIT
         return PAYMENT_METHODS.NONEXISTENT
 
     }
