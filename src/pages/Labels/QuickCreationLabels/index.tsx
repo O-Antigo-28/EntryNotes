@@ -79,7 +79,7 @@ const QuickCreationLabels = () => {
                 } else {
                     setValue('description', '');
                     setValue('valueProduct', 0);
-                    setValueProduct(product.value)
+                    setValueProduct("")
 
                 }
             })
