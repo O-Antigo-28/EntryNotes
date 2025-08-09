@@ -27,10 +27,10 @@ const QuickCreationLabels = () => {
         const[ valueProduct, setValueProduct]= useState<string>("0.00")
         const[ promotionalValueProduct, setPromotionalValueProduct] = useState<string>("0.00")
 
-    
+        const LIMIT_DESCRIPTION = 76
         const printableLabelSchema = z.object({
             code: z.string().min(1, {message: "digite algo pelo menos né"}).max(13, {message: "O formato máximo é o EAN13"}).regex(/^\d+$/),
-            description: z.string().max(70), 
+            description: z.string().max(LIMIT_DESCRIPTION), 
             unitOfMeasure: z.enum(["kg", "un" , "g", "l", "ml", "dz",  "pct", "fd" , "cx"]),
             valueProduct: z.coerce.number(),
             promotionalValue: z.coerce.number(),
@@ -113,7 +113,7 @@ const QuickCreationLabels = () => {
                         <div style={{width: "27ch"}}>
                             <SystemInput maxLength={13} required {...register("code")} onKeyDown={onKeyDown} >Código de barras</SystemInput>
                         </div> 
-                        <SystemInput maxLength={35} required {...register("description")}>Descrição</SystemInput>
+                        <SystemInput maxLength={LIMIT_DESCRIPTION} required {...register("description")}>Descrição</SystemInput>
                     </Stack>    
 
                     <Form.Select {...register("unitOfMeasure")}>

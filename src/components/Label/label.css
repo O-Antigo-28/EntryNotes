@@ -42,11 +42,12 @@
 .label__description{
 
     text-transform: uppercase;
-    width: 80%;
+    width: 100%;
     height: fit-content;
     line-height: 1;
     font-size: 1rem;
     font-weight: 600;
+    overflow-wrap: break-word;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .label__barcode{

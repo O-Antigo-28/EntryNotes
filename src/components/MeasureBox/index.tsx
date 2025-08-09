@@ -1,6 +1,7 @@
 import { ReactNode } from "react"
 import { LengthUnit } from "./TLengthUnit"
 import { IMeasure } from "./IMeasure";
+import "./measurebox.css"
 
 const MeasureBox = ({children, width, height, lengthUnit: unit}: IMeasure & {children:ReactNode}) => {
 
@@ -9,7 +10,7 @@ const MeasureBox = ({children, width, height, lengthUnit: unit}: IMeasure & {chi
     
     console.log(boxHeight, boxWidth)
     return ( 
-    <div className="measure-box" style={{width: boxWidth, height: boxHeight} }>
+    <div className="measure-box" style={{width: boxWidth, height: boxHeight, overflow: "hidden"} }>
       {children}
       </div> )
 }
