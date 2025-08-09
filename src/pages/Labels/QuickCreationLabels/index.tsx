@@ -74,8 +74,14 @@ const QuickCreationLabels = () => {
             ipcRenderer.invoke('ipc-get-product-by-barcode', code ).then((product) => {
                 if (product) {
                     setValue('description', product.description);
-                    setValue('valueProduct', product.value);
-                    setValueProduct(product.value)
+                    if(product.value){
+                        setValue('valueProduct', product.value);
+                        setValueProduct(product.value)
+                    }
+                    else{
+                        setValue('valueProduct', 0);
+                        setValueProduct("")
+                    }
                 } else {
                     setValue('description', '');
                     setValue('valueProduct', 0);
