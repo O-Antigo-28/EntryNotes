@@ -79,3 +79,26 @@ export const useCountPrintableLabel = () => {
     const printableLabelList = useAtomValue(PrintableLabelsAtom)
     return printableLabelList.length
 }
+
+export const useAddPrintablelabelByGroup = () => { 
+    const setPrintabableLabelList = useSetAtom(PrintableLabelsAtom)
+    return (groupcode: number) => {
+        ipcRenderer.invoke("ipc-get-printablelabels-by-groupcode", groupcode).then((newList: PrintableLabel[]|undefined)=> {
+            setPrintabableLabelList((prev) => {
+                const mapPrev = new Map(prev.map(printableLabel => [printableLabel.code, printableLabel]))
+                if(newList)
+                newList.forEach((item)=> {
+                    if(mapPrev.has(item.code)){
+                        mapPrev.set(item.code, { ...mapPrev.get(item.code), ...item })
+                    }
+                    else{
+                        mapPrev.set(item.code, item)
+                    }
+                })
+                return Array.from(mapPrev.values())
+                
+            })
+            return undefined
+        })
+    }
+}

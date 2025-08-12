@@ -1,0 +1,13 @@
+.Group{
+    display: block;
+    cursor: copy;
+    transition: transform 0.2s, font-weight 0s;
+    padding: 0.5rem;
+}
+
+.Group:hover{
+    font-weight: bold;
+    transform: scale(1.03);
+    border: 2px solid #77b;
+    border-radius: 0.5rem;
+}

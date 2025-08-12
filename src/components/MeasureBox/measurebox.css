@@ -1,3 +1,4 @@
 .measure-box{  border: 1px dashed #999;
   position: relative;
-  background: #fff;}
+  background: #fff;
+overflow: hidden;}

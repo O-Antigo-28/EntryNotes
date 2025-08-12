@@ -1,5 +1,20 @@
-.PrintableLabelList{
+.PrintableLabelList, .PrintableLabelList__List{
     display: flex;
     flex-direction: column;
     justify-content: center;
+    
+}
+@media print {
+  .PrintableLabelList {
+    height: 250mm; /* um pouco menos que o A4 para margem */
+    overflow: hidden;
+    page-break-after: always;
+  }
+    table, tr, td, th {
+    page-break-inside: avoid;
+  }
+
+  div, section {
+    page-break-inside: avoid;
+  }
 }
