@@ -6,9 +6,7 @@ import './label.css'
 import { useRemovePrintableLabelOnList } from '../../atoms/PritableLabelsAtom';
 import BarcodeComercial from '../../components/BarcodeComercial';
 import { IPrice } from '../../IPrice';
-import IconButton from '../../components/IconButton';
-import { IoIosClose } from "react-icons/io";
-
+import closeIcon from "../../assets/icons/Label/x.svg"
 const LabelElement = ({description, code, unitOfMeasure, value, currency}: Label & IPrice) => {  
   const removePrintableLabel = useRemovePrintableLabelOnList()
   let valueArea: ReactNode = <Price value={value} currency={currency}/>
@@ -43,7 +41,9 @@ const LabelElement = ({description, code, unitOfMeasure, value, currency}: Label
 
       </div>
     <div className='label__actions no_print'>
-      <IconButton Icon={IoIosClose} size={25} onClick={handleDeleteLabel}></IconButton>
+      <button onClick={handleDeleteLabel}>
+        <img src={closeIcon} style={{width: "26px", color:"red"}} alt="" />
+      </button>
     </div>
 
     </div>
