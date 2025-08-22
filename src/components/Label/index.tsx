@@ -3,18 +3,22 @@ import {ReactNode} from 'react'
 import { Label } from './Label';
 import Price from '../Price/Price';
 import './label.css'
-
+import { useRemovePrintableLabelOnList } from '../../atoms/PritableLabelsAtom';
 import BarcodeComercial from '../../components/BarcodeComercial';
 import { IPrice } from '../../IPrice';
+import IconButton from '../../components/IconButton';
+import { IoIosClose } from "react-icons/io";
 
 const LabelElement = ({description, code, unitOfMeasure, value, currency}: Label & IPrice) => {  
-  
+  const removePrintableLabel = useRemovePrintableLabelOnList()
   let valueArea: ReactNode = <Price value={value} currency={currency}/>
 
   // CRIAR A LÓGICA DO PREÇO PROMOCIONAL
   // if (promotionalValue)
   //   valueArea = <AnchoredPrice oldValue={value} value={promotionalValue}/> 
-
+  function handleDeleteLabel(e: React.MouseEvent<HTMLButtonElement>){
+    removePrintableLabel(code)
+  }
 
   return(
     <div className="label">
@@ -38,6 +42,9 @@ const LabelElement = ({description, code, unitOfMeasure, value, currency}: Label
 
 
       </div>
+    <div className='label__actions no_print'>
+      <IconButton Icon={IoIosClose} size={25} onClick={handleDeleteLabel}></IconButton>
+    </div>
 
     </div>
   )

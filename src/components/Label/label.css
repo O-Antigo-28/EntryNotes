@@ -7,7 +7,7 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-
+    position: relative;
     padding: 3%;
     gap: 3%;
     width: 100%;
@@ -65,4 +65,15 @@
     font-size: 0.79rem;
     text-transform: uppercase;
     flex-grow: 0.3;
+}
+.label__actions{
+    position: absolute;
+    top: 10px;
+    right: 5px;    
+}
+
+@media print{
+    .no_print{
+        display: none;
+    }
 }

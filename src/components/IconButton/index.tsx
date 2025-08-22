@@ -10,7 +10,7 @@ interface IIconButton extends React.ButtonHTMLAttributes<HTMLButtonElement>{
     HoverIcon?: IconType,
 }
 
-const IconButton: React.FC<IIconButton> = ({Icon, HoverIcon, size}) => {
+const IconButton: React.FC<IIconButton> = ({Icon, HoverIcon, size, ...props}) => {
     const [hover, setHover] = useState(false); 
 
     function handleMouseEnter(e: React.MouseEvent<HTMLButtonElement>) {
@@ -27,7 +27,7 @@ const IconButton: React.FC<IIconButton> = ({Icon, HoverIcon, size}) => {
     }
 
     return (
-        <Button style={{backgroundColor: "transparent", width: 'fit-content', outline: 'none', boxShadow: 'none', padding: 0, border:'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} >
+        <Button style={{backgroundColor: "transparent", width: 'fit-content', outline: 'none', boxShadow: 'none', padding: 0, border:'none' }} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} {...props} >
             <CurrentIcon color="#ff0000" size={size}/>
         </Button>
     )

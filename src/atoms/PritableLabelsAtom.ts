@@ -23,6 +23,14 @@ export enum PrintableLabelHookResponses{
 export const usePrintableLabels = () => { 
     return useAtomValue(PrintableLabelsAtom)
 }
+export const useRemovePrintableLabelOnList = () => {
+    const setListPrintableLabel = useSetAtom(PrintableLabelsAtom)
+    return (code: string)=>{
+        setListPrintableLabel((list) => {
+            return list.filter((p)=> p.code !== code)
+        })
+    }
+}
 export const useAddPrintableLabel = () => {
     const [printableLabels, setPrintableLabels] = useAtom(PrintableLabelsAtom)
 
