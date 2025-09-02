@@ -6,10 +6,19 @@ import QuickCreationLabels from "./QuickCreationLabels"
 import PrintableLabelList from "./PrintableLabelList"
 import LabelsGroupList from "./LabelsGroupList"
 import ListPrintableLabelPanel from "../../components/ListPrintableLabelPanel"
-
+import PendingLabels from "./PendingLabels"
+import { useState, useEffect } from "react"
+import { ipcRenderer } from "electron"
+import { IGroup } from "./IGroup"
+import { IGroups } from "./IGroups"
 const Labels = () => { 
     
-
+    const [groupsSystem, setGroupsSystem] = useState<IGroup[]>([])
+    useEffect(() => {
+        ipcRenderer.invoke('ipc-get-groups').then((groups: IGroups) => {
+            setGroupsSystem(groups.system)
+        })
+    }, [])
 
     return (
         <>
@@ -18,8 +27,11 @@ const Labels = () => {
                 <Tab title="Criação Padrão" eventKey={"default-creation"} >
                     <QuickCreationLabels></QuickCreationLabels>
                 </Tab>
+                <Tab title="Plaquinhas Pendentes" eventKey={"pending-creation"}>
+                    <PendingLabels></PendingLabels>
+                </Tab>
                 <Tab title="Criação por Grupo" eventKey={"group-creation"}>
-                    <LabelsGroupList></LabelsGroupList>
+                    <LabelsGroupList groups={groupsSystem}></LabelsGroupList>
                 </Tab>
             </Tabs>
             

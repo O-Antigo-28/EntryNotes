@@ -1,21 +1,10 @@
-import { useEffect, useState} from "react"
-import { ipcRenderer } from "electron"
 import "./labelgrouplist.css"
 import { IGroup } from "./../../../IGroup"
 import Groups from "./Groups"
-interface IGroups {
-    system: IGroup[]
-}
 
 
 
-const LabelsGroupList = () => {
-    const [groupsSystem, setGroupsSystem] = useState<IGroup[]>([])
-    useEffect(() => {
-        ipcRenderer.invoke('ipc-get-groups').then((groups: IGroups) => {
-            setGroupsSystem(groups.system)
-        })
-    }, [])
+const LabelsGroupList = ({groups}:{groups: IGroup[]}) => {
 
     return (
         <div className="LabelGroupList">
@@ -28,8 +17,8 @@ const LabelsGroupList = () => {
             <section className="GroupList__container">
                 <h2>Grupos do Sistema</h2>
                 <div className="GroupList__list">
-                    {groupsSystem.length ==0 && <p>Nenhum grupo cadastrado</p>}
-                    {groupsSystem.length >= 1 && <Groups groups={groupsSystem}/>}
+                    {groups.length ==0 && <p>Nenhum grupo cadastrado</p>}
+                    {groups.length >= 1 && <Groups groups={groups}/>}
                 </div>
             </section>
         </div>
