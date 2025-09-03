@@ -1,0 +1,19 @@
+.GroupFilters{
+    border-radius: 0.2rem;
+    box-shadow: 1px 1px 2px;
+    font-weight: bold;
+    user-select: none;
+    transition: color 140ms, background-color 140ms;
+}
+
+.GroupFilters:has(input[type="checkbox"]:checked) {
+  background-color: rgb(21, 104, 227);
+  color: white;
+}
+.GroupFilters label{
+    padding: 0.3rem;
+
+}
+.GroupFilters input[type="checkbox"]{
+    display: none;
+}

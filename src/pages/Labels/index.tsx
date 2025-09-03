@@ -28,7 +28,7 @@ const Labels = () => {
                     <QuickCreationLabels></QuickCreationLabels>
                 </Tab>
                 <Tab title="Plaquinhas Pendentes" eventKey={"pending-creation"}>
-                    <PendingLabels></PendingLabels>
+                    <PendingLabels groupsSystem={groupsSystem}></PendingLabels>
                 </Tab>
                 <Tab title="Criação por Grupo" eventKey={"group-creation"}>
                     <LabelsGroupList groups={groupsSystem}></LabelsGroupList>
