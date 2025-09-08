@@ -13,7 +13,7 @@ const Groups = ({groups}:{groups: IGroup[]}) => {
         return 0;
     })
     return (<div> 
-        {groups.map((group:IGroup) =>   <Group group={group} onClick={() => {addPrintableLabelsByGroup(group.code)}}/>)}
+        {groups.map((group:IGroup) =>   <Group key={group.code} group={group} onClick={() => {addPrintableLabelsByGroup(group.code)}}/>)}
     </div>)
 }
 export default Groups

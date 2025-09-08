@@ -25,6 +25,7 @@ export class PrintableLabel implements ILabel, IMeasure, IPrice{
 
     public static isValid(PrintableLabel: PrintableLabel): boolean{
         try{
+            console.log(PrintableLabel)
             if(!PrintableLabel)
                 throw new Error("PrintableLabel indefinida")
 

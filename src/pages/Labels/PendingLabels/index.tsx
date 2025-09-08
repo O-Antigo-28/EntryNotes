@@ -13,12 +13,11 @@ const PendingLabels = ({groupsSystem}:{groupsSystem: IGroup[]}) => {
     const addPrintableLabel = useAddPrintableLabel()
     function addAllPrintableLabels(e: React.MouseEvent<HTMLButtonElement>){
         pedingPrintableLabels.forEach((ppl) => {
-            addPrintableLabel(ppl)
-
+            console.log(addPrintableLabel(ppl))
         })
     }
     useEffect(() => {
-        ipcRenderer.invoke("ipc-get-peding-labels").then((pedingPrintableLabels: PrintableLabel[])=>{
+        ipcRenderer.invoke("ipc-get-pending-labels").then((pedingPrintableLabels: PrintableLabel[])=>{
             setPedingPrintableLabels(pedingPrintableLabels)
         })
     }, [])

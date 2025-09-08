@@ -104,8 +104,7 @@ ipcMain.handle("ipc-get-groups", async() => {
   const groups = {system: systemGroups}
   return groups
 })
-
-ipcMain.handle("ipc-get-peding-labels", async() => {
+ipcMain.handle("ipc-get-pending-labels", async() => {
   return await findpedinglabels()
 })
 ipcMain.handle("ipc-get-printablelabels-by-groupcode", async(event, groupcode) => {
