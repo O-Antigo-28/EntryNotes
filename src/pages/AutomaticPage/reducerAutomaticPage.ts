@@ -1,6 +1,6 @@
 import { Indexer } from "../../Indexer"
 import {SaleItem} from "../../SaleItem"
-import {Note} from "../../Note"
+import {Note, PAYMENT_METHODS} from "../../Note"
 import { Sale } from "../../Sale"
 import { IDGenerator } from "../../IDGenerator"
 import { IStatesAutomaticPage } from "./IStateAutomaticPage"
@@ -14,7 +14,17 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
     // const updateProductList = useUpdateProductList () 
     switch(action.type){
       case 'ADDING_TO_NOTES_LIST':{
-        return state.notes.length === 0? {...state, notes: new Indexer<Note>(action.notes)} : {...state, notes: new Indexer<Note>([...state.notes.content].concat(action.notes))}
+        if( state.notes.length === 0){
+          return {...state, notes: new Indexer<Note>(action.notes)}
+        }
+        else{
+          action.notes = action.notes.sort((a,b)=> {
+            if(a.paymentMethod === PAYMENT_METHODS.PIX && b.paymentMethod !== PAYMENT_METHODS.PIX) return 1
+            if(a.paymentMethod !== PAYMENT_METHODS.PIX && b.paymentMethod === PAYMENT_METHODS.PIX) return -1
+            return 0
+          })
+          return {...state, notes: new Indexer<Note>([...state.notes.content].concat(action.notes))}
+        }
       }
       case 'NEXT': {
         state.notes.next()

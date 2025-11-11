@@ -18,10 +18,10 @@ import { useCaixaFileIdentifier, usePixFileIdentifier, useRedeFileIdentifier, us
 import Button from 'react-bootstrap/Button';
 const FILENAME_SIMILAR_STOCK = "POSICAODEESTOQUE.CSV"
 const FILENAME_SIMILAR_REDE = "Rede_Rel_Vendas_Do_Dia.... .csv"
-const FILENAME_SIMILAR_CAIXA = "Relatorio_De_Vendas_"
+const FILENAME_SIMILAR_CAIXA = "relatorio_de_Vendas_"
 
 const REDE_INSPECT_FILENAME = /^Rede_Rel_Vendas_*/
-const CAIXA_INSPECT_FILENAME = /^Relatorio_de_Vendas_*/
+const CAIXA_INSPECT_FILENAME = /^relatorio_de_vendas_*/
 
 
 // import Button from 'react-bootstrap/Button';
@@ -109,7 +109,7 @@ const AutomaticFileSelection = () => {
               isValidFiles = false
             }
 
-            if(caixaFileIdentifier.fileName.length > 3 && !CAIXA_INSPECT_FILENAME.test(caixaFileIdentifier.fileName)){
+            if(caixaFileIdentifier.fileName.length > 3 && !CAIXA_INSPECT_FILENAME.test(caixaFileIdentifier.fileName.toLocaleLowerCase())){
               messageForEachIncorrectFilename.push(createCorrectionMessageForFilenames(caixaFileType.typeData, FILENAME_SIMILAR_CAIXA, caixaFileIdentifier.fileName))
               isValidFiles = false
             }

@@ -98,7 +98,8 @@ export abstract class NoteExtractor{
 
       case NOTE_FLAGS.MASTERCARD:
         return NOTE_FLAGS.MASTERCARD
-
+      case NOTE_FLAGS.PIX:
+        return NOTE_FLAGS.PIX
 
 
       default:
@@ -120,7 +121,7 @@ export abstract class NoteExtractor{
     }
 
     modality = normalizeString(modality)
-
+    console.log(modality)
     switch (modality) {
       case PAYMENT_METHODS.CREDIT:
         return nInstallments> 1? PAYMENT_METHODS.INSTALLMENT : PAYMENT_METHODS.CREDIT
@@ -134,7 +135,8 @@ export abstract class NoteExtractor{
   
       case "VOUCHER":
         return PAYMENT_METHODS.TICKET
-
+      case "VIA QRCODE": 
+        return PAYMENT_METHODS.PIX
       default: 
         if(modality.includes(PAYMENT_METHODS.DEBIT))
           return PAYMENT_METHODS.DEBIT
