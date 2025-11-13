@@ -100,7 +100,8 @@ export abstract class NoteExtractor{
         return NOTE_FLAGS.MASTERCARD
       case NOTE_FLAGS.PIX:
         return NOTE_FLAGS.PIX
-
+      case NOTE_FLAGS.FEPAS: 
+        return NOTE_FLAGS.FEPAS
 
       default:
         return NOTE_FLAGS.NONEXISTENT
@@ -137,6 +138,8 @@ export abstract class NoteExtractor{
         return PAYMENT_METHODS.TICKET
       case "VIA QRCODE": 
         return PAYMENT_METHODS.PIX
+      case PAYMENT_METHODS.MULTIPLE:
+        return PAYMENT_METHODS.MULTIPLE
       default: 
         if(modality.includes(PAYMENT_METHODS.DEBIT))
           return PAYMENT_METHODS.DEBIT
