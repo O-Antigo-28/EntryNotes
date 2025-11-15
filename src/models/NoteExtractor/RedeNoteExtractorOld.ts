@@ -4,6 +4,7 @@ import { NoteExtractor } from "./NoteExtractor";
 import { combineDateAndTime } from "./combineDateAndTime";
 import { splitAndCheckLength } from "./splitAndCheckLength";
 interface ISpreadsheetRedeOld{
+    "número da autorização (Auto)":string,
     "data da venda": string,
     "hora da venda": string,
     "status da venda": string,
@@ -24,7 +25,7 @@ export class RedeNoteExtractorOld extends NoteExtractor{
             const clock: Date = this._extractClock(object["hora da venda"])
             const combinedDateAndTime = combineDateAndTime(date, clock)
             const value = this._extractValue(object["valor da venda original"])
-            const note = new Note(MACHINE_NAMES.REDE, paymentMethod, value, combinedDateAndTime, flag )
+            const note = new Note(object["número da autorização (Auto)"] ,MACHINE_NAMES.REDE, paymentMethod, value, combinedDateAndTime, flag )
             this._appendNote(note, object["status da venda"])
 
         }

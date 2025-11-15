@@ -26,7 +26,7 @@ export class CaixaNoteExtractorWithPix extends NoteExtractor{
 
           const value = this._extractValue(object["Valor bruto"])
     
-          this._appendNote(new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDate, flag ), object.Status)
+          this._appendNote(new Note(object["Código de autorização"],MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDate, flag ), object.Status)
       })
     }
     protected _extractDate(date:string):Date{

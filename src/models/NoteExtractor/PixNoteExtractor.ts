@@ -11,7 +11,7 @@ export class PixNoteExtractor extends NoteExtractor{
         _table.forEach((rawNote: IPixNote) => {
             const value = this._extractValue(rawNote["Valor bruto"])
             const date = this._extractDate(rawNote["Data da venda"])
-            const note = new Note(machine_name, paymentMethod, value, date, flag )
+            const note = new Note(rawNote["Cód. de autorização"], machine_name, paymentMethod, value, date, flag )
             this._appendNote(note, rawNote.Status)
         })
     }

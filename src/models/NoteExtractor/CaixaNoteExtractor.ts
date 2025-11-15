@@ -16,6 +16,7 @@ export class CaixaNoteExtractor extends NoteExtractor{
         "Bandeira":string;
         "Valor bruto":string;
         "Status":string;
+        "Cód. de autorização": string 
         }) => {
           const paymentMethod: PaymentMethod = this._extractPaymentMethod(object.Produto, object.Parcelado)
           const flag: Flag = this._extractFlag(object.Bandeira)
@@ -30,7 +31,7 @@ export class CaixaNoteExtractor extends NoteExtractor{
 
           const value = this._extractValue(object["Valor bruto"])
 
-          this._appendNote(new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDate, flag ), object.Status)
+          this._appendNote(new Note(object["Cód. de autorização"],MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDate, flag ), object.Status)
       })
     }
     protected _extractDate(date:string):Date{

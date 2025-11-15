@@ -27,7 +27,7 @@ export class CaixaNoteExtractorOld extends NoteExtractor{
           const combinedDateAndTime = combineDateAndTime(date, time);
           const value = this._extractValue(rawNote["Valor bruto da transação"])
                     
-          const note = new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDateAndTime, flag )
+          const note = new Note(rawNote["Código de autorização"],MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDateAndTime, flag )
   
           this._appendNote(note, rawNote.Status)
         });
@@ -48,7 +48,7 @@ export class CaixaNoteExtractorOld extends NoteExtractor{
           const combinedDateAndTime = combineDateAndTime(date, time);
           const value = this._extractValue(rawNote["Valor original da venda"])
     
-          const note = new Note(MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDateAndTime, flag )
+          const note = new Note(rawNote["Cód. de autorização"],MACHINE_NAMES.CAIXA, paymentMethod, value, combinedDateAndTime, flag )
           this._appendNote(note, rawNote.Status)
 
       }

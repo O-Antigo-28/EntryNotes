@@ -29,6 +29,7 @@ export enum MACHINE_NAMES{
     CAIXA = 'CAIXA'
 }
 export interface INote{
+    authorization: string
     machineName:MachineName | string,
     paymentMethod: PaymentMethod | string,
     value: number,
@@ -37,6 +38,7 @@ export interface INote{
 }
 export class Note implements INote{ 
     constructor(
+        private _authorization: string,
         private _machineName:MachineName,
         private _paymentMethod: PaymentMethod,
         private _value: number,
@@ -60,5 +62,8 @@ export class Note implements INote{
     }
     get flag(): Flag | string{ 
         return this._flag
+    }
+    get authorization(): string{
+        return this._authorization
     }
 }
