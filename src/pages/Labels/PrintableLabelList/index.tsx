@@ -4,6 +4,7 @@ import LabelElement from "../../../components/Label";
 import { useRef , forwardRef} from "react";
 import Button from 'react-bootstrap/Button'
 import './printablelabellist.css'
+import ShortLabel from "../../../components/ShortLabel";
 
 
 const PrintableLabelList = forwardRef<HTMLUListElement>((props, ref) => {
@@ -15,9 +16,11 @@ const PrintableLabelList = forwardRef<HTMLUListElement>((props, ref) => {
             <ul className="PrintableLabelList__List"  ref={ref}>
                 {printableLabels.map((printableLabel) => {
                     return( 
-                    <MeasureBox key={printableLabel.code} height={printableLabel.height}  width={printableLabel.width} lengthUnit={printableLabel.lengthUnit}>
-                        <LabelElement {...printableLabel} key={printableLabel.code}/>
-                    </MeasureBox>)
+                    <MeasureBox key={printableLabel.code} height={printableLabel.height}  width={7} lengthUnit={printableLabel.lengthUnit}>
+                        {/* <LabelElement {...printableLabel} key={printableLabel.code}/> */}
+                        <ShortLabel key={printableLabel.code} {...printableLabel}/>
+                    </MeasureBox>
+                   
                 })}
             </ul>
 

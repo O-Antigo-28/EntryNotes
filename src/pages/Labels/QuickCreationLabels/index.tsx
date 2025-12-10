@@ -14,6 +14,7 @@ import {zodResolver} from "@hookform/resolvers/zod"
 import {findProductByBarcode} from "../../../findProductByBarcode"
 import { PrintableLabelHookResponses, useAddPrintableLabel, useUpdatePrintableLabel} from "../../../atoms/PritableLabelsAtom"
 import { ipcRenderer } from "electron"
+import { Label } from "../../../components/Label/Label"
 
 
 const QuickCreationLabels = () => {

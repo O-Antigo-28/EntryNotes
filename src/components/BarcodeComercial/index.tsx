@@ -6,9 +6,9 @@ const BarcodeComercial =({code}: {code: string}) => {
     const isEAN13 = BarcodeModel.isEAN13Barcode(code)
     const barcodeOptions: BarcodeProps = {
       value: code,
-      format: code.length === 13? "EAN13" : "CODE39",
+      format: code.length === 13? "EAN13" : "CODE128",
     }
-    if(barcodeOptions.format === "CODE39")
+    if(barcodeOptions.format === "CODE128")
       barcodeOptions.value = code.replace(/^0+/,"")
   
     let height = 40

@@ -9,12 +9,15 @@ rules.push({
 });
 
 
-export const rendererConfig: Configuration = {
+import path from 'path';
+
+export const rendererConfig: Configuration =  {
+  entry: './src/app.tsx',
   module: {
-    rules,
+    rules: rules
   },
-  plugins,
   resolve: {
-    extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+    extensions: ['.tsx', '.ts', '.js', '.css']
   },
+  target: 'electron-renderer'
 };
