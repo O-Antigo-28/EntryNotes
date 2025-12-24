@@ -4,66 +4,87 @@ export type MachineName = MACHINE_NAMES.REDE | MACHINE_NAMES.CAIXA
 
 export type Flag = NOTE_FLAGS.MASTERCARD | NOTE_FLAGS.VISA | NOTE_FLAGS.MAESTRO | NOTE_FLAGS.ELO | NOTE_FLAGS.HIPERCARD | NOTE_FLAGS.ALELO | NOTE_FLAGS.NONEXISTENT | NOTE_FLAGS.PIX
 export enum PAYMENT_METHODS {
-    PIX = "PIX", 
+    PIX = "PIX",
     DEBIT = "DEBITO",
-    CREDIT = "CREDITO" ,
+    CREDIT = "CREDITO",
     CASH_CREDIT = "CREDITO A VISTA",
-    INSTALLMENT = "PARCELADO", 
-    TICKET = "TICKET", 
+    INSTALLMENT = "PARCELADO",
+    TICKET = "TICKET",
     NONEXISTENT = "NONE",
 }
 
-export enum NOTE_FLAGS{ 
-    MASTERCARD = "MASTERCARD", 
-    VISA ='VISA',
-    MAESTRO ='MAESTRO', 
+export enum NOTE_FLAGS {
+    MASTERCARD = "MASTERCARD",
+    VISA = 'VISA',
+    MAESTRO = 'MAESTRO',
     ELO = 'ELO',
-    HIPERCARD ='HIPERCARD', 
+    HIPERCARD = 'HIPERCARD',
     ALELO = 'ALELO',
     PIX = 'PIX',
     NONEXISTENT = "NONE"
 }
 
-export enum MACHINE_NAMES{
+export enum MACHINE_NAMES {
     REDE = 'REDE',
     CAIXA = 'CAIXA'
 }
-export interface INote{
+export interface INote {
     authorization: string
-    machineName:MachineName | string,
+    machineName: MachineName | string,
     paymentMethod: PaymentMethod | string,
     value: number,
     date: Date,
-    flag: Flag | string 
+    flag: Flag | string
+    ok?:boolean
 }
-export class Note implements INote{ 
+export class Note implements INote {
     constructor(
         private _authorization: string,
-        private _machineName:MachineName,
+        private _machineName: MachineName,
         private _paymentMethod: PaymentMethod,
         private _value: number,
         private _date: Date,
-        private _flag: Flag
-        ){ 
+        private _flag: Flag,
+        private _ok?: boolean
+    ) {
     }
-    get value(): number{
+    get value(): number {
         return this._value
     }
 
-    get machineName(): MachineName | string{ 
+    get machineName(): MachineName | string {
         return this._machineName
     }
-    get paymentMethod() :PaymentMethod | string{ 
+    get paymentMethod(): PaymentMethod | string {
         return this._paymentMethod
     }
 
-    get date(): Date{ 
+    get date(): Date {
         return this._date
     }
-    get flag(): Flag | string{ 
+    get flag(): Flag | string {
         return this._flag
     }
-    get authorization(): string{
+    get authorization(): string {
         return this._authorization
+    }
+
+    public toINote() :INote{
+        return {
+            authorization: this._authorization,
+            machineName: this._machineName,
+            paymentMethod: this._paymentMethod, 
+            value: this._value,
+            date: this._date,
+            flag: this._flag,
+            ok: this._ok,
+        }
+    }
+    static fromINote(iNote: INote): Note {
+     
+        return new Note(iNote.authorization, iNote.machineName as MachineName, iNote.paymentMethod as PaymentMethod, iNote.value, new Date(iNote.date), iNote.flag as NOTE_FLAGS, iNote.ok)
+
+
+        
     }
 }

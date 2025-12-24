@@ -14,6 +14,7 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
     // const updateProductList = useUpdateProductList () 
     switch(action.type){
       case 'ADDING_TO_NOTES_LIST':{
+        ipcRenderer.invoke("storage-notes", JSON.stringify(action.notes.map(note => note.toINote())))
         if( state.notes.length === 0){
           return {...state, notes: new Indexer<Note>(action.notes)}
         }
@@ -27,6 +28,11 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
         }
       }
       case 'NEXT': {
+        state.confirmedNotes.push(state.notes.current())
+        if(state.confirmedNotes.length >= Math.floor(state.notes.length / 4) || state.notes.index === state.notes.length-1){
+          ipcRenderer.send("confirm-notes", state.confirmedNotes)
+          state.confirmedNotes = []
+        }
         state.notes.next()
         state.sales.next()
         return state
@@ -43,9 +49,10 @@ export const reducerAutomaticPage: React.Reducer<IStatesAutomaticPage, ActionAut
       case 'ERASE_DATA': { 
         console.log(state.products)
         IDGenerator.reset()
-        return {ready: false, indexItem: 0, items: new Indexer<SaleItem>([]), notes: new Indexer<Note>([]), sales: new Indexer<Sale>([]), products: []}
+        return {ready: false, indexItem: 0, items: new Indexer<SaleItem>([]), notes: new Indexer<Note>([]), sales: new Indexer<Sale>([]), products: [], confirmedNotes:[]}
       }
       case 'NEXT_ITEM': {
+  
         state.items.next()
         return {...state, indexItem: state.items.index}
   

@@ -68,7 +68,8 @@ const AutomaticPage = () => {
       items: new Indexer<SaleItem>([]),
       notes: new Indexer<Note>([]),
       sales: new Indexer<Sale>([]), 
-      products: []}
+      products: [], 
+      confirmedNotes: []}
     )
 
 

@@ -10,5 +10,6 @@ export interface IStatesAutomaticPage{
     indexItem: number,
     notes: Indexer<Note>,
     sales: Indexer<Sale>, 
-    products: Array<Product>
+    products: Array<Product>, 
+    confirmedNotes: Array<Note>
 }
