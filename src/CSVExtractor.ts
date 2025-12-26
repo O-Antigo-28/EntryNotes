@@ -21,7 +21,7 @@ export async function CSVExtractor(path: string, encoding: string= DEFAULT_FILE_
       
       const data: Buffer  = await readFile(path)
       const utf8text = iconv.decode(data, encoding)
-      const table = Papa.parse(utf8text, {header: true}).data
+      const table = Papa.parse(utf8text, {header: true, delimiter:";"}).data
       table.pop()
       return table
     }
