@@ -31,15 +31,16 @@ const LabelElement = ({description, code, unitOfMeasure, value, currency}: Label
           <span className="label__unit-measure">{unitOfMeasure}</span>
         </div>
 
-        {code.trim() !== '0' && <span  className="label__barcode">
- 
-          <BarcodeComercial code={code} />
-        </span>}
+
 
 
 
 
       </div>
+        {code.trim() !== '0' && <span  className="label__barcode">
+ 
+          <BarcodeComercial code={code} />
+        </span>}
     <div className='label__actions no_print'>
       <button onClick={handleDeleteLabel}>
         <img src={closeIcon} style={{width: "26px", color:"red"}} alt="" />

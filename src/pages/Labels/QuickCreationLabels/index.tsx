@@ -70,7 +70,7 @@ const QuickCreationLabels = () => {
     
         async function searchProduct(){
             const code = getValues('code');
-            console.log(code)
+            if(code.trim() === '0') return
             ipcRenderer.invoke('ipc-get-product-by-barcode', code ).then((product) => {
                 if (product) {
                     setValue('description', product.description);
@@ -103,7 +103,7 @@ const QuickCreationLabels = () => {
             data.description,
             data.unitOfMeasure, 
             data.valueProduct,
-            10, 3.40, "cm",
+            6.5, 3.40, "cm",
             data.promotionalValue)
             currentPrintableLabel.current = printableLabel
 
