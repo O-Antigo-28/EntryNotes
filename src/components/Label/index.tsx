@@ -31,11 +31,11 @@ const LabelElement = ({description, code, unitOfMeasure, value, currency}: Label
           <span className="label__unit-measure">{unitOfMeasure}</span>
         </div>
 
-
-        <span  className="label__barcode">
+        {code.trim() !== '0' && <span  className="label__barcode">
  
           <BarcodeComercial code={code} />
-        </span>
+        </span>}
+
 
 
 
