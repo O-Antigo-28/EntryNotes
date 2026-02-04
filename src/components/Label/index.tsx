@@ -7,7 +7,8 @@ import { useRemovePrintableLabelOnList } from '../../atoms/PritableLabelsAtom';
 import BarcodeComercial from '../../components/BarcodeComercial';
 import { IPrice } from '../../IPrice';
 import closeIcon from "../../assets/icons/Label/x.svg"
-const LabelElement = ({description, code, unitOfMeasure, value, currency}: Label & IPrice) => {  
+import { PrintableLabel } from '../../pages/Labels/PrintableLabel';
+const LabelElement = ({description, code, unitOfMeasure, value,currency, promotionalValue}: PrintableLabel) => {  
   const removePrintableLabel = useRemovePrintableLabelOnList()
   let valueArea: ReactNode = <Price value={value} currency={currency}/>
 

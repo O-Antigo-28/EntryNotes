@@ -9,7 +9,8 @@ import { Price } from "../../Price"
 
 export class PrintableLabel implements ILabel, IMeasure, IPrice{
     constructor(
-        public code: string, 
+        public code: string,
+ 
         public description: string, 
         public unitOfMeasure: UnitOfMeasure,
         public value: number, 

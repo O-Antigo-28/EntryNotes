@@ -3,7 +3,6 @@ import { UnitOfMeasure } from "./components/Label/TUnitOfMeasure"
 
 import { PrintableLabel } from "./pages/Labels/PrintableLabel"
 export function transformproductInDefaultPrintableLable(product: IProduct): PrintableLabel{
-    const {barcode,description, price, unitOfMeasure } = product
-    console.log(unitOfMeasure)
+    const {barcode,description, price, unitOfMeasure, code,  } = product
     return {code: barcode, description: description, value: price, currency:"R$", unitOfMeasure: unitOfMeasure as UnitOfMeasure, width: 6.5, height: 3.4, lengthUnit:"cm"}
 }

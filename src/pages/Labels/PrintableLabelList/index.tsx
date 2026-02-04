@@ -16,7 +16,7 @@ const PrintableLabelList = forwardRef<HTMLUListElement>((props, ref) => {
                 {printableLabels.map((printableLabel) => {
                     return( 
                     <MeasureBox key={printableLabel.code} height={printableLabel.height}  width={printableLabel.width} lengthUnit={printableLabel.lengthUnit}>
-                        <LabelElement {...printableLabel} key={printableLabel.code}/>
+                        <LabelElement  {...printableLabel} key={printableLabel.code}/>
                     </MeasureBox>)
                 })}
             </ul>
