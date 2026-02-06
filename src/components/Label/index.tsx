@@ -1,6 +1,7 @@
 
 import {ReactNode} from 'react'
 import { Label } from './Label';
+import AnchoredPrice from './AnchoredPrice';
 import Price from '../Price/Price';
 import './label.css'
 import { useRemovePrintableLabelOnList } from '../../atoms/PritableLabelsAtom';
@@ -11,16 +12,28 @@ import { PrintableLabel } from '../../pages/Labels/PrintableLabel';
 const LabelElement = ({description, code, unitOfMeasure, value,currency, promotionalValue}: PrintableLabel) => {  
   const removePrintableLabel = useRemovePrintableLabelOnList()
   let valueArea: ReactNode = <Price value={value} currency={currency}/>
-
-  // CRIAR A LÓGICA DO PREÇO PROMOCIONAL
-  // if (promotionalValue)
-  //   valueArea = <AnchoredPrice oldValue={value} value={promotionalValue}/> 
+  let hasPromotion: boolean = false;
+  let percent_promotion: number = 0
+  let labelStyle = "label"
+  if (typeof promotionalValue === "number"){
+    hasPromotion = (promotionalValue < value && promotionalValue > 0.1)
+  }
+  if(hasPromotion){
+    labelStyle = "label label_promotional"
+    valueArea = <AnchoredPrice oldValue={value} value={promotionalValue}/> 
+    
+  }
+ 
   function handleDeleteLabel(e: React.MouseEvent<HTMLButtonElement>){
     removePrintableLabel(code)
   }
 
+
+
+
   return(
-    <div className="label">
+    <div className={labelStyle}>
+
       <span className="label__description">{description}</span>
 
       <div className="label__container">
@@ -38,10 +51,13 @@ const LabelElement = ({description, code, unitOfMeasure, value,currency, promoti
 
 
       </div>
-        {code.trim() !== '0' && <span  className="label__barcode">
+      {<div>
+        
+       </div>}
+        {/* {code.trim() !== '0' && <span  className="label__barcode">
  
           <BarcodeComercial code={code} />
-        </span>}
+        </span>} */}
     <div className='label__actions no_print'>
       <button onClick={handleDeleteLabel}>
         <img src={closeIcon} style={{width: "26px", color:"red"}} alt="" />

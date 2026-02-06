@@ -10,7 +10,7 @@ const AnchoredPrice = ({oldValue, value, currency}: IAnchoredPrice) => {
     
     return (
         <div className="anchored-price">
-            <span className="anchored-price__item">de R$<span className="anchored-price__old-price"> {Number(oldValue).toFixed(2)}</span> para</span>
+            <span className="anchored-price__item">R$<span className="anchored-price__old-price"> {Number(oldValue).toFixed(2)}</span> por</span>
             <Price value={value} currency={currency}/>
         </div>
     )

@@ -4,7 +4,7 @@ import { UnitOfMeasure } from "./TUnitOfMeasure";
 
 export class Label implements ILabel{
     constructor(
-        public barcode: string,
+        public code: string,
         public description: string,
         public unitOfMeasure: UnitOfMeasure,
         

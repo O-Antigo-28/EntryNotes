@@ -103,7 +103,7 @@ const QuickCreationLabels = () => {
             data.description,
             data.unitOfMeasure, 
             data.valueProduct,
-            6.5, 3.40, "cm",
+            7, 3.40, "cm",
             data.promotionalValue)
             currentPrintableLabel.current = printableLabel
 

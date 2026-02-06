@@ -5,7 +5,7 @@ export async function findProductByBarcode(barcode: string): Promise<IPrice & IL
     try{
         const result = await fetch(`http://127.0.0.1:3001/basicproduct?code=${barcode}`)    
         const product: labelInFetch = await result.json()
-        return {barcode: product.barcode, description: product.description, value: product.price, unitOfMeasure: "un", currency: "R$" }
+        return {code: product.barcode, description: product.description, value: product.price, unitOfMeasure: "un", currency: "R$" }
     }catch(e){
         return undefined
     }
